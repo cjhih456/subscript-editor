@@ -1,0 +1,8 @@
+{
+  // https://v3.nuxtjs.org/concepts/typescript
+  "extends": "./.nuxt/tsconfig.json",
+  "files": [
+    // https://vuejs.org/api/utility-types.html#cssproperties
+    // "./types/CssProperties.d.ts"
+  ]
+}

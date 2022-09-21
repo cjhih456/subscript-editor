@@ -1,0 +1,13 @@
+{
+    "root": true,
+    "plugins": ["prettier"],
+    "extends": [
+        "@nuxtjs",
+        "@nuxtjs/eslint-config-typescript",
+        "plugin:prettier/recommended"
+    ],
+    "ignorePatterns": ["node_modules/"],
+    "rules": {
+        "prettier/prettier": "error"
+    }
+}
