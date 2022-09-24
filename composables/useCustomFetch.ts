@@ -1,6 +1,9 @@
 import { FetchOptions } from 'ohmyfetch'
 
-export const fetchData = (method: string, data: { [key: string]: any }) => {
+export const fetchData = function (
+  method: string,
+  data: { [key: string]: any }
+): String | FormData | { [key: string]: any } | null {
   const values = Object.values(data)
   if (method === 'get') {
     const dataBuffer = {} as { [key: string]: any }
@@ -18,7 +21,7 @@ export const fetchData = (method: string, data: { [key: string]: any }) => {
     return dataBuffer
   } else if (method === 'post') {
     if (values.findIndex((v) => v instanceof Blob) !== -1) {
-      return data
+      return JSON.stringify(data)
     }
     const formData = new FormData()
     Object.keys(data).forEach((v) => {
