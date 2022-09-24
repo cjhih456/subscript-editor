@@ -33,8 +33,16 @@ export const fetchData = function (
 }
 
 export const useCustomFetch = (url: string, options?: FetchOptions<'json'>) => {
+  const headers = {} as HeadersInit
   return useFetch(url, {
     ...options,
+    headers:
+      options && options.headers
+        ? {
+            ...options.headers,
+            ...headers,
+          }
+        : headers,
     // eslint-disable-next-line require-await
     async onResponse() {
       // { request, response, options }
