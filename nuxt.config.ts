@@ -14,6 +14,10 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  nitro: {
+    minify: true,
+    serveStatic: true, // TODO: if need CDN publish
+  },
   vite: {
     css: {
       preprocessorOptions: {
