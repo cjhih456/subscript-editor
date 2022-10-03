@@ -3,18 +3,18 @@ export default defineNuxtPlugin(() => {
     provide: {
       theme: {
         value: ref('light'),
-        changer(value: string) {
-          if (typeof value === 'undefined' || !value) return this.value.value
+        changer (value?: string) {
+          if (typeof value === 'undefined' || !value) { return this.value.value }
           this.value.value = value
-        },
-      },
-    },
+        }
+      }
+    }
   }
 })
 export const mixinProps = {
-  theme: String,
+  theme: String
 }
-export const mixin = function ThemeMixin(props: any) {
+export const mixin = function ThemeMixin (props: any) {
   const nuxtApp = useNuxtApp()
   const lazyTheme = computed<string>(
     () => props.theme || nuxtApp.$theme.value.value
@@ -23,6 +23,6 @@ export const mixin = function ThemeMixin(props: any) {
   return {
     props,
     lazyTheme,
-    themeClass,
+    themeClass
   }
 }
