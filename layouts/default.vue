@@ -32,8 +32,8 @@
         <slot> Default content </slot>
       </div>
     </main>
+    <div id="dialog-area" />
   </div>
-  <div id="dialog-area" />
 </template>
 <script setup>
 import { useNuxtApp } from '#app'

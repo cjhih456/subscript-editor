@@ -9,10 +9,14 @@
     <button class="" @click="changeHeader">
       change header
     </button>
-    <button ref="activator">
-      activator
-    </button>
-    <DialogCDialog :activator="activator" />
+    <div class="dialog-area">
+      <button ref="activator">
+        activator
+      </button>
+      <DialogCDialog v-if="activator" :activator="activator" attache>
+        <span>aaaaaa</span>
+      </DialogCDialog>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -39,3 +43,8 @@ function changeHeader () {
   }
 }
 </script>
+<style lang="sass">
+.dialog-area
+  display: inline-block
+  position: relative
+</style>
