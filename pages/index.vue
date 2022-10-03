@@ -3,16 +3,26 @@
     isDefault
     <Input v-model="inputValue" />
     <SecondInput v-model="inputValue" />
-    <button class="" @click="changeTheme">change Theme</button>
-    <button class="" @click="changeHeader">change header</button>
+    <button class="" @click="changeTheme">
+      change Theme
+    </button>
+    <button class="" @click="changeHeader">
+      change header
+    </button>
+    <button ref="activator">
+      activator
+    </button>
+    <DialogCDialog :activator="activator" />
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
+import type { VNode } from 'vue'
 import { useNuxtApp } from '#app'
 import Input from '~~/components/forms/Input.vue'
 import SecondInput from '~~/components/forms/SecondInput.vue'
 const inputValue = ref('')
-function changeTheme() {
+const activator = ref<VNode | Element | null>(null)
+function changeTheme () {
   const nuxtApp = useNuxtApp()
   if (nuxtApp.$theme.changer() === 'light') {
     nuxtApp.$theme.changer('dark')
@@ -20,7 +30,7 @@ function changeTheme() {
     nuxtApp.$theme.changer('light')
   }
 }
-function changeHeader() {
+function changeHeader () {
   const nuxtApp = useNuxtApp()
   if (nuxtApp.$header.getHeaderComponent()) {
     nuxtApp.$header.changer('no-header')

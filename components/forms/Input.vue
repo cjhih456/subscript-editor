@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input v-model="value" :type="types" />
+    <input v-model="value" :type="types">
   </div>
 </template>
 <script lang="ts">
@@ -11,10 +11,10 @@ export default defineNuxtComponent({
   props: {
     modelValue: {
       type: [String, Boolean] as PropType<String | Boolean>,
-      default: false,
+      default: false
     },
     types: { type: String, default: '' },
-    messages: { type: Array as PropType<Array<String>>, default: () => [] },
+    messages: { type: Array as PropType<Array<String>>, default: () => [] }
   },
   emits: [
     'hover',
@@ -23,24 +23,24 @@ export default defineNuxtComponent({
     'keypress',
     'error',
     'change',
-    'update:modelValue',
+    'update:modelValue'
   ],
-  setup(props, { emit }) {
+  setup (props, { emit }) {
     const hover = ref<boolean>(false)
     const value = computed({
-      get() {
+      get () {
         return props.modelValue
       },
-      set(v) {
+      set (v) {
         emit('update:modelValue', v)
-      },
+      }
     })
     return {
       value,
       hover,
-      ...props,
+      ...props
     }
   },
-  methods: {},
+  methods: {}
 })
 </script>

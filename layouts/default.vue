@@ -20,7 +20,9 @@
           active: $hambuger.value,
         }"
       >
-        <slot name="hambug"> Default hambug </slot>
+        <slot name="hambug">
+          Default hambug
+        </slot>
       </div>
       <div
         :class="{
@@ -31,13 +33,14 @@
       </div>
     </main>
   </div>
+  <div id="dialog-area" />
 </template>
 <script setup>
 import { useNuxtApp } from '#app'
 import { mixin, mixinProps } from '~/plugins/Themeable'
 const props = defineProps(mixinProps)
 const { themeClass } = mixin(props)
-function toggleHambugMenu() {
+function toggleHambugMenu () {
   const nuxtApp = useNuxtApp()
   nuxtApp.$hambuger.changer(!nuxtApp.$hambuger.value)
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input v-model="value" :type="types" />
+    <input v-model="value" :type="types">
     {{ userStore.userDisplayLang }}
   </div>
 </template>
@@ -10,10 +10,10 @@ import { useUserStore } from '~/stores/UserStore'
 const props = defineProps({
   modelValue: {
     type: [String, Boolean] as PropType<String | Boolean>,
-    default: false,
+    default: false
   },
   types: { type: String, default: '' },
-  messages: { type: Array as PropType<Array<String>>, default: () => [] },
+  messages: { type: Array as PropType<Array<String>>, default: () => [] }
 })
 const emit = defineEmits([
   'hover',
@@ -22,7 +22,7 @@ const emit = defineEmits([
   'keypress',
   'error',
   'change',
-  'update:modelValue',
+  'update:modelValue'
 ])
 const userStore = useUserStore()
 onMounted(() => {
@@ -30,11 +30,11 @@ onMounted(() => {
 })
 // const hover = ref<boolean>(false)
 const value = computed({
-  get() {
+  get () {
     return props.modelValue
   },
-  set(v) {
+  set (v) {
     emit('update:modelValue', v)
-  },
+  }
 })
 </script>
