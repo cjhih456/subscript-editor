@@ -1,11 +1,11 @@
-import { acceptHMRUpdate } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 export const useChannelDataStore = defineStore('ChannelData', () => {
   const dataStore = ref<{ [key: number]: ChannelInfo }>({})
   const userDataStore = useUserDataStore()
   function setChannelData (channelData: ChannelInfo) {
     if (channelData.userData) {
-      channelData.uId = channelData.userData.id
+      channelData.uId = channelData.userData.idx
       userDataStore.setUserData(channelData.userData)
       delete channelData.userData
     }
@@ -16,13 +16,7 @@ export const useChannelDataStore = defineStore('ChannelData', () => {
     }
   }
   const takeChannelData = computed(() => {
-    return (idx: number, isLast = true) => {
-      const bufferObj = dataStore.value[idx]
-      if (bufferObj.uId && !isLast) {
-        bufferObj.userData = userDataStore.takeUserData(bufferObj.uId)
-      }
-      return bufferObj
-    }
+    return (idx: number) => dataStore.value[idx]
   })
   return { dataStore, takeChannelData, setChannelData }
 })
@@ -37,21 +31,14 @@ export const useUserDataStore = defineStore('UserData', () => {
       channelDataStore.setChannelData(userData.channelData)
       delete userData.channelData
     }
-    if (dataStore.value[userData.id]) {
-      Object.assign(dataStore.value[userData.id], userData)
+    if (dataStore.value[userData.idx]) {
+      Object.assign(dataStore.value[userData.idx], userData)
     } else {
-      dataStore.value[userData.id] = userData
+      dataStore.value[userData.idx] = userData
     }
   }
   const takeUserData = computed(() => {
-    return (idx: number, isLast = true) => {
-      const bufferObj = dataStore.value[idx]
-      if (bufferObj.channelId && !isLast) {
-        // TODO: take info
-        bufferObj.channelData = channelDataStore.takeChannelData(bufferObj.channelId)
-      }
-      return bufferObj
-    }
+    return (idx: number) => dataStore.value[idx]
   })
   return { dataStore, takeUserData, setUserData }
 })
@@ -64,13 +51,22 @@ export const useUserStore = defineStore('User', () => {
   const userId = ref(0)
   const userDisplayLang = ref('')
   const loginUserData = computed(() => {
-    return userDataStore.dataStore[userId.value]
+    return userDataStore.dataStore.value[userId.value]
   })
   const loginUserLang = computed(() => {
     return loginUserData.value.lang || ''
   })
-  function loadUserInfo () {}
-  return { userDisplayLang, loginUserData, loginUserLang, loadUserInfo }
+  function loadUserInfo () {
+    return useCustomFetch('/api/userData', {
+      method: 'post'
+    })
+  }
+  function tokenValid () {
+    return useCustomFetch('/api/tokenValid', {
+      method: 'post'
+    })
+  }
+  return { userDisplayLang, loginUserData, loginUserLang, loadUserInfo, tokenValid }
 })
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot))

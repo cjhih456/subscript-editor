@@ -1,34 +1,37 @@
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
+  const name = ref<'default' | 'no-hambug' | any>('default')
+  const value = ref(true)
+  const isMini = ref(false)
   return {
     provide: {
       hambuger: {
-        name: ref('default'),
-        value: ref(true),
-        isMini: ref(false),
-        changer(value: boolean) {
-          if (typeof value !== 'boolean') return nuxtApp.$hambuger.value.value
-          nuxtApp.$hambuger.value.value = value
+        name,
+        value,
+        isMini,
+        changer: (v: boolean) => {
+          if (typeof v !== 'boolean') { return value.value }
+          value.value = v
         },
-        changeMiniState(value: boolean) {
-          if (typeof value !== 'boolean') return nuxtApp.$hambuger.isMini.value
-          nuxtApp.$hambuger.isMini.value = value
+        changeMiniState (value: boolean) {
+          if (typeof value !== 'boolean') { return isMini.value }
+          isMini.value = value
         },
         hambugerActiveStatu: computed<boolean>(
-          () => nuxtApp.$hambuger.value.value
+          () => value.value
         ),
         hambugerIsMiniStatu: computed<boolean>(
-          () => nuxtApp.$hambuger.isMini.value
+          () => isMini.value
         ),
-        getHambugerComponent() {
-          switch (nuxtApp.$hambuger.name) {
+        getHambugerComponent () {
+          switch (name) {
             case 'default':
               return
-            case 'no-header':
+            case 'no-hambug':
             default:
               return undefined
           }
-        },
-      },
-    },
+        }
+      }
+    }
   }
 })

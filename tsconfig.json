@@ -1,8 +1,12 @@
 {
   // https://v3.nuxtjs.org/concepts/typescript
   "extends": "./.nuxt/tsconfig.json",
+  "exclude": ["node_modules", "dist", ".storybook"],
   "files": [
     // https://vuejs.org/api/utility-types.html#cssproperties
     // "./types/CssProperties.d.ts"
-  ]
+  ],
+  "compilerOptions": {
+    "strict": true
+  }
 }

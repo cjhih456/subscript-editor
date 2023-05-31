@@ -1,12 +1,13 @@
 import HeaderDefault from '~/components/header/HeaderDefault.vue'
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
+  const headerName = ref('default')
   return {
     provide: {
       header: {
-        headerName: ref('default'),
-        getHeaderComponent() {
-          switch (nuxtApp.$header.headerName.value) {
+        headerName,
+        getHeaderComponent () {
+          switch (headerName.value) {
             case 'default':
               return HeaderDefault
             case 'no-header':
@@ -14,11 +15,11 @@ export default defineNuxtPlugin((nuxtApp) => {
               return undefined
           }
         },
-        changer(value: string) {
-          if (typeof value !== 'string') return nuxtApp.$header.headerName.value
-          nuxtApp.$header.headerName.value = value
-        },
-      },
-    },
+        changer (value: string) {
+          if (typeof value !== 'string') { return headerName.value }
+          headerName.value = value
+        }
+      }
+    }
   }
 })
