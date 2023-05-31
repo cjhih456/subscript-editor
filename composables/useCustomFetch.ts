@@ -46,6 +46,7 @@ function customFetch (url: string, options?: FetchOptions<'json'> & {method: Api
   const authStore = useAuthStore()
   const config = useRuntimeConfig()
   const ctx = {
+    // @ts-ignore
     fetch: $fetch(url, {
       ...options,
       keepalive: true,
