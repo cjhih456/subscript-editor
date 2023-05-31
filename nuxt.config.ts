@@ -1,28 +1,29 @@
-import { defineNuxtConfig } from 'nuxt'
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   typescript: {
-    strict: true,
+    strict: true
   },
+  ssr: false,
   css: ['@/assets/styles/init.sass'],
-  buildModules: [
+  modules: [
     [
       '@pinia/nuxt',
       {
-        autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
-      },
-    ],
+        autoImports: ['defineStore', ['defineStore', 'definePiniaStore']]
+      }
+    ]
   ],
   nitro: {
     minify: true,
-    serveStatic: true, // TODO: if need CDN publish
+    serveStatic: true // TODO: if need CDN publish
+
   },
   vite: {
     css: {
       preprocessorOptions: {
-        sass: {},
-      },
-    },
-  },
+        sass: {}
+      }
+    }
+  }
 })
