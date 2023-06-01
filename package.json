@@ -7,22 +7,26 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "storybook dev -p 6006",
+    "build:storybook": "storybook build"
   },
   "devDependencies": {
     "@babel/core": "^7.19.0",
     "@babel/preset-env": "^7.19.0",
+    "@nuxt/devtools": "^0.5.5",
+    "@nuxt/kit": "^3.5.2",
     "@nuxtjs/eslint-config": "^11.0.0",
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
     "@storybook/addon-actions": "^7.0.18",
     "@storybook/addon-essentials": "^7.0.18",
     "@storybook/addon-interactions": "^7.0.18",
     "@storybook/addon-links": "^7.0.18",
+    "@storybook/cli": "^7.0.18",
     "@storybook/client-api": "^7.0.18",
     "@storybook/testing-library": "^0.1.0",
     "@storybook/vue3-vite": "^7.0.18",
     "@types/node": "^20.2.5",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vue/compiler-sfc": "^3.2.38",
     "babel-loader": "^8.2.5",
     "eslint": "^8.23.0",
@@ -31,6 +35,7 @@
     "nuxt": "^3.5.2",
     "prettier": "^2.7.1",
     "sass": "^1.54.8",
+    "storybook": "^7.0.18",
     "typescript": "^5.0.4",
     "vite": "^4.3.9",
     "vue-loader": "^16.8.3",
@@ -46,6 +51,7 @@
     "react": "^17",
     "react-dom": "^17",
     "sanitize-html": "^2.7.2",
-    "vue": "^3.2.38"
+    "vue": "^3.3.4",
+    "vue-demi": "^0.14.5"
   }
 }

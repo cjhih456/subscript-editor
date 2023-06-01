@@ -12,12 +12,12 @@ export default defineNuxtConfig({
       {
         autoImports: ['defineStore', ['defineStore', 'definePiniaStore']]
       }
-    ]
+    ],
+    '@nuxt/devtools'
   ],
   nitro: {
     minify: true,
     serveStatic: true // TODO: if need CDN publish
-
   },
   vite: {
     css: {
