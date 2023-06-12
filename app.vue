@@ -1,22 +1,19 @@
 <template>
   <NuxtLayout>
     <template #header>
-      <component :is="headerStatus" v-if="headerStatus"></component>
+      <component :is="headerStatus" v-if="headerStatus" />
     </template>
     <template #hambuger>
-      <component :is="hambugerStatus" v-if="hambugerStatus"></component>
+      <component :is="hambugerStatus" v-if="hambugerStatus" />
     </template>
     <NuxtLoadingIndicator :duration="3000" />
     <NuxtPage />
   </NuxtLayout>
 </template>
 <script setup>
-import { useNuxtApp, useHead } from '#app'
+import { useNuxtApp } from '#app'
 import { computed } from 'vue'
 const nuxtApp = useNuxtApp()
 const headerStatus = computed(() => nuxtApp.$header.getHeaderComponent())
 const hambugerStatus = computed(() => nuxtApp.$hambuger.getHambugerComponent())
-useHead({
-  charset: 'utf8',
-})
 </script>
