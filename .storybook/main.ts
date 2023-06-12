@@ -1,5 +1,6 @@
 import type { StorybookConfig } from "@storybook/vue3-vite"
-import { loadNuxt, buildNuxt} from '@nuxt/kit'
+import { w as writeTypes } from '../node_modules/nuxi/dist/shared/nuxi.89758cc3.mjs';
+import { loadNuxt, buildNuxt } from '@nuxt/kit'
 import { Nuxt, ViteConfig } from "nuxt/schema"
 import { mergeConfig, optimizeDeps } from "vite"
 import vuePlugin from '@vitejs/plugin-vue';
@@ -25,8 +26,9 @@ function loadNuxtOnPrimise() {
       dev: true,
       overrides: {
         pages: false,
+        ssr: false,
         app: {
-          rootId: 'nuxt-test'
+          rootId: 'storybook-root',
         },
         vue: {
           runtimeCompiler: true
@@ -39,6 +41,7 @@ function loadNuxtOnPrimise() {
       }
     })
     await nuxtObj.nuxtServer.ready()
+    await writeTypes(nuxtObj.nuxtServer)
     await buildNuxt(nuxtObj.nuxtServer)
   })
   return result
@@ -62,6 +65,9 @@ export default {
   framework: "@storybook/vue3-vite",
   async viteFinal(config) {
     const nuxtObj = await loadNuxtOnPrimise()
+    // console.log(Object.keys(nuxtObj.nuxtServer))
+    // console.log(nuxtObj.nuxtServer.vfs)
+
     const mergedConfig = mergeConfig({
       ...config,
       plugins: config.plugins?.filter((p) => {
@@ -75,19 +81,12 @@ export default {
       }),
       define: {
         ...config.define,
-        global: "window"
+        global: "window",
+        __NUXT__: {
+          runtimeConfig: nuxtObj.nuxtServer.options.runtimeConfig
+        }
       }
-    }, {
-      css: nuxtObj.viteConfig.css,
-      resolve: nuxtObj.viteConfig.resolve,
-      // @ts-ignore
-      plugins: nuxtObj.viteConfig.plugins,
-      vue: nuxtObj.viteConfig.vue,
-      vueJsx: nuxtObj.viteConfig.vueJsx,
-      optimizeDeps: nuxtObj.viteConfig.optimizeDeps,
-      define: nuxtObj.viteConfig.define,
-      assetsInclude: nuxtObj.viteConfig.assetsInclude,
-    } as ViteConfig)
+    }, nuxtObj.viteConfig)
     delete mergedConfig.esbuild
     mergedConfig.optimizeDeps.include = mergedConfig.optimizeDeps.include.filter(v => v !== 'vue')
     mergedConfig.optimizeDeps.include.push('vue')
@@ -99,11 +98,13 @@ export default {
         
       }
     }
-    // console.log(mergedConfig.resolve)
     return mergedConfig
+  },
+  docs: {
+    autodocs: true,
   },
   features: {
     storyStoreV7: true
   },
-  staticDirs: ['../public']
+  staticDirs: ['../public'],
 } as StorybookConfig
