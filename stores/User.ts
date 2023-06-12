@@ -55,7 +55,7 @@ export const useUserStore = defineStore('User', () => {
   })
   const loginUserData = computed(() => {
     return (
-      (authStore.jwtInfo.value?.idx && userDataStore.dataStore[authStore.jwtInfo.value?.idx]) ||
+      (authStore.jwtInfo?.idx && userDataStore.dataStore[authStore.jwtInfo?.idx]) ||
       undefined
     )
   })
@@ -139,7 +139,7 @@ export const useUserStore = defineStore('User', () => {
   function logoutAction () {
     // return useCustomFetch('/account/')
     setTokenInfo('', '')
-    authStore.jwtInfo.value = undefined
+    authStore.jwtInfo = undefined
     return Promise.resolve()
   }
   return {

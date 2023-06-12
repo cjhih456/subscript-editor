@@ -51,7 +51,7 @@ export const useUserStore = defineStore('User', () => {
   const userId = ref(0)
   const userDisplayLang = ref('')
   const loginUserData = computed(() => {
-    return userDataStore.dataStore.value[userId.value]
+    return userDataStore.dataStore[userId.value]
   })
   const loginUserLang = computed(() => {
     return loginUserData.value.lang || ''

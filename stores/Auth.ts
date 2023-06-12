@@ -46,7 +46,7 @@ export const useAuthStore = defineStore('Auth', () => {
         refresh_token: userStore.userRefreshTokenActive
       })
     }).then((result: any) => {
-      userStore.setTokenInfo(result.data, userStore.userRefreshTokenActive.value || '')
+      userStore.setTokenInfo(result.data, userStore.userRefreshTokenActive || '')
       return true
     })
   }

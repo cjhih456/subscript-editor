@@ -74,10 +74,10 @@ function customFetch (url: string, options?: FetchOptions<'json'> & {method: Api
           options.headers = options.headers
             ? {
                 ...options.headers,
-                access_token: userStore.userAccessTokenActive.value || ''
+                access_token: userStore.userAccessTokenActive || ''
               }
             : {
-                access_token: userStore.userAccessTokenActive.value || ''
+                access_token: userStore.userAccessTokenActive || ''
               }
         }
       }

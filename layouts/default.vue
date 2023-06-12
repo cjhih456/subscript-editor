@@ -40,8 +40,8 @@ import { useNuxtApp } from '#app'
 import { mixin, mixinProps } from '~/plugins/Themeable'
 const props = defineProps(mixinProps)
 const { themeClass } = mixin(props)
+const nuxtApp = useNuxtApp()
 function toggleHambugMenu () {
-  const nuxtApp = useNuxtApp()
   nuxtApp.$hambuger.changer(!nuxtApp.$hambuger.value)
 }
 </script>

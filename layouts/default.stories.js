@@ -4,13 +4,13 @@ export default {
   title: 'Layouts/default',
   component: CustomDefaultLayout,
   parameters: {
-    layout: 'fullscreen',
-  },
+    layout: 'fullscreen'
+  }
 }
 
 const Template = () => ({
   components: { CustomDefaultLayout },
-  template: '<custom-default-layout />',
+  template: '<custom-default-layout />'
 })
 
 export const DefaultCustomDefaultLayout =

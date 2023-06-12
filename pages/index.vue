@@ -17,6 +17,9 @@
         <span>aaaaaa</span>
       </DialogCDialog>
     </div>
+    <NuxtLink :to="{name: 'signinNeed'}">
+      aaaaddddd
+    </NuxtLink>
   </div>
 </template>
 <script setup lang="ts">

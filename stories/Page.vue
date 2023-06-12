@@ -16,9 +16,7 @@
           target="_blank"
           rel="noopener noreferrer"
         >
-          <strong
-            >component-driven</strong
-          >
+          <strong>component-driven</strong>
         </a>
         process starting with atomic
         components and ending with
@@ -55,15 +53,13 @@
           href="https://storybook.js.org/tutorials/"
           target="_blank"
           rel="noopener noreferrer"
-          >Storybook tutorials</a
-        >
+        >Storybook tutorials</a>
         . Read more in the
         <a
           href="https://storybook.js.org/docs"
           target="_blank"
           rel="noopener noreferrer"
-          >docs</a
-        >
+        >docs</a>
         .
       </p>
       <div class="tip-wrapper">
@@ -102,22 +98,22 @@ export default {
 
   components: { MyHeader },
 
-  data() {
+  data () {
     return {
-      user: null,
+      user: null
     }
   },
 
   methods: {
-    onLogin() {
+    onLogin () {
       this.user = { name: 'Jane Doe' }
     },
-    onLogout() {
+    onLogout () {
       this.user = null
     },
-    onCreateAccount() {
+    onCreateAccount () {
       this.user = { name: 'Jane Doe' }
-    },
-  },
+    }
+  }
 }
 </script>
