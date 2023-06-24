@@ -35,11 +35,22 @@ function loadNuxtOnPrimise() {
         }
       }
     })
-    nuxtObj.nuxtServer.hook('vite:extendConfig', (viteConfig, {isClient}) => {
-      if(isClient) {
-        resolve({nuxtServer: nuxtObj.nuxtServer, viteConfig} as NuxtObjForViteConfig)
-      }
+    nuxtObj.nuxtServer.hook('modules:done', () => {
+      nuxtObj.nuxtServer?.hook('components:extend', (components) => {
+        for (const name of ['NuxtLink']) {
+          Object.assign(components.find((c) => c.pascalName === name) || {}, {
+            export: name,
+            filePath: './components.mjs',
+          });
+        }
+      });
+      nuxtObj.nuxtServer?.hook('vite:extendConfig', (viteConfig, {isClient}) => {
+        if(isClient) {
+          resolve({nuxtServer: nuxtObj.nuxtServer, viteConfig} as NuxtObjForViteConfig)
+        }
+      })
     })
+    
     await nuxtObj.nuxtServer.ready()
     await writeTypes(nuxtObj.nuxtServer)
     await buildNuxt(nuxtObj.nuxtServer)
@@ -65,39 +76,23 @@ export default {
   framework: "@storybook/vue3-vite",
   async viteFinal(config) {
     const nuxtObj = await loadNuxtOnPrimise()
-    // console.log(Object.keys(nuxtObj.nuxtServer))
-    // console.log(nuxtObj.nuxtServer.vfs)
-
+    // console.log(nuxtObj.viteConfig.)
     const mergedConfig = mergeConfig({
-      ...config,
-      plugins: config.plugins?.filter((p) => {
-        if(!p) return false
-        // @ts-ignore
-        switch(p.name) {
-          case 'vite:vue':
-            return false
-          default: return true
-        }
-      }),
-      define: {
-        ...config.define,
-        global: "window",
-        __NUXT__: {
-          runtimeConfig: nuxtObj.nuxtServer.options.runtimeConfig
-        }
-      }
-    }, nuxtObj.viteConfig)
-    delete mergedConfig.esbuild
-    mergedConfig.optimizeDeps.include = mergedConfig.optimizeDeps.include.filter(v => v !== 'vue')
-    mergedConfig.optimizeDeps.include.push('vue')
-    for (const name in vuePlugins) {
-      if (!mergedConfig.plugins?.some((p) => (p as any)?.name === name)) {
-        const [plugin, key] = vuePlugins[name as keyof typeof vuePlugins];
-        // @ts-ignore
-        mergedConfig.plugins?.push(plugin(mergedConfig[key]));
-        
-      }
-    }
+      resolve: nuxtObj.viteConfig.resolve,
+      optimizeDeps: nuxtObj.viteConfig.optimizeDeps,
+      plugins: nuxtObj.viteConfig.plugins,
+      define: nuxtObj.viteConfig.define,
+      vue: nuxtObj.viteConfig.vue,
+      vueJsx: nuxtObj.viteConfig.vueJsx
+    }, config)
+    // for (const name in vuePlugins) {
+    //   if (!mergedConfig.plugins?.some((p) => (p as any)?.name === name)) {
+    //     const [plugin, key] = vuePlugins[name as keyof typeof vuePlugins];
+    //     // @ts-ignore
+    //     mergedConfig.plugins?.push(plugin(mergedConfig[key]));
+    //   }
+    // }
+
     return mergedConfig
   },
   docs: {

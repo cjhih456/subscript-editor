@@ -18,7 +18,6 @@ type StoryID = string;
 type StoryFnVueReturnType = ConcreteComponent<any>
 // console.log(_plugins)
 const plugins = normalizePlugins(_plugins);
-console.log(plugins)
 const vueApp = createApp({
   setup() {
     const args = reactive({})
