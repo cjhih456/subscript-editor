@@ -10,6 +10,11 @@ export default defineNuxtConfig({
   },
   ssr: false,
   css: ['@/assets/styles/init.sass'],
+  runtimeConfig: {
+    public: {
+      BACKEND_API: ''
+    }
+  },
   modules: [
     [
       '@pinia/nuxt',
@@ -17,8 +22,13 @@ export default defineNuxtConfig({
         autoImports: ['defineStore', ['defineStore', 'definePiniaStore']]
       }
     ],
+    '@nuxtjs/storybook',
     '@nuxt/devtools'
   ],
+  storybook: {
+    devtools: true,
+    version: 'v7'
+  },
   nitro: {
     minify: true,
     serveStatic: true // TODO: if need CDN publish
@@ -26,7 +36,7 @@ export default defineNuxtConfig({
   vite: {
     css: {
       preprocessorOptions: {
-        sass: {}
+        module: () => true
       }
     }
   }
