@@ -30,14 +30,17 @@ export default defineNuxtConfig({
     version: 'v7'
   },
   nitro: {
-    minify: true,
-    serveStatic: true // TODO: if need CDN publish
+    minify: false,
+    serveStatic: false // TODO: if need CDN publish
   },
-  vite: {
-    css: {
-      preprocessorOptions: {
-        module: () => true
-      }
-    }
+  devtools: {
+    enabled: true
   }
+  // vite: {
+  //   css: {
+  //     preprocessorOptions: {
+  //       module: () => true
+  //     }
+  //   }
+  // }
 })
