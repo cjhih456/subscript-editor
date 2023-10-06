@@ -1,11 +1,3 @@
-<template>
-  <div>
-    <input v-model="value" :type="types">
-  </div>
-</template>
-<script lang="ts">
-import { ref, PropType, computed } from 'vue'
-import { defineNuxtComponent } from '#app'
 export default defineNuxtComponent({
   name: 'Input',
   props: {
@@ -26,21 +18,18 @@ export default defineNuxtComponent({
     'update:modelValue'
   ],
   setup (props, { emit }) {
-    const hover = ref<boolean>(false)
     const value = computed({
       get () {
         return props.modelValue
       },
       set (v) {
-        emit('update:modelValue', v)
+        if (v !== value.value) { emit('update:modelValue', v) }
       }
     })
-    return {
-      value,
-      hover,
-      ...props
+    return () => {
+      return <div>
+        <input v-model={value.value} type="types" />
+      </div>
     }
-  },
-  methods: {}
+  }
 })
-</script>

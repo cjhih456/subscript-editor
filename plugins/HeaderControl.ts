@@ -1,5 +1,4 @@
-import HeaderDefault from '~/components/header/HeaderDefault.vue'
-
+import { HeaderDefault } from '#components'
 export default defineNuxtPlugin(() => {
   const headerName = ref('default')
   return {

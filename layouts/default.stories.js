@@ -1,4 +1,4 @@
-import CustomDefaultLayout from './default.vue'
+import CustomDefaultLayout from './default.tsx'
 
 export default {
   title: 'Layouts/default',

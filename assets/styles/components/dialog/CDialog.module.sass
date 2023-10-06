@@ -1,0 +1,14 @@
+.dialog-shell
+  position: relative
+  &.attached-content
+    > *
+      position: absolute
+.dialog-content
+  position: absolute
+  &.fixed-content
+    position: fixed
+    top: var(--dialog-position-top, 0) !important
+    left: var(--dialog-position-left, 0) !important
+    &.full-cover
+      width: 100%
+      height: 100%
