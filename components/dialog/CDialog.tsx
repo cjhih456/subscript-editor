@@ -1,5 +1,7 @@
+import { Teleport, Transition } from 'vue'
 import ClickOutside from '../mixins/ClickOutside'
 import styles from '~~/assets/styles/components/dialog/CDialog.module.sass'
+import { ClientOnly } from '#components'
 export default defineNuxtComponent({
   props: {
     attache: { type: Boolean, default: false },
@@ -31,17 +33,11 @@ export default defineNuxtComponent({
     const dialogContentClassComputed = computed(() => {
       return {
         [styles['dialog-content']]: true,
-        [styles['fixed-content']]: slots.fixed,
         [styles['full-cover']]: slots.fullCover
       }
     })
-    const divWithClickOutsideDirective = withDirectives(h('div'), [
-      [ClickOutside, {
-        handler: clickOutsideEvnet,
-        closeConditional,
-        include: () => []
-      }]
-    ])
+
+    const activatorComputed = computed(() => slots.activator ? slots.activator({ clickAction: activatorClickEvent }) : undefined)
 
     const lazyValue = ref(false)
     const lazyValueComputed = computed({
@@ -64,28 +60,34 @@ export default defineNuxtComponent({
     }
 
     function clickOutsideEvnet () {
-      console.log('clickOutsideEvnet', lazyValueComputed.value)
       if (lazyValueComputed.value) { lazyValueComputed.value = false }
     }
-    function activatorClickEvent (e: Event) {
-      console.log(e)
+    function activatorClickEvent (_e: Event) {
       lazyValueComputed.value = !lazyValueComputed.value
     }
     return () => <div class={dialogShellClassComputed.value}>
     {data.mountedPoint
-      ? <teleport to="#dialog-area" disabled={attacheComputed.value}>
-      <transition>
-        {lazyValueComputed.value
-          ? <divWithClickOutsideDirective class={dialogContentClassComputed.value}>
-          {slots.default ? slots.default() : undefined}
-        </divWithClickOutsideDirective>
-          : undefined}
-      </transition>
-    </teleport>
+      ? <ClientOnly>
+          <Teleport to="#dialog-area" disabled={attacheComputed.value}>
+            <Transition>
+                {
+                  lazyValueComputed.value
+                    ? <div class={styles['dialog-overlay']}>
+                      {withDirectives(h('div', { class: dialogContentClassComputed.value }, slots.default ? slots.default() : undefined), [
+                        [ClickOutside, {
+                          handler: clickOutsideEvnet,
+                          closeConditional,
+                          include: () => [activatorComputed.value]
+                        }]
+                      ])}</div>
+                    : undefined
+                }
+            </Transition>
+          </Teleport>
+        </ClientOnly>
       : undefined}
-
     {
-      slots.activator ? slots.activator({ clickAction: activatorClickEvent }) : 'no Activator'
+      activatorComputed.value
     }
   </div>
   }

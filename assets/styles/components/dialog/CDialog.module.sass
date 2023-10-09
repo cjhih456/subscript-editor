@@ -3,12 +3,30 @@
   &.attached-content
     > *
       position: absolute
-.dialog-content
-  position: absolute
-  &.fixed-content
-    position: fixed
-    top: var(--dialog-position-top, 0) !important
-    left: var(--dialog-position-left, 0) !important
-    &.full-cover
-      width: 100%
-      height: 100%
+.dialog-overlay
+  position: fixed
+  top: 0px
+  left: 0px
+  width: 100vw
+  height: 100vh
+  display: flex
+  justify-content: center
+  align-items: center
+  pointer-events: none
+  &:not(.no-overlay)
+    background: rgba(#000,0.6)
+  .dialog-content
+    background: #fff
+    width: var(--dialog-content-width, 80vw)
+    max-width: var(--dialog-content-max-width, 80vw)
+    height: var(--dialog-content-height, 60vh)
+    max-height: var(--dialog-content-max-height, 80vh)
+    overflow: scroll
+    pointer-events: all
+    &.fixed-content
+      position: fixed
+      top: var(--dialog-position-top, 0) !important
+      left: var(--dialog-position-left, 0) !important
+      &.full-cover
+        width: 100%
+        height: 100%

@@ -4,7 +4,7 @@ import { attachedRoot } from './AttachedRoot'
 interface ClickOutsideBindingArgs {
   handler: (e: MouseEvent) => void
   closeConditional?: (e: Event) => boolean
-  include?: () => HTMLElement[]
+  include?: () => (HTMLElement | VNode)[]
 }
 
 interface ClickOutsideDirectiveBinding extends DirectiveBinding {
@@ -44,13 +44,16 @@ function checkEvent (
   )()
   // Add the root element for the component this directive was defined on
   elements.push(el)
+  const templateBuffer = [...elements].map((el: HTMLElement | VNode) => {
+    if (el instanceof HTMLElement) { return el } else if (Object.hasOwn(el, 'el')) { return el.el } else { return undefined }
+  }).filter(Boolean)
 
   // Check if it's a click outside our elements, and then if our callback returns true.
   // Non-toggleable components should take action in their callback and return falsy.
   // Toggleable can return true if it wants to deactivate.
   // Note that, because we're in the capture phase, this callback will occur before
   // the bubbling click event on any outside elements.
-  return !elements.some(el => el?.contains(e.target as Node))
+  return !templateBuffer.some(el => el?.contains(e.target as Node))
 }
 
 function checkIsActive (
