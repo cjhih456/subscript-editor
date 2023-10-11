@@ -29,10 +29,10 @@ export default defineNuxtConfig({
     devtools: true,
     version: 'v7'
   },
-  nitro: {
-    minify: false,
-    serveStatic: false // TODO: if need CDN publish
-  },
+  // nitro: { // 활성화시 build되어 hot reload가 정상적으로 작동하지 않는다. dev환경에서는 undefined로 지정되게 하자.
+  //   minify: true,
+  //   serveStatic: false // TODO: if need CDN publish
+  // },
   devtools: {
     enabled: true
   }
