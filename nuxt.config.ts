@@ -1,3 +1,5 @@
+import typescript from 'rollup-plugin-typescript2'
+
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   app: {
@@ -35,6 +37,14 @@ export default defineNuxtConfig({
   // },
   devtools: {
     enabled: true
+  },
+  vite: {
+    plugins: [
+      typescript({
+        tsconfig: './tsconfig.json',
+        check: false
+      })
+    ]
   }
   // vite: {
   //   css: {
