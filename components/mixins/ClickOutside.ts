@@ -1,6 +1,19 @@
 import type { DirectiveBinding } from 'vue'
 import { attachedRoot } from './AttachedRoot'
 
+declare global {
+  interface Element {
+    _clickOutside?: Record<
+      number,
+      | {
+        onClick: EventListener
+        onMousedown: EventListener
+      }
+      | undefined
+    > & { lastMousedownWasOutside: boolean }
+  }
+}
+
 interface ClickOutsideBindingArgs {
   handler: (e: MouseEvent) => void
   closeConditional?: (e: Event) => boolean
@@ -92,7 +105,7 @@ function handleShadow (el: HTMLElement, callback: Function): void {
   }
 }
 
-export const ClickOutside = {
+export default {
   // [data-app] may not be found
   // if using bind, inserted makes
   // sure that the root element is
@@ -141,5 +154,3 @@ export const ClickOutside = {
     delete el._clickOutside[binding.instance!.$.uid]
   }
 }
-
-export default ClickOutside

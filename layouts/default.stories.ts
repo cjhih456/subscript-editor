@@ -1,4 +1,4 @@
-import CustomDefaultLayout from './default.tsx'
+import CustomDefaultLayout from './default.jsx'
 
 export default {
   title: 'Layouts/default',

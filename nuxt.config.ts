@@ -1,5 +1,3 @@
-import typescript from 'rollup-plugin-typescript2'
-
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   app: {
@@ -14,7 +12,7 @@ export default defineNuxtConfig({
   css: ['@/assets/styles/init.sass'],
   runtimeConfig: {
     public: {
-      BACKEND_API: ''
+      BACKEND_API: 'http://localhost:3000'
     }
   },
   modules: [
@@ -27,6 +25,11 @@ export default defineNuxtConfig({
     '@nuxtjs/storybook',
     '@nuxt/devtools'
   ],
+  routeRules: {
+    '/api/**': {
+      cors: true
+    }
+  },
   storybook: {
     devtools: true,
     version: 'v7'
@@ -37,20 +40,12 @@ export default defineNuxtConfig({
   // },
   devtools: {
     enabled: true
-  },
-  vite: {
-    plugins: [
-      typescript({
-        tsconfig: './tsconfig.json',
-        check: false
-      })
-    ]
   }
   // vite: {
-  //   css: {
-  //     preprocessorOptions: {
-  //       module: () => true
-  //     }
+  // css: {
+  //   preprocessorOptions: {
+  //     module: () => true
   //   }
+  // }
   // }
 })

@@ -1,4 +1,4 @@
-import { $Fetch, FetchOptions } from 'ohmyfetch'
+import { ofetch, type FetchOptions } from 'ofetch'
 import { useAuthStore } from '~~/stores/Auth'
 import { useUserStore } from '~~/stores/User'
 
@@ -36,18 +36,18 @@ export const fetchData = function (
   return null
 }
 
-interface CustomFetch {
-  fetch: Promise<$Fetch>
+interface CustomFetch<T> {
+  fetch: Promise<T>
   tokenRefreshNeed: boolean
 }
 
-function customFetch (url: string, options?: FetchOptions<'json'> & {method: ApiMethod}) {
+function customFetch<T> (url: string, options?: FetchOptions<'json'> & {method: ApiMethod}) {
   const userStore = useUserStore()
   const authStore = useAuthStore()
   const config = useRuntimeConfig()
   const ctx = {
     // @ts-ignore
-    fetch: $fetch(url, {
+    fetch: ofetch(url, {
       ...options,
       keepalive: true,
       baseURL: config.public.BACKEND_API,
@@ -88,7 +88,7 @@ function customFetch (url: string, options?: FetchOptions<'json'> & {method: Api
       // },
     }),
     tokenRefreshNeed: false
-  } as CustomFetch
+  } as CustomFetch<T>
   return ctx
 }
 

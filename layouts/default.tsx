@@ -12,39 +12,48 @@ export default defineNuxtComponent({
     function toggleHambugMenu () {
       nuxtApp.$hambuger.changer(!nuxtApp.$hambuger.value)
     }
-    const layoutClass = {
+    const layoutClass = computed(() => ({
       [styleClass.value['default-layout']]: true,
       [styleClass.value['no-hambug']]: !slots.hambug,
       [themeClass.value]: true
-    }
-    const mainClass = {
+    }))
+    const mainClass = computed(() => ({
       [styleClass.value['hambug-menu']]: true,
       [styleClass.value['is-mini']]: nuxtApp.$hambuger.isMini,
       active: nuxtApp.$hambuger.value
+    }))
+    const contentClass = computed(() => ({
+      [styleClass.value.content]: true
+    }))
+    return {
+      layoutClass,
+      mainClass,
+      contentClass,
+      toggleHambugMenu
     }
-    return () => {
-      return <div class={layoutClass}>
-        <header>
-          {slots.header ? slots.header({ toggleEvent: toggleHambugMenu }) : ('Default Header')}
-        </header>
-        <main>
-          <div class={mainClass}>
-          {slots.hambug
-            ? slots.hambug()
-            : 'Default hambug'
+  },
+  render () {
+    return <div class={this.layoutClass}>
+      <header>
+        {this.$slots.header ? this.$slots.header({ toggleEvent: this.toggleHambugMenu }) : ('Default Header')}
+      </header>
+      <main>
+        <div class={this.mainClass}>
+          {this.$slots.hambug
+            ? this.$slots.hambug()
+            : 'Default hambug2'
           }
-          </div>
-          <div
-            class={styleClass.value.content}
-          >
-            {slots.default
-              ? slots.default()
-              : 'Default content'
+        </div>
+        <div
+          class={this.contentClass}
+        >
+          {this.$slots.default
+            ? this.$slots.default()
+            : 'Default content2'
           }
-          </div>
-        </main>
-        <div id="dialog-area" />
-      </div>
-    }
+        </div>
+      </main>
+      <div id="dialog-area" />
+    </div>
   }
 })
