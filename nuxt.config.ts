@@ -6,9 +6,9 @@ export default defineNuxtConfig({
     }
   },
   typescript: {
+    shim: true,
     strict: true
   },
-  ssr: false,
   css: ['@/assets/styles/init.sass'],
   runtimeConfig: {
     public: {

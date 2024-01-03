@@ -1,5 +1,5 @@
 export default defineNuxtPlugin(() => {
-  const name = ref<'default' | 'no-hambug' | any>('default')
+  const name = ref<'default' | 'no-hambug'>('default')
   const value = ref(true)
   const isMini = ref(false)
   return {
@@ -23,7 +23,7 @@ export default defineNuxtPlugin(() => {
           () => isMini.value
         ),
         getHambugerComponent () {
-          switch (name) {
+          switch (name.value) {
             case 'default':
               return
             case 'no-hambug':
