@@ -9,7 +9,21 @@ export default defineNuxtConfig({
     shim: true,
     strict: true
   },
-  css: ['@/assets/styles/init.sass'],
+  postcss: {
+    plugins: {
+      autoprefixer: {},
+      tailwindcss: {}
+    }
+  },
+  build: {
+    transpile: ['vuetify']
+  },
+  css: [
+    'vuetify/lib/styles/main.sass',
+    '@mdi/font/css/materialdesignicons.min.css',
+    '@/assets/styles/css/main.css',
+    '@/assets/styles/init.sass'
+  ],
   runtimeConfig: {
     public: {
       BACKEND_API: 'http://localhost:3000'

@@ -38,13 +38,13 @@ export const useUserStore = defineStore('User', () => {
   const userAccessToken = useCookie('userAccess', {
     secure: true,
     sameSite: 'lax',
-    domain: publicConfig.public.PAGE_LOCALE,
+    domain: publicConfig.public.PAGE_LOCALE as string,
     expires: new Date('9999 12-31')
   })
   const userRefreshToken = useCookie('userRefresh', {
     secure: true,
     sameSite: 'lax',
-    domain: publicConfig.public.PAGE_LOCALE,
+    domain: publicConfig.public.PAGE_LOCALE as string,
     expires: new Date('9999 12-31')
   })
   const userAccessTokenActive = computed(() => {
