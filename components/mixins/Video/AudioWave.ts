@@ -1,16 +1,40 @@
-// import dayjs from 'dayjs'
+interface LevelData {
+  displayTerm: number,
+  barPerSec: number,
+  /**
+   *
+   */
+  barSize: number,
+  /**
+   * format for timeline display
+   */
+  format: 'HH:mm:ss.SSS' | 'HH:mm:ss',
+  scaleValue: number
+}
+
+/**
+ *
+ * @param file video file
+ * @param waveCanvas wave gage display
+ * @param timelineCanvas timeline display
+ * @param lazyScroll scroll position
+ * @param displayLevel
+ * @param widthSize canvas's width size
+ * @param waveHeight wave Height will be two time of this value(waveHeight * 2 = canvas height)
+ * @param waveBySec how many wave in a second (when make wave file need this value. will make a value for compress 48000 / waveBySec, default: 400)
+ */
 export default function audioWave (
   file: ComputedRef<File|undefined>,
   waveCanvas: ComputedRef<HTMLCanvasElement | null | undefined>,
   timelineCanvas: ComputedRef<HTMLCanvasElement | null | undefined>,
-  lazyScroll: Ref<number>,
-  displayLevel: Ref<number>,
+  lazyScroll: ComputedRef<number>,
+  displayLevel: ComputedRef<number>,
   widthSize: ComputedRef<number>,
   waveHeight: number,
   waveBySec: number = 400
 ) {
   const nuxt = useNuxtApp()
-  const levelDatas = readonly([
+  const levelDatas = readonly<LevelData[]>([
     {
       displayTerm: 0.1,
       barPerSec: 64,
@@ -51,31 +75,16 @@ export default function audioWave (
   const displayWaveBySec = computed(() => {
     return waveBySec / levelData.value.barPerSec
   })
-  const displayLevelCalc = computed(() => {
-    return levelData.value.scaleValue
-  })
-  const barSize = computed(() => {
-    return levelData.value.barSize
-  })
-  const barPerSec = computed(() => {
-    return levelData.value.barPerSec
-  })
-  const displayTerm = computed(() => {
-    return levelData.value.displayTerm
-  })
-  const displayLevelFormat = computed(() => {
-    return levelData.value.format
-  })
   const displayBarSize = computed(() => {
     return Math.max(
       Math.ceil(
-        ((barSize.value / displayWaveBySec.value) * 100) / displayLevelCalc.value
+        ((levelData.value.barSize / displayWaveBySec.value) * 100) / levelData.value.scaleValue
       ),
       2
     )
   })
   const pixPerSec = computed(() => {
-    return displayBarSize.value * barPerSec.value
+    return displayBarSize.value * levelData.value.barPerSec
   })
   const data = reactive<{
     waveData: number[]
@@ -123,7 +132,7 @@ export default function audioWave (
   function drawWave (scroll: number) {
     const canvas = waveCanvas.value?.getContext('2d')
     if (canvas) {
-      const skipPos = Math.floor(scroll * barPerSec.value) * 2
+      const skipPos = Math.floor(scroll * levelData.value.barPerSec) * 2
       const visibleWidth = dataByLevelDisplay().slice(
         skipPos,
         skipPos + Math.round(widthSize.value / displayBarSize.value) * 2
@@ -157,19 +166,19 @@ export default function audioWave (
       canvas.font = "12px 'Roboto', 'Noto', sans-serif"
       canvas.textAlign = 'left'
       canvas.textBaseline = 'bottom'
-      const displaySpace = displayTerm.value * pixPerSec.value
+      const displaySpace = levelData.value.displayTerm * pixPerSec.value
       const timeRound =
-        Math.ceil(widthSize.value / displayTerm.value / pixPerSec.value) + 1
-      const leftSpace = (scroll % displayTerm.value) * pixPerSec.value
+        Math.ceil(widthSize.value / levelData.value.displayTerm / pixPerSec.value) + 1
+      const leftSpace = (scroll % levelData.value.displayTerm) * pixPerSec.value
       const leftRound =
-        Math.floor(scroll / displayTerm.value) * displayTerm.value
+        Math.floor(scroll / levelData.value.displayTerm) * levelData.value.displayTerm
 
       for (let i = 0; i < timeRound; i++) {
         genTimeLabel(
           canvas,
-          nuxt.$dayjs((i * displayTerm.value + leftRound) * 1000)
+          nuxt.$dayjs((i * levelData.value.displayTerm + leftRound) * 1000)
             .utc()
-            .format(displayLevelFormat.value),
+            .format(levelData.value.format),
           Math.ceil(i * displaySpace - leftSpace)
         )
       }
@@ -194,49 +203,22 @@ export default function audioWave (
   watch(() => file.value, (n) => {
     if (n) {
       n.arrayBuffer().then(async (v: ArrayBuffer) => {
-        const { Buffer } = await import('buffer')
-        nuxt.$ffmpeg.transcodeAudio(new Uint8Array(v), 'video', 'out.data').then((wave: Uint8Array) => {
-          const tempData = [] as number[]
-          wave.reduce((acc, byte, i) => {
-            if (i % 2 === 1) {
-              acc.tempValue = Buffer.from([byte, acc.tempValue]).readInt16LE()
-              if (acc.tempValue < acc.min) { acc.min = acc.tempValue }
-              if (acc.tempValue > acc.max) { acc.max = acc.tempValue }
-              if (++acc.readRound === 240) {
-                tempData.push(acc.max, acc.min)
-                acc.readRound = 0
-                acc.min = 32767
-                acc.max = -32768
-              }
-            } else {
-              acc.tempValue = byte
-            }
-            return acc
-          }, {
-            tempValue: 0,
-            readRound: 0,
-            min: 32767,
-            max: -32768
-          })
-          const maxValue = tempData.reduce(
-            (acc, cur, idx) => {
-              if (idx % 2) {
-                acc.min = acc.min > cur ? cur : acc.min
-              } else {
-                acc.max = acc.max < cur ? cur : acc.max
-              }
-              return acc
-            },
-            { max: 0, min: 0 }
-          )
-          data.waveData = Array.from(tempData.map((v, idx) =>
+        await nuxt.$ffmpeg.writeFile(new Uint8Array(v), 'video')
+        nuxt.$ffmpeg.transcodeWave('video', 'out.data', waveBySec).then((obj) => {
+          data.waveData = obj.wave.map((v, idx) =>
             Math.round(
-              (waveHeight * v) / Math.abs(maxValue[idx % 2 ? 'min' : 'max'])
+              (waveHeight * v) / Math.abs(obj.maxMinValue[idx % 2 ? 'min' : 'max'])
             )
-          ))
+          )
           genWave()
         })
+        nuxt.$ffmpeg.transcodeAudio('video', 'out.wav')
       })
+    }
+  })
+  watch(() => lazyScroll.value, (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      genWave()
     }
   })
   onMounted(async () => {

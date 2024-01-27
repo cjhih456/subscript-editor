@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { toBlobURL } from '@ffmpeg/util'
 import type { WatchStopHandle } from 'vue'
@@ -42,8 +43,14 @@ export default defineNuxtPlugin(() => {
     })
     setLoaded(result)
   }
-  async function transcodeAudio (file: Uint8Array, inputFileName: string, outputFileName: string) {
-    await ffmpegRef.value.writeFile(inputFileName, file)
+  /**
+   * make wave data from file's audio channel
+   * @param file VideoFile
+   * @param inputFileName VideoFileName
+   * @param outputFileName OutputFileName
+   * @returns wave data & min, max value object
+   */
+  async function transcodeWave (inputFileName: string, outputFileName: string, waveBySec: number) {
     await ffmpegRef.value.exec(['-f', 'lavfi',
       '-i', 'anullsrc=channel_layout=stereo:sample_rate=48000:duration=8.86',
       '-i', inputFileName,
@@ -55,24 +62,74 @@ export default defineNuxtPlugin(() => {
       outputFileName
     ])
     const data = await ffmpegRef.value.readFile(outputFileName) as Uint8Array
-    return data
+    ffmpegRef.value.deleteFile(outputFileName)
+    const wave = [] as number[]
+    const maxMinValue = {
+      max: -32768,
+      min: 32767
+    }
+    const waveBySecValue = 96000 / waveBySec // (48000 * 2) / waveBySec
+    data.reduce((acc, byte, i) => {
+      if (i % 2 === 1) {
+        const value = Buffer.from([byte, acc.tempValue]).readInt16LE()
+        if (value < maxMinValue.min) { maxMinValue.min = value }
+        if (value < acc.min) { acc.min = value }
+        if (value > maxMinValue.max) { maxMinValue.max = value }
+        if (value > acc.max) { acc.max = value }
+        if (++acc.readRound === waveBySecValue) {
+          wave.push(acc.max, acc.min)
+          acc.readRound = 0
+          acc.min = 32767
+          acc.max = -32768
+        }
+      } else {
+        acc.tempValue = byte
+      }
+      return acc
+    }, {
+      tempValue: 0,
+      readRound: 0,
+      min: 32767,
+      max: -32768
+    })
+    return {
+      wave,
+      maxMinValue
+    }
   }
-  async function transcodeVideo (file: Uint8Array, inputFileName: string, outputFileName: string, options: any = {}) {
-    await ffmpegRef.value.writeFile(inputFileName, file)
+  async function transcodeVideo (inputFileName: string, outputFileName: string, options: any = {}) {
     const command = ['-i', inputFileName]
 
     for (const [key, value] of Object.entries(options)) {
       command.push(key, String(value))
     }
-
+    command.push(outputFileName)
     await ffmpegRef.value.exec(command)
     const data = await ffmpegRef.value.readFile(outputFileName) as Uint8Array
     return data
+  }
+  async function transcodeAudio (inputFileName: string, outputFileName: string, options: any = {}) {
+    const command = ['-i', inputFileName, '-ar', '16000']
+
+    for (const [key, value] of Object.entries(options)) {
+      command.push(key, String(value))
+    }
+    command.push(outputFileName)
+
+    await ffmpegRef.value.exec(command)
+    const data = await ffmpegRef.value.readFile(outputFileName) as Uint8Array
+    ffmpegRef.value.deleteFile(outputFileName)
+    return data
+  }
+  async function writeFile (file: Uint8Array, inputFileName: string) {
+    await ffmpegRef.value.writeFile(inputFileName, file)
   }
   return {
     provide: {
       ffmpeg: {
         load,
+        writeFile,
+        transcodeWave,
         transcodeAudio,
         transcodeVideo
       }

@@ -21,14 +21,12 @@ export default defineNuxtComponent({
       return waveCanvas.value?.offsetWidth || 0
     })
     const selectedFile = computed(() => data.videoFile)
-    const timelineComputed = computed(() => timeline.value)
-    const waveCanvasComputed = computed(() => waveCanvas.value)
     audioWave(
       selectedFile,
-      waveCanvasComputed,
-      timelineComputed,
-      toRef(data.scrollValue),
-      toRef(data.displayLevel),
+      computed(() => waveCanvas.value),
+      computed(() => timeline.value),
+      computed(() => data.scrollValue),
+      computed(() => data.displayLevel),
       displayPx,
       waveHeight
     )
@@ -38,7 +36,6 @@ export default defineNuxtComponent({
         data.videoFile = target.files[0]
       }
     }
-
     return () => <div>
       <input type="file" onChange={fileSelect}></input>
       <canvas
