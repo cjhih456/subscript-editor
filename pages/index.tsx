@@ -1,47 +1,64 @@
-import { useNuxtApp } from '#app'
-import { NuxtLink, DialogCDialog, FormsSecondInput as SecondInput, FormsInput as Input } from '#components'
-import styles from '~~/assets/styles/pages/index.module.sass'
+// import styles from '~~/assets/styles/pages/index.module.sass'
+
+import audioWave from '~/components/mixins/Video/AudioWave'
+
 export default defineNuxtComponent({
   name: 'IndexPage',
   setup () {
-    const stylesComputed = computed(() => styles)
-    const inputValue = ref<any>('')
-    function changeTheme () {
-      const nuxtApp = useNuxtApp()
-      if (nuxtApp.$theme.changer() === 'light') {
-        nuxtApp.$theme.changer('dark')
-      } else {
-        nuxtApp.$theme.changer('light')
+    const data = reactive<{
+      displayLevel: number,
+      videoFile?: File,
+      scrollValue: number
+    }>({
+      displayLevel: 2,
+      videoFile: undefined,
+      scrollValue: 0
+    })
+    const waveHeight = 25
+    const timeline = ref<HTMLCanvasElement | null>()
+    const waveCanvas = ref<HTMLCanvasElement | null>()
+    const displayPx = computed(() => {
+      return waveCanvas.value?.offsetWidth || 0
+    })
+    const selectedFile = computed(() => data.videoFile)
+    const timelineComputed = computed(() => timeline.value)
+    const waveCanvasComputed = computed(() => waveCanvas.value)
+    audioWave(
+      selectedFile,
+      waveCanvasComputed,
+      timelineComputed,
+      toRef(data.scrollValue),
+      toRef(data.displayLevel),
+      displayPx,
+      waveHeight
+    )
+    function fileSelect (event: Event) {
+      const target = event.target as HTMLInputElement
+      if (target && target.files) {
+        data.videoFile = target.files[0]
       }
     }
-    function changeHeader () {
-      const nuxtApp = useNuxtApp()
-      if (nuxtApp.$header.getHeaderComponent()) {
-        nuxtApp.$header.changer('no-header')
-      } else {
-        nuxtApp.$header.changer('default')
-      }
-    }
-    return () => <div>
-      isDefault
-      <Input v-model={inputValue.value} />
-      <SecondInput v-model={inputValue.value} />
-      <button class="" onClick={changeTheme}>
-        change Theme
-      </button>
-      <button class="" onClick={changeHeader}>
-        change header
-      </button>
-      <div class={stylesComputed.value['dialog-area']}>
 
-        <DialogCDialog fixed>{{
-          default: () => <span>aaaaaa</span>,
-          activator: ({ clickAction }: {clickAction: (v:MouseEvent) => void}) => <button onClick={clickAction}>activator</button>
-        }}</DialogCDialog>
-      </div>
-      <NuxtLink to={{ name: 'signinNeed' }}>
-        aaaaddddd
-      </NuxtLink>
+    return () => <div>
+      <input type="file" onChange={fileSelect}></input>
+      <canvas
+        ref={(el) => { timeline.value = el as HTMLCanvasElement }}
+        height="20"
+        width={displayPx.value}
+        style={{
+          width: '100%',
+          height: '20px'
+        }}
+      />
+      <canvas
+        ref={(el) => { waveCanvas.value = el as HTMLCanvasElement }}
+        height={waveHeight * 2}
+        width={displayPx.value}
+        style={{
+          width: '100%',
+          height: `${waveHeight * 2}px`
+        }}
+      ></canvas>
     </div>
   }
 })
