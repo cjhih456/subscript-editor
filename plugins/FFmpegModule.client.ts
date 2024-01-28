@@ -71,7 +71,7 @@ export default defineNuxtPlugin(() => {
     const waveBySecValue = 96000 / waveBySec // (48000 * 2) / waveBySec
     data.reduce((acc, byte, i) => {
       if (i % 2 === 1) {
-        const value = Buffer.from([byte, acc.tempValue]).readInt16LE()
+        const value = Buffer.from([acc.tempValue, byte]).readInt16LE()
         if (value < maxMinValue.min) { maxMinValue.min = value }
         if (value < acc.min) { acc.min = value }
         if (value > maxMinValue.max) { maxMinValue.max = value }
