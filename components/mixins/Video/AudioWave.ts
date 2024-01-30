@@ -1,9 +1,8 @@
+import type { WritableComputedRef } from 'vue'
+
 interface LevelData {
   displayTerm: number,
   barPerSec: number,
-  /**
-   *
-   */
   barSize: number,
   /**
    * format for timeline display
@@ -23,13 +22,14 @@ interface LevelData {
  * @param waveHeight wave Height will be two time of this value(waveHeight * 2 = canvas height)
  * @param waveBySec how many wave in a second (when make wave file need this value. will make a value for compress 48000 / waveBySec, default: 400)
  */
-export default function audioWave (
+export default function AudioWave (
   file: ComputedRef<File|undefined>,
   waveCanvas: ComputedRef<HTMLCanvasElement | null | undefined>,
   timelineCanvas: ComputedRef<HTMLCanvasElement | null | undefined>,
   lazyScroll: ComputedRef<number>,
   displayLevel: ComputedRef<number>,
   widthSize: ComputedRef<number>,
+  duration: WritableComputedRef<number>,
   waveHeight: number,
   waveBySec: number = 400
 ) {
@@ -187,14 +187,18 @@ export default function audioWave (
   function genWave () {
     if (
       !import.meta.env.SSR &&
-      Array.isArray(data.waveData) && data.waveData.length &&
       waveCanvas.value && timelineCanvas.value
     ) {
       requestAnimationFrame(() => {
-        if (waveCanvas.value?.width === widthSize.value) {
+        if (
+          Array.isArray(data.waveData) && data.waveData.length &&
+          waveCanvas.value?.width === widthSize.value
+        ) {
           clearWave()
-          clearTimeline()
           drawWave(lazyScroll.value)
+        }
+        if (timelineCanvas.value) {
+          clearTimeline()
           drawTimeline(lazyScroll.value)
         }
       })
@@ -204,7 +208,7 @@ export default function audioWave (
     if (n) {
       n.arrayBuffer().then(async (v: ArrayBuffer) => {
         await nuxt.$ffmpeg.writeFile(new Uint8Array(v), 'video')
-        nuxt.$ffmpeg.transcodeWave('video', 'out.data', waveBySec).then((obj) => {
+        await nuxt.$ffmpeg.transcodeWave('video', 'out.data', waveBySec).then((obj) => {
           data.waveData = obj.wave.map((v, idx) =>
             Math.round(
               (waveHeight * v) / Math.abs(obj.maxMinValue[idx % 2 ? 'min' : 'max'])
@@ -212,12 +216,15 @@ export default function audioWave (
           )
           genWave()
         })
-        nuxt.$ffmpeg.transcodeAudio('video', 'out.wav')
+        // take duration of file
+        duration.value = await nuxt.$ffmpeg.takeMediaFileDuration()
+        // take audio file for whisper
+        // const audioFile = await nuxt.$ffmpeg.transcodeAudio('video', 'out.wav')
       })
     }
   })
-  watch(() => lazyScroll.value, (newVal, oldVal) => {
-    if (newVal !== oldVal) {
+  watch(() => [lazyScroll.value, widthSize.value, displayLevel.value], (newVal, oldVal) => {
+    if (newVal[0] !== oldVal[0] || newVal[1] !== oldVal[1] || newVal[2] !== oldVal[2]) {
       genWave()
     }
   })
@@ -227,4 +234,8 @@ export default function audioWave (
     }
     await nuxt.$ffmpeg.load()
   })
+  return {
+    pixPerSec,
+    levelDatasMax: computed(() => levelDatas.length)
+  }
 }
