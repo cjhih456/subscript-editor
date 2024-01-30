@@ -1,4 +1,5 @@
 import { useNuxtApp } from '#app'
+import { VApp, VAppBar, VAppBarTitle, VMain } from 'vuetify/components'
 import { mixin, mixinProps } from '~/plugins/Themeable'
 import styles from '~/assets/styles/layouts/default.module.sass'
 
@@ -33,11 +34,11 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <div class={this.layoutClass}>
-      <header>
-        {this.$slots.header ? this.$slots.header({ toggleEvent: this.toggleHambugMenu }) : ('Default Header')}
-      </header>
-      <main>
+    return <VApp class={this.layoutClass}>
+      <VAppBar>
+        {this.$slots.header ? this.$slots.header({ toggleEvent: this.toggleHambugMenu }) : <VAppBarTitle>Default Header</VAppBarTitle>}
+      </VAppBar>
+      <VMain>
         <div class={this.mainClass}>
           {this.$slots.hambug
             ? this.$slots.hambug()
@@ -52,8 +53,8 @@ export default defineNuxtComponent({
             : 'Default content2'
           }
         </div>
-      </main>
+      </VMain>
       <div id="dialog-area" />
-    </div>
+    </VApp>
   }
 })

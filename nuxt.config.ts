@@ -16,11 +16,11 @@ export default defineNuxtConfig({
     }
   },
   build: {
-    transpile: ['vuetify', '@ffmpeg/ffmpeg', '@ffmpeg/util']
+    transpile: ['@ffmpeg/ffmpeg', '@ffmpeg/util']
   },
   vite: {
     optimizeDeps: {
-      exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util']
+      exclude: ['vuetify', '@ffmpeg/ffmpeg', '@ffmpeg/util']
     },
     server: {
       headers: {
@@ -30,7 +30,6 @@ export default defineNuxtConfig({
     }
   },
   css: [
-    'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css',
     '@/assets/styles/css/main.css',
     '@/assets/styles/init.sass'
@@ -45,9 +44,20 @@ export default defineNuxtConfig({
     {
       autoImports: ['defineStore', ['defineStore', 'definePiniaStore']]
     }
-  ], '@nuxtjs/storybook', '@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt'],
+  ], '@nuxtjs/storybook', '@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'vuetify-nuxt-module'],
+  vuetify: {
+    moduleOptions: {
+      importComposables: true,
+      styles: {
+        configFile: 'assets/styles/variable/vuetify-settings-variable.scss'
+      }
+    }
+  },
+  features: {
+    inlineStyles: false
+  },
   dayjs: {
-    plugins: ['utc']
+    plugins: ['utc', 'customParseFormat']
   },
   security: {
     headers: {
