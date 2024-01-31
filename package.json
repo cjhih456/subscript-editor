@@ -49,6 +49,7 @@
   "dependencies": {
     "@ffmpeg/ffmpeg": "^0.12.10",
     "@ffmpeg/util": "^0.12.1",
+    "@mdi/js": "^7.4.47",
     "@pinia/nuxt": "^0.4.2",
     "@vue/server-renderer": "^3.3.13",
     "buffer": "^6.0.3",
@@ -64,6 +65,7 @@
     "videojs-vtt.js": "^0.15.5",
     "vue": "^3.3.13",
     "vue-demi": "^0.14.5",
+    "vuetify": "^3.5.1",
     "vuetify-nuxt-module": "^0.10.3"
   }
 }
