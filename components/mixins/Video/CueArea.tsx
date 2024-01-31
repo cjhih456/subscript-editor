@@ -1,15 +1,5 @@
 import type { WritableComputedRef } from 'vue'
 
-interface CueData {
-  idx: number,
-  start: number,
-  end: number,
-  speech: string,
-  cache: {
-
-  }
-}
-
 export default function CueArea (
   waveArea: ComputedRef<HTMLDivElement | null | undefined>,
   currentCursor: ComputedRef<HTMLDivElement | null | undefined>,
@@ -19,18 +9,49 @@ export default function CueArea (
   duration: WritableComputedRef<number>,
   currentTime: WritableComputedRef<number>
 ) {
+  function secToPix (sec: number) {
+    return pixPerSec.value * sec
+  }
+  function pixToSec (pix: number) {
+    return pix / pixPerSec.value
+  }
+  class CueData {
+    idx: number
+    startTime: number
+    endTime: number
+    text: string
+    get startPosition () {
+      return secToPix(this.startTime)
+    }
+
+    get endPosition () {
+      return secToPix(this.endTime)
+    }
+
+    get width () {
+      return this.endPosition - this.startPosition
+    }
+
+    constructor () {
+      this.idx = 0
+      this.startTime = 0
+      this.endTime = 0
+      this.text = ''
+    }
+  }
+
   const eventListeningList = ['mousemove', 'mousedown', 'mouseup']
-  const data = reactive({
-    cueData: [] as CueData[],
+  const data = reactive<{
+    cueData: CueData[]
+    cursorDisplay: string
+    lastMouseEvent: string
+    selectedCue: number | undefined
+  }>({
+    cueData: [],
     cursorDisplay: 'auto',
-    lastMouseEvent: ''
+    lastMouseEvent: '',
+    selectedCue: undefined
   })
-  // const focusedCue = shallowRef<CueData>({
-  //   idx: 0,
-  //   start: 0,
-  //   end: 0,
-  //   speech: ''
-  // })
   const mouseCursor = shallowRef({
     position: 0,
     opacity: 0
@@ -50,12 +71,6 @@ export default function CueArea (
       return acc > cur.left ? acc : cur.left
     }, 0)
   })
-  function secToPix (sec: number) {
-    return pixPerSec.value * sec
-  }
-  function pixToSec (pix: number) {
-    return pix / pixPerSec.value
-  }
   function cursorDragEvent (e: MouseEvent) {
     mouseCursor.value = {
       position: e.x - waveAreaPosition.value,
@@ -79,7 +94,7 @@ export default function CueArea (
     }
   }
   function cueDragEvent (_e: MouseEvent, _targetEl?: Element) {
-
+    data.lastMouseEvent = 'cursor'
   }
   function pointerEvent (e: MouseEvent) {
     data.cursorDisplay = 'auto'
@@ -155,15 +170,44 @@ export default function CueArea (
       )
     })
   })
-  function addCue () {
-
+  function genCue (cue: CueData) {
+    return <div
+      class="cue-bar tw-bg-gray-300"
+      data-id={cue.idx}
+      style={{
+        '--cue-position': `${cue.startPosition}px`,
+        '--cue-display-width': `${cue.width}px`
+      }}
+    >
+      <span>
+        <pre>{cue.text}</pre>
+      </span>
+    </div>
   }
+  function genCueArea () {
+    return data.cueData.map(v => genCue(v))
+  }
+  function addCue () {
+    const cueData = new CueData()
+    data.cueData.push(cueData)
+  }
+  // function genCueEdit (cue: CueData) {
+  //   return <div class="cue-bar">
+  //     <span>
+  //       <pre>{cue.speech}</pre>
+  //     </span>
+  //   </div>
+  // }
+  // function genCueEditArea () {
+  //   return data.cueData.map(genCueEdit)
+  // }
   return {
     mouseCursor: computed(() => mouseCursor.value),
     currentTimePosition,
     cueList: data.cueData,
     pointerStyle: computed(() => data.cursorDisplay),
     subtitleArea,
-    addCue
+    addCue,
+    genCueArea
   }
 }

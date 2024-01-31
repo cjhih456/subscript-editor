@@ -68,7 +68,13 @@ export default defineNuxtComponent({
       duration,
       waveHeight
     )
-    const { mouseCursor, currentTimePosition, pointerStyle, subtitleArea } = CueArea(
+    const {
+      mouseCursor,
+      currentTimePosition,
+      pointerStyle,
+      subtitleArea,
+      genCueArea
+    } = CueArea(
       computed(() => waveArea.value),
       computed(() => currentCursor.value),
       computed(() => currentCursorArea.value),
@@ -101,7 +107,8 @@ export default defineNuxtComponent({
       pointerStyle,
       subtitleArea,
       // methods
-      fileSelect
+      fileSelect,
+      genCueArea
     }
   },
   render () {
@@ -133,11 +140,11 @@ export default defineNuxtComponent({
             <div
               class={styles['subtitle-area']}
               style={{
-                '--display-width': this.subtitleArea.width,
-                '--scroll-position': this.subtitleArea.position
+                '--display-width': `${this.subtitleArea.width}px`,
+                '--scroll-position': `-${this.subtitleArea.position}px`
               }}
             >
-              {/* {this.genCueDisplays()} */}
+              {this.genCueArea()}
             </div>
             <div class={styles['wave-area-cursor']}>
               <div

@@ -15,16 +15,13 @@
     min-height: 50px
     transform: translateX(var(--scroll-position))
     width: var(--display-width)
-    .cue-bar
+    :global(.cue-bar)
       position: absolute
       overflow: hidden
-      background: red
       transform: translateX(var(--cue-position))
       width: var(--cue-display-width)
       height: 30px
       top: 10px
-      &[data-active=true]
-        background: #000
       > span
         display: flex
         width: 100%

@@ -3,6 +3,7 @@ import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { toBlobURL } from '@ffmpeg/util'
 import type { WatchStopHandle } from 'vue'
 export default defineNuxtPlugin(() => {
+  const nuxt = useNuxtApp()
   const data = reactive({
     loaded: false,
     onLoading: false
@@ -49,10 +50,13 @@ export default defineNuxtPlugin(() => {
       const regex = /Duration: ([0-9:.]+),/g
       const result = regex.exec(durationStr)
       const time = (result && result[1]) || '00:00:00.00'
-      const [hour, min, sec, ms] = time.split(/[:.]/g).map(v => +v)
-      return ((hour * 3600 + min * 60 + sec) * 1000 + ms * 10) / 1000
+      return convertTimeToSecond(time)
     }
     return 0
+  }
+  function convertTimeToSecond (time: string) {
+    const [hours, minutes, seconds, milliseconds] = time.split(/[:.]/g).map(v => +v)
+    return nuxt.$dayjs.duration({ hours, minutes, seconds, milliseconds }).asMilliseconds() / 1000
   }
   /**
    * make wave data from file's audio channel
@@ -145,7 +149,8 @@ export default defineNuxtPlugin(() => {
         takeMediaFileDuration,
         transcodeWave,
         transcodeAudio,
-        transcodeVideo
+        transcodeVideo,
+        convertTimeToSecond
       }
     }
   }

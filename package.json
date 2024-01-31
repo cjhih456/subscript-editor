@@ -26,6 +26,7 @@
     "@storybook/testing-library": "^0.2.2",
     "@storybook/vue3": "7.6.6",
     "@types/node": "^18.17.5",
+    "@types/videojs-vtt.js": "^0.15.3",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vue/compiler-core": "^3.3.13",
     "autoprefixer": "^10.4.17",
@@ -60,6 +61,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sanitize-html": "^2.7.2",
+    "videojs-vtt.js": "^0.15.5",
     "vue": "^3.3.13",
     "vue-demi": "^0.14.5",
     "vuetify-nuxt-module": "^0.10.3"
