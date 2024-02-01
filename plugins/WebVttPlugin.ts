@@ -8,6 +8,17 @@ interface TranslateResult {
 export default defineNuxtPlugin(() => {
   const nuxt = useNuxtApp()
   const numFormat = 'HH:mm:ss.SSS'
+
+  function timeFormatCheckForEdit (time: string) {
+    return /\d{1,}:\d{2}:\d{2}\.\d{3}/.test(time) ? time : '0:0:0.000'
+  }
+  function timeFormatCheck (time: string) {
+    return /\d{1,}:\d{1,2}:\d{1,2}\.\d{1,3}/.test(time) ? time : '0:0:0.000'
+  }
+  function convertTimeToSecond (time: string) {
+    const [hours, minutes, seconds, milliseconds] = timeFormatCheck(time).split(/[:.]/g).map(v => +v)
+    return nuxt.$dayjs.duration({ hours, minutes, seconds, milliseconds }).asMilliseconds() / 1000
+  }
   function parseSbv (txt: string) {
     const data = { cues: [] as VTTCue[] } as TranslateResult
     txt
@@ -19,8 +30,8 @@ export default defineNuxtPlugin(() => {
           const [s, e] = time.split(',')
           data.cues.push(
             new VTTCue(
-              nuxt.$ffmpeg.convertTimeToSecond(s),
-              nuxt.$ffmpeg.convertTimeToSecond(e),
+              convertTimeToSecond(s),
+              convertTimeToSecond(e),
               text.replace(/\n/g, ' ').trim()
             )
           )
@@ -95,6 +106,9 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       webVtt: {
+        timeFormatCheckForEdit,
+        timeFormatCheck,
+        convertTimeToSecond,
         parseSubtitle,
         makeVttFromJson,
         convertJsonToFile

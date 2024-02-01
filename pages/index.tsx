@@ -1,4 +1,4 @@
-import { VCol, VRow, VSlider } from 'vuetify/components'
+import { VBtn, VCol, VRow, VSlider } from 'vuetify/components'
 import styles from '~/assets/styles/pages/index.module.sass'
 
 import AudioWave from '~/components/mixins/Video/AudioWave'
@@ -69,10 +69,14 @@ export default defineNuxtComponent({
       waveHeight
     )
     const {
+      cueList,
+      cueLastEvent,
       mouseCursor,
       currentTimePosition,
       pointerStyle,
       subtitleArea,
+      addCue,
+      genCueEditArea,
       genCueArea
     } = CueArea(
       computed(() => waveArea.value),
@@ -98,6 +102,8 @@ export default defineNuxtComponent({
       currentCursorArea,
       currentCursor,
       // reactive
+      cueList,
+      cueLastEvent,
       data,
       // computed value
       displayPx,
@@ -108,6 +114,8 @@ export default defineNuxtComponent({
       subtitleArea,
       // methods
       fileSelect,
+      addCue,
+      genCueEditArea,
       genCueArea
     }
   },
@@ -116,6 +124,15 @@ export default defineNuxtComponent({
       cursor: this.pointerStyle
     }}>
       <input type="file" onChange={this.fileSelect}></input>
+      <VRow class="mx-8">
+        <VCol cols="4">
+          {this.genCueEditArea()}
+          <VBtn block onClick={() => this.addCue()}>
+            Add Cue
+          </VBtn>
+        </VCol>
+        <VCol></VCol>
+      </VRow>
       <VRow class="mx-8">
         <VCol>
           <div ref={(el) => { this.waveArea = el as HTMLDivElement }} class={styles['wave-area']}>

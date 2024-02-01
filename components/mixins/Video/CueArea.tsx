@@ -1,3 +1,6 @@
+import { v4 as uuid } from 'uuid'
+import { VCol, VRow, VTextField, VBtn, VIcon } from 'vuetify/components'
+
 import type { WritableComputedRef } from 'vue'
 
 export default function CueArea (
@@ -9,6 +12,7 @@ export default function CueArea (
   duration: WritableComputedRef<number>,
   currentTime: WritableComputedRef<number>
 ) {
+  const nuxt = useNuxtApp()
   function secToPix (sec: number) {
     return pixPerSec.value * sec
   }
@@ -16,27 +20,63 @@ export default function CueArea (
     return pix / pixPerSec.value
   }
   class CueData {
-    idx: number
+    idx: string
     startTime: number
     endTime: number
     text: string
+    lazy: {
+      startTime: number
+      endTime: number
+      startPosition: number
+    }
+
     get startPosition () {
-      return secToPix(this.startTime)
+      return secToPix(this.lazy.startTime || this.startTime)
     }
 
     get endPosition () {
-      return secToPix(this.endTime)
+      return secToPix(this.lazy.endTime || this.endTime)
     }
 
     get width () {
       return this.endPosition - this.startPosition
     }
 
+    get startTimeEdit () {
+      return nuxt.$dayjs.duration((this.lazy.startTime || this.startTime) * 1000).format('HH:mm:ss.SSS')
+    }
+
+    set startTimeEdit (value: string) {
+      this.lazy.startTime = nuxt.$webVtt.convertTimeToSecond(value)
+      this.update()
+    }
+
+    get endTimeEdit () {
+      return nuxt.$dayjs.duration((this.lazy.endTime || this.endTime) * 1000).format('HH:mm:ss.SSS')
+    }
+
+    set endTimeEdit (value: string) {
+      this.lazy.endTime = nuxt.$webVtt.convertTimeToSecond(value)
+      this.update()
+    }
+
     constructor () {
-      this.idx = 0
+      this.idx = uuid()
       this.startTime = 0
       this.endTime = 0
       this.text = ''
+      this.lazy = {
+        startTime: 0,
+        endTime: 0,
+        startPosition: 0
+      }
+    }
+
+    update () {
+      if ((this.lazy.startTime || this.startTime) <= (this.lazy.endTime || this.endTime)) {
+        if (this.startTime !== this.lazy.startTime) { this.startTime = this.lazy.startTime }
+        if (this.endTime !== this.lazy.endTime) { this.endTime = this.lazy.endTime }
+      }
     }
   }
 
@@ -93,8 +133,70 @@ export default function CueArea (
         break
     }
   }
-  function cueDragEvent (_e: MouseEvent, _targetEl?: Element) {
-    data.lastMouseEvent = 'cursor'
+  function cueDragEvent (e: MouseEvent, targetEl?: HTMLDivElement) {
+    let id: string | undefined
+    if (targetEl) {
+      id = targetEl?.dataset.id
+    }
+    if (data.lastMouseEvent.startsWith('cue-')) {
+      id = data.lastMouseEvent.replace(/(^cue-|-[esm]$)/g, '')
+    }
+    const hoveredCueData = data.cueData.find(v => v.idx === id)
+    if (!hoveredCueData) { return }
+    mouseCursor.value = {
+      position: e.x - waveAreaPosition.value,
+      opacity: 0
+    }
+    const innerPos =
+      mouseCursor.value.position - (hoveredCueData.startPosition - secToPix(lazyScroll.value))
+    switch (e.type) {
+      case 'mousemove':
+        if (!data.lastMouseEvent) {
+          if (innerPos < 8 || innerPos > hoveredCueData.width - 8) {
+            data.cursorDisplay = 'col-resize'
+          } else {
+            data.cursorDisplay = 'move'
+          }
+        } else {
+          cueMoveEvent(hoveredCueData, false)
+        }
+        break
+      case 'mousedown':
+        if (innerPos < 8) {
+          data.lastMouseEvent = `cue-${hoveredCueData.idx}-s`
+        } else if (innerPos > hoveredCueData.width - 8) {
+          data.lastMouseEvent = `cue-${hoveredCueData.idx}-e`
+        } else {
+          data.lastMouseEvent = `cue-${hoveredCueData.idx}-m`
+        }
+        hoveredCueData.lazy.startPosition = mouseCursor.value.position
+        break
+      case 'mouseup':
+        cueMoveEvent(hoveredCueData, true)
+        data.lastMouseEvent = ''
+        break
+    }
+  }
+  /**
+   * 커서를 마우스로 드래그시 발생하는 이밴트를 처리하기 위한 함수이다.
+   * @param cue 위치 변경할 CueData 객체
+   * @param isUp mouseUp이벤트 케이스인 경우
+   * @returns {void}
+   */
+  function cueMoveEvent (cue: CueData, isUp: boolean) {
+    if (!data.lastMouseEvent.startsWith('cue-')) { return }
+    const movement = pixToSec(mouseCursor.value.position - cue.lazy.startPosition)
+    if (data.lastMouseEvent.endsWith('-s')) {
+      cue.lazy.startTime = cue.startTime + movement
+    } else if (data.lastMouseEvent.endsWith('-e')) {
+      cue.lazy.endTime = cue.endTime + movement
+    } else if (data.lastMouseEvent.endsWith('-m')) {
+      cue.lazy.startTime = cue.startTime + movement
+      cue.lazy.endTime = cue.endTime + movement
+    }
+    if (isUp) {
+      cue.update()
+    }
   }
   function pointerEvent (e: MouseEvent) {
     data.cursorDisplay = 'auto'
@@ -142,7 +244,7 @@ export default function CueArea (
         default:
           // TODO: 3. cue에 커서가 있는 경우 > cueDragEvent이밴트 수행
           if (target) {
-            cueDragEvent(mouseEvent, target)
+            cueDragEvent(mouseEvent, target as HTMLDivElement)
           } else {
             mouseCursor.value = {
               position: mouseEvent.x - waveAreaPosition.value,
@@ -187,27 +289,59 @@ export default function CueArea (
   function genCueArea () {
     return data.cueData.map(v => genCue(v))
   }
-  function addCue () {
+  function addCue (cue?: VTTCue) {
     const cueData = new CueData()
+    if (cue) {
+      cueData.startTime = cue.startTime
+      cueData.endTime = cue.endTime
+      cueData.text = cue.text
+    }
     data.cueData.push(cueData)
   }
-  // function genCueEdit (cue: CueData) {
-  //   return <div class="cue-bar">
-  //     <span>
-  //       <pre>{cue.speech}</pre>
-  //     </span>
-  //   </div>
-  // }
-  // function genCueEditArea () {
-  //   return data.cueData.map(genCueEdit)
-  // }
+  function deleteCue (cue: CueData) {
+    data.cueData = data.cueData.filter(v => v.idx !== cue.idx)
+  }
+  function genCueEdit (rowData: CueData) {
+    return <VRow key={`cue${rowData.idx}`} no-gutters>
+        <VCol>
+          <VTextField
+            v-model={rowData.startTimeEdit}
+          />
+        </VCol>
+        <VCol>
+          <VTextField
+            v-model={rowData.endTimeEdit}
+          />
+        </VCol>
+        <VCol>
+          <VTextField v-model={rowData.text} />
+        </VCol>
+        <VCol cols="auto">
+          <VBtn
+            color="tw-text-red-400"
+            icon
+            onClick={() => {
+              deleteCue(rowData)
+            }}
+          >
+            <VIcon icon="$delete"></VIcon>
+          </VBtn>
+        </VCol>
+      </VRow>
+  }
+  function genCueEditArea () {
+    return data.cueData.map(genCueEdit)
+  }
   return {
     mouseCursor: computed(() => mouseCursor.value),
     currentTimePosition,
     cueList: data.cueData,
+    cueLastEvent: data.lastMouseEvent, // TODO: delete
     pointerStyle: computed(() => data.cursorDisplay),
     subtitleArea,
     addCue,
-    genCueArea
+    deleteCue,
+    genCueArea,
+    genCueEditArea
   }
 }

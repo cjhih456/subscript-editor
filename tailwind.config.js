@@ -4,7 +4,7 @@ module.exports = {
   mode: 'jit',
   prefix: 'tw-',
   content: [
-    'components/**/*.{tsx}',
+    'components/**/*.tsx',
     'layouts/**/*.tsx',
     'pages/**/*.tsx',
     'app.vue',

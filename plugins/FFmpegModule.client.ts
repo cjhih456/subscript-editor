@@ -50,13 +50,9 @@ export default defineNuxtPlugin(() => {
       const regex = /Duration: ([0-9:.]+),/g
       const result = regex.exec(durationStr)
       const time = (result && result[1]) || '00:00:00.00'
-      return convertTimeToSecond(time)
+      return nuxt.$webVtt.convertTimeToSecond(time)
     }
     return 0
-  }
-  function convertTimeToSecond (time: string) {
-    const [hours, minutes, seconds, milliseconds] = time.split(/[:.]/g).map(v => +v)
-    return nuxt.$dayjs.duration({ hours, minutes, seconds, milliseconds }).asMilliseconds() / 1000
   }
   /**
    * make wave data from file's audio channel
@@ -149,8 +145,7 @@ export default defineNuxtPlugin(() => {
         takeMediaFileDuration,
         transcodeWave,
         transcodeAudio,
-        transcodeVideo,
-        convertTimeToSecond
+        transcodeVideo
       }
     }
   }

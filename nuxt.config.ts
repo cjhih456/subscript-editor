@@ -51,6 +51,11 @@ export default defineNuxtConfig({
       styles: {
         configFile: 'assets/styles/variable/vuetify-settings-variable.scss'
       }
+    },
+    vuetifyOptions: {
+      icons: {
+        defaultSet: 'mdi-svg'
+      }
     }
   },
   features: {
