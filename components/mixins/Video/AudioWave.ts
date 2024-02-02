@@ -227,7 +227,7 @@ export default function AudioWave (
         })
         useCustomFetch('http://localhost:3000/whisper/asr', {
           query: {
-            encode: true,
+            encode: false,
             task: 'transcribe',
             word_timestamps: true,
             output: 'vtt'

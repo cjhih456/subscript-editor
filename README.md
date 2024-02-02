@@ -1,11 +1,11 @@
 # Whisper 
 Whisper Setup document (https://ahmetoner.com/whisper-asr-webservice/run/)
 ```bash
-## Macos
+## CPU only
 docker pull onerahmet/openai-whisper-asr-webservice
 docker run -d -p 9000:9000 -e ASR_MODEL=base -e ASR_ENGINE=openai_whisper onerahmet/openai-whisper-asr-webservice:latest
-
 ```
+
 
 # Nuxt 3 Minimal Starter
 

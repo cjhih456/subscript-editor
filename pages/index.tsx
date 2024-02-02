@@ -32,16 +32,6 @@ export default defineNuxtComponent({
       return data.displayPx
     })
     const selectedFile = computed(() => data.videoFile)
-    function windowResizeEvent () {
-      data.displayPx = waveCanvas.value?.offsetWidth || 0
-    }
-    onMounted(() => {
-      window.addEventListener('resize', windowResizeEvent, false)
-      windowResizeEvent()
-    })
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', windowResizeEvent, false)
-    })
     const duration = computed({
       get () {
         return data.duration
@@ -58,7 +48,7 @@ export default defineNuxtComponent({
         data.currentTime = v
       }
     })
-    const { pixPerSec, levelDatasMax } = AudioWave(
+    const { pixPerSec, levelDatasMax, cueGeneratedData } = AudioWave(
       selectedFile,
       computed(() => waveCanvas.value),
       computed(() => timelineCanvas.value),
@@ -93,6 +83,19 @@ export default defineNuxtComponent({
         data.videoFile = target.files[0]
       }
     }
+    function windowResizeEvent () {
+      data.displayPx = waveCanvas.value?.offsetWidth || 0
+    }
+    watch(() => cueGeneratedData.value, (cues) => {
+      if (cues && cues.length) { cues.forEach(addCue) }
+    })
+    onMounted(() => {
+      window.addEventListener('resize', windowResizeEvent, false)
+      windowResizeEvent()
+    })
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', windowResizeEvent, false)
+    })
     return {
       levelDatasMax,
       // Refs
