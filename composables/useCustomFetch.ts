@@ -49,9 +49,9 @@ function customFetch<T> (url: string, options?: FetchOptions<'json'> & {method: 
     // @ts-ignore
     fetch: ofetch(url, {
       ...options,
-      keepalive: true,
-      baseURL: config.public.BACKEND_API,
-      cache: 'no-cache',
+      keepalive: options?.keepalive ?? true,
+      baseURL: options?.baseURL ?? config.public.BACKEND_API,
+      cache: options?.cache ?? 'no-cache',
       // eslint-disable-next-line require-await
       // async onResponse() {
       //   // { request, response, options }

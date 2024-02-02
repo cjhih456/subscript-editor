@@ -1,5 +1,4 @@
 import type { WritableComputedRef } from 'vue'
-
 interface LevelData {
   displayTerm: number,
   barPerSec: number,
@@ -88,9 +87,11 @@ export default function AudioWave (
   })
   const data = reactive<{
     waveData: number[]
+    cueGeneratedData: VTTCue[]
     dataByLevel: {[k: number]: number[]}
   }>({
     waveData: [],
+    cueGeneratedData: [],
     dataByLevel: {}
   })
 
@@ -219,7 +220,31 @@ export default function AudioWave (
         // take duration of file
         duration.value = await nuxt.$ffmpeg.takeMediaFileDuration()
         // take audio file for whisper
-        // const audioFile = await nuxt.$ffmpeg.transcodeAudio('video', 'out.wav')
+        const audioFile = await nuxt.$ffmpeg.transcodeAudio('video', 'out.wav')
+        const file = new File([audioFile.buffer], 'out.wav', { type: 'audio/wav' })
+        const formData = fetchData('post', {
+          audio_file: file
+        })
+        useCustomFetch('http://localhost:3000/whisper/asr', {
+          query: {
+            encode: true,
+            task: 'transcribe',
+            word_timestamps: true,
+            output: 'vtt'
+          },
+          cache: 'default',
+          keepalive: false,
+          duplex: 'half',
+          body: formData,
+          method: 'post'
+        }).then(async (result: any) => {
+          const cueList = await nuxt.$webVtt.parseSubtitle(result)
+          if (cueList) {
+            data.cueGeneratedData = cueList.cues
+          }
+        }).catch((e: Error) => {
+          console.error(e)
+        })
       })
     }
   })
@@ -236,6 +261,7 @@ export default function AudioWave (
   })
   return {
     pixPerSec,
-    levelDatasMax: computed(() => levelDatas.length)
+    levelDatasMax: computed(() => levelDatas.length),
+    cueGeneratedData: computed(() => data.cueGeneratedData)
   }
 }
