@@ -24,6 +24,7 @@ export default defineNuxtConfig({
     },
     server: {
       headers: {
+        permissionsPolicy: 'fullscreen=self',
         'Cross-Origin-Opener-Policy': 'same-origin',
         'Cross-Origin-Embedder-Policy': 'require-corp'
       }
@@ -32,7 +33,8 @@ export default defineNuxtConfig({
   css: [
     '@mdi/font/css/materialdesignicons.min.css',
     '@/assets/styles/css/main.css',
-    '@/assets/styles/init.sass'
+    '@/assets/styles/init.sass',
+    'video.js/dist/video-js.css'
   ],
   runtimeConfig: {
     public: {
@@ -68,7 +70,8 @@ export default defineNuxtConfig({
     headers: {
       crossOriginResourcePolicy: 'cross-origin',
       crossOriginOpenerPolicy: 'same-origin',
-      crossOriginEmbedderPolicy: import.meta.env.DEV ? 'unsafe-none' : 'require-corp'
+      crossOriginEmbedderPolicy: import.meta.env.DEV ? 'unsafe-none' : 'require-corp',
+      permissionsPolicy: 'fullscreen=self'
     },
     corsHandler: {
       origin: '*',

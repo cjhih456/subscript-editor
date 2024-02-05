@@ -1,5 +1,6 @@
 import { VBtn, VCol, VRow, VSlider } from 'vuetify/components'
 import styles from '~/assets/styles/pages/index.module.sass'
+import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
 
 import AudioWave from '~/components/mixins/Video/AudioWave'
 import CueArea from '~/components/mixins/Video/CueArea'
@@ -14,13 +15,15 @@ export default defineNuxtComponent({
       duration: number
       currentTime: number
       displayPx: number
+      videoFileSrc: string
     }>({
       displayLevel: 2,
       videoFile: undefined,
       scrollValue: 0,
       duration: 0,
       currentTime: 0,
-      displayPx: 0
+      displayPx: 0,
+      videoFileSrc: ''
     })
     const waveHeight = 25
     const timelineCanvas = ref<HTMLCanvasElement | null>()
@@ -81,6 +84,7 @@ export default defineNuxtComponent({
       const target = event.target as HTMLInputElement
       if (target && target.files) {
         data.videoFile = target.files[0]
+        data.videoFileSrc = URL.createObjectURL(data.videoFile)
       }
     }
     function windowResizeEvent () {
@@ -95,6 +99,9 @@ export default defineNuxtComponent({
     })
     onBeforeUnmount(() => {
       window.removeEventListener('resize', windowResizeEvent, false)
+      if (data.videoFileSrc) {
+        URL.revokeObjectURL(data.videoFileSrc)
+      }
     })
     return {
       levelDatasMax,
@@ -134,7 +141,9 @@ export default defineNuxtComponent({
             Add Cue
           </VBtn>
         </VCol>
-        <VCol></VCol>
+        <VCol>
+          <VideoPlayer src={this.data.videoFileSrc}></VideoPlayer>
+        </VCol>
       </VRow>
       <VRow class="mx-8">
         <VCol>

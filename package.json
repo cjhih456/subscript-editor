@@ -64,6 +64,7 @@
     "react-dom": "^18.2.0",
     "sanitize-html": "^2.7.2",
     "uuid": "^9.0.1",
+    "video.js": "^8.10.0",
     "videojs-vtt.js": "^0.15.5",
     "vue": "^3.3.13",
     "vue-demi": "^0.14.5",
