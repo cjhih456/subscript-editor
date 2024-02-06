@@ -1,4 +1,4 @@
-import { VBtn, VCol, VRow, VSlider } from 'vuetify/components'
+import { VBtn, VCol, VContainer, VRow, VSlider } from 'vuetify/components'
 import styles from '~/assets/styles/pages/index.module.sass'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
 
@@ -130,11 +130,11 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <div style={{
+    return <VContainer style={{
       cursor: this.pointerStyle
-    }}>
+    }} fluid>
       <input type="file" onChange={this.fileSelect}></input>
-      <VRow class="mx-8">
+      <VRow>
         <VCol cols="4">
           {this.genCueEditArea()}
           <VBtn block onClick={() => this.addCue()}>
@@ -199,25 +199,6 @@ export default defineNuxtComponent({
               </div>
             </div>
           </div>
-          <VSlider class="video-slide"
-            v-model={this.data.scrollValue}
-            max={this.data.duration}
-            hide-details
-            always-dirty
-            step="0"
-            color="purple">
-            {{
-              'thumb-label': ({ value }: { value: number }) => {
-                return (
-                  <div
-                    class="d-inline"
-                    font-size="6"
-                    line-height="1"
-                  >{value}</div>
-                )
-              }
-            }}
-          </VSlider>
         </VCol>
         <VCol cols="auto">
           <VSlider
@@ -230,6 +211,6 @@ export default defineNuxtComponent({
           />
         </VCol>
       </VRow>
-    </div>
+    </VContainer>
   }
 })

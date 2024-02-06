@@ -177,25 +177,30 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <div class={[this.style['control-bar'], 'tw-bg-gray-500', 'tw-opacity-60']}>
-      <div class="tw-flex">
-        <VBtn size="x-small" icon onClick={this.togglePlayPause}>
-          <VIcon icon={this.playIcon}></VIcon>
-        </VBtn>
-        <VBtn size="x-small" icon onClick={this.stopVideo}>
-          <VIcon icon={mdiStop}></VIcon>{/* stop btn */}
-        </VBtn>
-        <span>{this.durationWithCurrentTime}</span>
-        <VSlider class="tw-flex-grow" step={0} max={this.duration} modelValue={this.currentTime} onUpdate:modelValue={this.seekCurrentTime}></VSlider>
-        <div class="tw-inline-block">
-          <VBtn size="x-small" icon onClick={this.toggleMute}>
-            <VIcon icon={this.volumeIcon}></VIcon>
-          </VBtn>
-        </div>
-        <VBtn size="x-small" icon onClick={this.toggleFullscreen}>
-          <VIcon icon={this.fullscreenIcon}></VIcon>
+    return <div class={[this.style['control-bar']]}>
+      <VBtn size="x-small" icon onClick={this.togglePlayPause}>
+        <VIcon icon={this.playIcon}></VIcon>
+      </VBtn>
+      <VBtn size="x-small" icon onClick={this.stopVideo}>
+        <VIcon icon={mdiStop}></VIcon>
+      </VBtn>
+      <span class={this.style['duration-area']}>{this.durationWithCurrentTime}</span>
+      <VSlider
+        class={this.style['seekbar-area']}
+        step={0}
+        hideDetails
+        max={this.duration}
+        modelValue={this.currentTime}
+        onUpdate:modelValue={this.seekCurrentTime}
+      ></VSlider>
+      <div class={this.style['volume-area']}>
+        <VBtn size="x-small" icon onClick={this.toggleMute}>
+          <VIcon icon={this.volumeIcon}></VIcon>
         </VBtn>
       </div>
+      <VBtn size="x-small" icon onClick={this.toggleFullscreen}>
+        <VIcon icon={this.fullscreenIcon}></VIcon>
+      </VBtn>
     </div>
   }
 })

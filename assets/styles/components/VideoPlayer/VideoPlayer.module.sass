@@ -1,5 +1,10 @@
 .video-player
   position: relative
+  @apply tw-bg-gradient-to-b
+  @apply tw-from-white
+  @apply tw-from-15%
+  @apply tw-to-emerald-300
+  @apply tw-to-85%
   video
     top: 0
     position: absolute
@@ -9,4 +14,15 @@
     width: 100%
     position: absolute
     bottom: 0
-    height: 64px
+    height: 40px
+    @apply tw-bg-gray-500
+    @apply tw-bg-opacity-60
+    @apply tw-flex
+    @apply tw-items-center
+    @apply tw-px-2
+    .duration-area
+      @apply tw-px-2
+    .seekbar-area
+      @apply tw-flex-grow
+    .volume-area
+      @apply tw-relative
