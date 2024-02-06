@@ -30,7 +30,7 @@ export default defineNuxtComponent({
       status.userActive = videoPlayer.value?.userActive() || false
     }
     function updatePlayingState () {
-      status.isPlaying = videoPlayer.value?.paused() || false
+      status.isPlaying = !videoPlayer.value?.paused() || false
     }
     function updateStartedState () {
       status.started = videoPlayer.value?.hasStarted_ || false
