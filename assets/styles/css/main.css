@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --tw-colors-player-50: 112,255,234;
+    --tw-colors-player-100: 123,221,254;
+    --tw-colors-player-200: 134,175,253;
+    --tw-colors-player-300: 142,142,251;
+    --tw-colors-player-400: 177,148,247;
+    --tw-colors-player-500: 199,151,242;
+    --tw-colors-player-600: 208,150,233;
+    --tw-colors-player-700: 203,142,215;
+    --tw-colors-player-800: 168,116,173;
+    --tw-colors-player-900: 107,73,107;
+    --tw-colors-player-950: 51,35,51;
+  }
+};

@@ -94,7 +94,7 @@ export default function CueArea (
   })
   const mouseCursor = shallowRef({
     position: 0,
-    opacity: 0
+    display: false
   })
   const subtitleArea = computed(() => {
     return {
@@ -114,7 +114,7 @@ export default function CueArea (
   function cursorDragEvent (e: MouseEvent) {
     mouseCursor.value = {
       position: e.x - waveAreaPosition.value,
-      opacity: 0
+      display: false
     }
     // this.lastCue = undefined
     data.cursorDisplay = 'col-resize'
@@ -145,7 +145,7 @@ export default function CueArea (
     if (!hoveredCueData) { return }
     mouseCursor.value = {
       position: e.x - waveAreaPosition.value,
-      opacity: 0
+      display: false
     }
     const innerPos =
       mouseCursor.value.position - (hoveredCueData.startPosition - secToPix(lazyScroll.value))
@@ -204,7 +204,7 @@ export default function CueArea (
       // TODO: 마우스 커서 위치에 따라 place holder 바 위치 갱신
       mouseCursor.value = {
         position: e.x - waveAreaPosition.value,
-        opacity: 1
+        display: true
       }
     } else if (e.type === 'mouseup' || e.type === 'mousedown') {
       // TODO: 커서 드래그 이벤트와 동일하게 처리(currentTime 갱신, 마우스 포인터 변경, 등)
@@ -248,7 +248,7 @@ export default function CueArea (
           } else {
             mouseCursor.value = {
               position: mouseEvent.x - waveAreaPosition.value,
-              opacity: 0
+              display: false
             }
           }
       }

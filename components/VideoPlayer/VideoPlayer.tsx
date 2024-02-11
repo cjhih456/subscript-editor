@@ -1,11 +1,11 @@
 import videojs from 'video.js'
 
 import type Player from 'video.js/dist/types/player'
-import './ControlArea'
 import { Teleport } from 'vue'
 import ControlAreaVue from './ControlAreaVue'
+import BigPlayButton from './BigPlayButton'
 import { ClientOnly } from '#components'
-import styleModule from '@/assets/styles/components/VideoPlayer/VideoPlayer.module.sass'
+import styles from '@/assets/styles/components/VideoPlayer/VideoPlayer.module.sass'
 
 export default defineNuxtComponent({
   name: 'VideoPlayer',
@@ -16,11 +16,9 @@ export default defineNuxtComponent({
     }
   },
   setup (props) {
-    const styles = readonly(styleModule)
     const video = ref<Element | null>()
     const videoPlayerReady = ref<boolean>(false)
     const videoPlayer = ref<Player>()
-    const controlArea = ref()
     const status = reactive({
       started: false,
       isPlaying: false,
@@ -48,9 +46,7 @@ export default defineNuxtComponent({
         if (video.value) {
           videoPlayer.value = videojs(video.value, {
             controls: true,
-            controlBar: {
-              controlBar: controlArea
-            },
+            controlBar: false,
             topControlBar: false,
             loadingSpinner: false,
             playEffect: false,
@@ -117,18 +113,20 @@ export default defineNuxtComponent({
       )
       videoPlayer.value.off(['loadstart', 'firstplay'], updateStartedState)
     })
-    return { video, videoPlayer, controlArea, videoPlayerReady, status, styles }
+    return { video, videoPlayer, videoPlayerReady, status }
   },
   render () {
-    return <div class={this.styles['video-player']}>
+    return <div class={styles['video-player']}>
       <ClientOnly>
         <video ref={((el) => { this.video = el as Element })}></video>
         {this.videoPlayerReady && <Teleport to={this.videoPlayer && `#${this.videoPlayer.id_}` as string}>
           <ControlAreaVue
-            ref={((el) => { this.controlArea = el })}
-            video={this.videoPlayer}
+            player={this.videoPlayer}
             isPlaying={this.status.isPlaying}
           ></ControlAreaVue>
+          <BigPlayButton
+            player={this.videoPlayer}
+          ></BigPlayButton>
         </Teleport>}
       </ClientOnly>
     </div>

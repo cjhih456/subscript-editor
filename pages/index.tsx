@@ -130,7 +130,7 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <VContainer style={{
+    return <VContainer class={styles['index-page']} style={{
       cursor: this.pointerStyle
     }} fluid>
       <input type="file" onChange={this.fileSelect}></input>
@@ -150,6 +150,7 @@ export default defineNuxtComponent({
           <div ref={(el) => { this.waveArea = el as HTMLDivElement }} class={styles['wave-area']}>
             <canvas
               ref={(el) => { this.timelineCanvas = el as HTMLCanvasElement }}
+              class={styles['time-line-canvas']}
               height="20"
               width={this.displayPx}
               style={{
@@ -177,10 +178,9 @@ export default defineNuxtComponent({
             </div>
             <div class={styles['wave-area-cursor']}>
               <div
-                class={[styles['hover-cursor'], 'tw-bg-transparent']}
+                class={[styles['hover-cursor'], 'tw-bg-transparent', this.mouseCursor.display ? styles.display : '']}
                 style={{
-                  '--cursor-position': `${this.mouseCursor.position}px`,
-                  opacity: this.mouseCursor.opacity
+                  '--cursor-position': `${this.mouseCursor.position}px`
                 }}
               >
                 <div class={[styles.cursor, 'tw-bg-red-300']}></div>
@@ -202,6 +202,7 @@ export default defineNuxtComponent({
         </VCol>
         <VCol cols="auto">
           <VSlider
+            class={styles['level-slider']}
             v-model={this.data.displayLevel}
             direction="vertical"
             hide-details

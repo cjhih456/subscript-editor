@@ -1,6 +1,10 @@
 .dialog-area
   display: inline-block
   position: relative
+.index-page
+  @apply tw-bg-player-50 tw-bg-opacity-5
+  .level-slider
+    --v-theme-surface-variant: var(--tw-colors-player-500)
 .wave-area
   -webkit-touch-callout: none
   -webkit-user-select: none
@@ -10,7 +14,12 @@
   user-select: none
   position: relative
   overflow: hidden
-  .subtitle-area    
+  .time-line-canvas
+    --time-line-font-color: var(--tw-colors-player-900)
+    --time-line-mark-color: var(--tw-colors-player-600)
+  .wave-line-canvas
+    --wave-line-bar-color: var(--tw-colors-player-300)
+  .subtitle-area
     position: relative
     min-height: 50px
     transform: translateX(var(--scroll-position))
@@ -43,18 +52,22 @@
     top: 0
     width: 100%
     height: 100%
-    .hover-cursor
-      transform: translateX(var(--cursor-position))
-      transition: .2s opacity
-      pointer-events: none
     .cursor-area, .hover-cursor
       position: absolute
       height: 100%
       width: 1px
       display: flex
       justify-content: center
+      transform: translateX(var(--cursor-position))
       .cursor
         height: 100%
-        min-width: 5px
-    .cursor-area
-      transform: translateX(var(--cursor-position))
+        min-width: 4px
+        @apply tw-bg-player-400
+    .hover-cursor
+      transition: .2s opacity
+      pointer-events: none
+      &.display
+        .cursor
+          @apply tw-bg-opacity-40
+      .cursor
+        @apply tw-bg-opacity-0

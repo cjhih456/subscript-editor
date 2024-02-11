@@ -2,11 +2,11 @@ import { VBtn, VIcon, VSlider } from 'vuetify/components'
 import { mdiPlay, mdiPause, mdiStop, mdiVolumeMute, mdiVolumeHigh, mdiVolumeLow, mdiVolumeMedium, mdiVolumeVariantOff, mdiFullscreen, mdiFullscreenExit } from '@mdi/js'
 import type Player from 'video.js/dist/types/player'
 import type { PropType } from 'vue'
-import styleModule from '@/assets/styles/components/VideoPlayer/VideoPlayer.module.sass'
+import style from '@/assets/styles/components/VideoPlayer/VideoPlayer.module.sass'
 export default defineNuxtComponent({
   name: 'ControlAreaVue',
   props: {
-    video: {
+    player: {
       type: Object as PropType<Player>,
       default: undefined
     },
@@ -36,21 +36,21 @@ export default defineNuxtComponent({
       }
     }
     function startVideo () {
-      if (!props.video) { return }
+      if (!props.player) { return }
       // starting the video...
-      props.video.play()
+      props.player.play()
     }
     function pauseVideo () {
-      if (!props.video) { return }
+      if (!props.player) { return }
       // pausing the video...
-      props.video.pause()
+      props.player.pause()
     }
     function stopVideo () {
-      if (!props.video) { return }
+      if (!props.player) { return }
       // stopping the video...
-      props.video.pause()
-      props.video.currentTime(0)
-      props.video.trigger('stop')
+      props.player.pause()
+      props.player.currentTime(0)
+      props.player.trigger('stop')
     }
 
     // Volume
@@ -70,33 +70,33 @@ export default defineNuxtComponent({
       }
     })
     function updateVolumeState () {
-      if (!props.video) { return }
-      volumeData.value = { value: props.video.volume() || 0, mute: props.video.muted() || false }
+      if (!props.player) { return }
+      volumeData.value = { value: props.player.volume() || 0, mute: props.player.muted() || false }
     }
     function changeVolume (value: number) {
-      if (!props.video) { return }
-      props.video.volume(value)
+      if (!props.player) { return }
+      props.player.volume(value)
       updateVolumeState()
     }
     function toggleMute () {
-      if (!props.video) { return }
-      props.video.muted(!volumeData.value.mute)
+      if (!props.player) { return }
+      props.player.muted(!volumeData.value.mute)
       updateVolumeState()
     }
 
     // FullScreen
     const fullscreenData = ref(false)
     function updateFullscreenState () {
-      if (!props.video) { return }
-      fullscreenData.value = props.video.isFullscreen() || false
+      if (!props.player) { return }
+      fullscreenData.value = props.player.isFullscreen() || false
     }
     function toggleFullscreen () {
-      if (!props.video) { return }
-      if (props.video.supportsFullScreen() && document.fullscreenEnabled) {
+      if (!props.player) { return }
+      if (props.player.supportsFullScreen() && document.fullscreenEnabled) {
         if (fullscreenData.value) {
-          props.video.exitFullscreen()
+          props.player.exitFullscreen()
         } else {
-          props.video.requestFullscreen()
+          props.player.requestFullscreen()
         }
       }
     }
@@ -105,14 +105,14 @@ export default defineNuxtComponent({
     // CurrentTime
     const currentTime = ref(0)
     function seekCurrentTime (value: number) {
-      if (value !== currentTime.value) { props.video?.currentTime(value) }
+      if (value !== currentTime.value) { props.player?.currentTime(value) }
     }
     function updateCurrentTimeState () {
       requestAnimationFrame(() => {
-        if (props.video?.ended()) {
+        if (props.player?.ended()) {
           currentTime.value = duration.value
         } else {
-          currentTime.value = props.video?.scrubbing() ? props.video?.getCache().currentTime : props.video?.currentTime() || 0
+          currentTime.value = props.player?.scrubbing() ? props.player?.getCache().currentTime : props.player?.currentTime() || 0
         }
       })
     }
@@ -120,7 +120,7 @@ export default defineNuxtComponent({
     // Duration
     const duration = ref(0)
     function updateDurationState () {
-      duration.value = props.video?.duration() || 0
+      duration.value = props.player?.duration() || 0
     }
     function formatTimeDisplay (duration: number) {
       const format = duration >= 3600 ? 'H:mm:ss' : 'm:ss'
@@ -139,14 +139,14 @@ export default defineNuxtComponent({
     }
 
     function eventInit () {
-      props.video?.on('loadedmetadata', updateDurationState)
-      props.video?.on('fullscreenchange', updateFullscreenState)
-      props.video?.on(['timeupdate', 'ended'], updateCurrentTimeState)
+      props.player?.on('loadedmetadata', updateDurationState)
+      props.player?.on('fullscreenchange', updateFullscreenState)
+      props.player?.on(['timeupdate', 'ended'], updateCurrentTimeState)
     }
     function eventDetech () {
-      props.video?.off('loadedmetadata', updateDurationState)
-      props.video?.off('fullscreenchange', updateFullscreenState)
-      props.video?.off(['timeupdate', 'ended'], updateCurrentTimeState)
+      props.player?.off('loadedmetadata', updateDurationState)
+      props.player?.off('fullscreenchange', updateFullscreenState)
+      props.player?.off(['timeupdate', 'ended'], updateCurrentTimeState)
     }
 
     onMounted(() => {
@@ -172,28 +172,27 @@ export default defineNuxtComponent({
       duration,
       currentTime,
       seekCurrentTime,
-      durationWithCurrentTime,
-      style: readonly(styleModule)
+      durationWithCurrentTime
     }
   },
   render () {
-    return <div class={[this.style['control-bar']]}>
+    return <div class={[style['control-bar']]}>
       <VBtn size="x-small" icon onClick={this.togglePlayPause}>
         <VIcon icon={this.playIcon}></VIcon>
       </VBtn>
       <VBtn size="x-small" icon onClick={this.stopVideo}>
         <VIcon icon={mdiStop}></VIcon>
       </VBtn>
-      <span class={this.style['duration-area']}>{this.durationWithCurrentTime}</span>
+      <span class={style['duration-area']}>{this.durationWithCurrentTime}</span>
       <VSlider
-        class={this.style['seekbar-area']}
+        class={style['seekbar-area']}
         step={0}
         hideDetails
         max={this.duration}
         modelValue={this.currentTime}
         onUpdate:modelValue={this.seekCurrentTime}
       ></VSlider>
-      <div class={this.style['volume-area']}>
+      <div class={style['volume-area']}>
         <VBtn size="x-small" icon onClick={this.toggleMute}>
           <VIcon icon={this.volumeIcon}></VIcon>
         </VBtn>

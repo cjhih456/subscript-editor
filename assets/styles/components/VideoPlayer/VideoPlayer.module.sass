@@ -1,28 +1,28 @@
 .video-player
   position: relative
-  @apply tw-bg-gradient-to-b
-  @apply tw-from-white
-  @apply tw-from-15%
-  @apply tw-to-emerald-300
-  @apply tw-to-85%
+  @apply tw-bg-gradient-to-b tw-from-player-200 tw-from-15% tw-to-player-400 tw-to-85%
   video
-    top: 0
-    position: absolute
-    width: 100%
-    height: 100%
+    @apply tw-top-0 tw-absolute tw-h-full tw-w-full
   .control-bar
-    width: 100%
-    position: absolute
-    bottom: 0
     height: 40px
-    @apply tw-bg-gray-500
-    @apply tw-bg-opacity-60
-    @apply tw-flex
-    @apply tw-items-center
-    @apply tw-px-2
+    @apply tw-w-full tw-bottom-0 tw-absolute tw-bg-player-800 tw-bg-opacity-60 tw-flex tw-items-center tw-px-2
     .duration-area
       @apply tw-px-2
     .seekbar-area
       @apply tw-flex-grow
     .volume-area
       @apply tw-relative
+  .big-play-btn
+    @apply tw-absolute tw-top-1/2 tw-left-1/2 tw-transform -tw-translate-x-1/2 -tw-translate-y-1/2 tw-bg-transparent tw-shadow-none tw-text-white
+    &.has-started
+      @apply tw-opacity-0
+    &::before
+      content: ''
+      @apply tw-block tw-absolute tw-h-full tw-w-full tw-blur-md tw-bg-player-500 tw-bg-opacity-50 tw-rounded-full
+    :global(.v-btn__overlay)
+      @apply tw-h-full tw-w-full tw-blur-lg tw-bg-player-600 tw-bg-opacity-40
+    :global(.v-btn__content)
+      @apply tw-opacity-60
+    &:hover
+      :global(.v-btn__content)
+        @apply tw-opacity-100

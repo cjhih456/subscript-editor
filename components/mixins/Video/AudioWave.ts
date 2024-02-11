@@ -131,14 +131,15 @@ export default function AudioWave (
     timelineCanvas.value?.getContext('2d')?.clearRect(0, 0, widthSize.value, 20)
   }
   function drawWave (scroll: number) {
-    const canvas = waveCanvas.value?.getContext('2d')
+    if (!waveCanvas.value) { return }
+    const canvas = waveCanvas.value.getContext('2d')
     if (canvas) {
       const skipPos = Math.floor(scroll * levelData.value.barPerSec) * 2
       const visibleWidth = dataByLevelDisplay().slice(
         skipPos,
         skipPos + Math.round(widthSize.value / displayBarSize.value) * 2
       )
-      canvas.fillStyle = '#880000'
+      canvas.fillStyle = getComputedStyle(waveCanvas.value).getPropertyValue('--wave-line-bar-color')
       for (let pos = 0; pos < visibleWidth.length; pos += 2) {
         canvas.fillRect(
           (pos / 2) * displayBarSize.value,
@@ -150,12 +151,14 @@ export default function AudioWave (
     }
   }
   function genTimeLabel (c: CanvasRenderingContext2D, t: string, x: number) {
-    c.fillStyle = '#000'
+    if (!timelineCanvas.value) { return }
+    c.fillStyle = getComputedStyle(timelineCanvas.value).getPropertyValue('--time-line-font-color')
     c.fillText(t, x + 3, 12)
     genTimeMark(c, x)
   }
   function genTimeMark (c: CanvasRenderingContext2D, x: number) {
-    c.strokeStyle = '#880000'
+    if (!timelineCanvas.value) { return }
+    c.strokeStyle = getComputedStyle(timelineCanvas.value).getPropertyValue('--time-line-mark-color')
     c.beginPath()
     c.moveTo(x, 0)
     c.lineTo(x, 20)
