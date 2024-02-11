@@ -1,71 +1,47 @@
 .dialog-area
-  display: inline-block
-  position: relative
+  @apply tw-relative tw-inline-block
 .index-page
   @apply tw-bg-player-50 tw-bg-opacity-5
   .level-slider
     --v-theme-surface-variant: var(--tw-colors-player-500)
 .wave-area
-  -webkit-touch-callout: none
-  -webkit-user-select: none
-  -khtml-user-select: none
-  -moz-user-select: none
-  -ms-user-select: none
-  user-select: none
-  position: relative
-  overflow: hidden
+  @apply tw-relative tw-overflow-hidden tw-select-none
   .time-line-canvas
     --time-line-font-color: var(--tw-colors-player-900)
     --time-line-mark-color: var(--tw-colors-player-600)
   .wave-line-canvas
     --wave-line-bar-color: var(--tw-colors-player-300)
   .subtitle-area
-    position: relative
+    @apply tw-relative
     min-height: 50px
     transform: translateX(var(--scroll-position))
     width: var(--display-width)
     :global(.cue-bar)
-      position: absolute
-      overflow: hidden
+      @apply tw-absolute tw-overflow-hidden
       transform: translateX(var(--cue-position))
       width: var(--cue-display-width)
       height: 30px
       top: 10px
       > span
-        display: flex
-        width: 100%
-        height: 100%
-        overflow: hidden
-        align-items: center
+        @apply tw-flex tw-h-full tw-w-full tw-overflow-hidden tw-items-center
         padding: 0 8px
         > *
-          width: 100%
-          overflow: hidden
-          text-overflow: ellipsis
+          @apply tw-w-full tw-overflow-hidden tw-text-ellipsis
           box-orient: vertical
           -webkit-box-orient: vertical
           -webkit-line-clamp: 1
           -moz-box-orient: vertical
   .wave-area-cursor
-    position: absolute
-    left: 0
-    top: 0
-    width: 100%
-    height: 100%
+    @apply tw-h-full tw-w-full tw-top-0 tw-left-0 tw-absolute tw-transition-opacity tw-duration-200
     .cursor-area, .hover-cursor
-      position: absolute
-      height: 100%
+      @apply tw-h-full tw-absolute tw-flex tw-justify-center
       width: 1px
-      display: flex
-      justify-content: center
       transform: translateX(var(--cursor-position))
       .cursor
-        height: 100%
+        @apply tw-h-full tw-bg-player-400
         min-width: 4px
-        @apply tw-bg-player-400
     .hover-cursor
-      transition: .2s opacity
-      pointer-events: none
+      @apply tw-pointer-events-none
       &.display
         .cursor
           @apply tw-bg-opacity-40
