@@ -1,3 +1,5 @@
+import { HambugerDefault } from '#components'
+
 export default defineNuxtPlugin(() => {
   const name = ref<'default' | 'no-hambug'>('default')
   const value = ref(true)
@@ -25,7 +27,7 @@ export default defineNuxtPlugin(() => {
         getHambugerComponent () {
           switch (name.value) {
             case 'default':
-              return
+              return HambugerDefault
             case 'no-hambug':
             default:
               return undefined

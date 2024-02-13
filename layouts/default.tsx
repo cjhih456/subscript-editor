@@ -40,8 +40,8 @@ export default defineNuxtComponent({
       </VAppBar>
       <VMain>
         <div class={this.mainClass}>
-          {this.$slots.hambug
-            ? this.$slots.hambug()
+          {this.$slots.hambuger
+            ? this.$slots.hambuger()
             : 'Default hambug2'
           }
         </div>
