@@ -21,9 +21,14 @@ export default defineNuxtComponent({
     userActive: {
       type: Boolean,
       default: false
+    },
+    currentTime: {
+      type: Number,
+      default: 0
     }
   },
-  setup (props) {
+  emits: ['update:currentTime'],
+  setup (props, { emit }) {
     const nuxt = useNuxtApp()
 
     // Play & Pause
@@ -114,8 +119,15 @@ export default defineNuxtComponent({
         } else {
           currentTime.value = props.player?.scrubbing() ? props.player?.getCache().currentTime : props.player?.currentTime() || 0
         }
+        emit('update:currentTime', currentTime.value)
       })
     }
+    watch(() => props.currentTime, (newVal, oldVal) => {
+      if (newVal !== oldVal && newVal !== currentTime.value) {
+        seekCurrentTime(props.currentTime)
+        currentTime.value = props.currentTime
+      }
+    })
 
     // Duration
     const duration = ref(0)
@@ -128,7 +140,7 @@ export default defineNuxtComponent({
     }
 
     const durationWithCurrentTime = computed(() => {
-      return formatTimeDisplay(duration.value) + ' / ' + formatTimeDisplay(currentTime.value)
+      return formatTimeDisplay(currentTime.value) + ' / ' + formatTimeDisplay(duration.value)
     })
 
     function init () {

@@ -13,9 +13,14 @@ export default defineNuxtComponent({
     src: {
       type: String,
       default: ''
+    },
+    currentTime: {
+      type: Number,
+      default: 0
     }
   },
-  setup (props) {
+  emits: ['update:currentTime'],
+  setup (props, { emit }) {
     const video = ref<Element | null>()
     const videoPlayerReady = ref<boolean>(false)
     const videoPlayer = ref<Player>()
@@ -113,7 +118,16 @@ export default defineNuxtComponent({
       )
       videoPlayer.value.off(['loadstart', 'firstplay'], updateStartedState)
     })
-    return { video, videoPlayer, videoPlayerReady, status }
+
+    const currentTime = computed({
+      get () {
+        return props.currentTime
+      },
+      set (v: number) {
+        emit('update:currentTime', v)
+      }
+    })
+    return { video, videoPlayer, videoPlayerReady, status, currentTime }
   },
   render () {
     return <div class={styles['video-player']}>
@@ -121,6 +135,7 @@ export default defineNuxtComponent({
         <video ref={((el) => { this.video = el as Element })}></video>
         {this.videoPlayerReady && <Teleport to={this.videoPlayer && `#${this.videoPlayer.id_}` as string}>
           <ControlAreaVue
+            v-model:currentTime={this.currentTime}
             player={this.videoPlayer}
             isPlaying={this.status.isPlaying}
           ></ControlAreaVue>
