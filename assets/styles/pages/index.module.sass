@@ -1,10 +1,28 @@
 .dialog-area
   @apply tw-relative tw-inline-block
 .index-page
-  @apply tw-bg-player-50 tw-bg-opacity-5
+  @apply tw-bg-player-50 tw-bg-opacity-5 tw-grid tw-h-full tw-gap-x-3 tw-gap-y-3
+  grid-template-areas: 'fileInput video' 'cue video' 'timeline timeline'
+  grid-template-rows: min-content 1fr auto
+  grid-template-columns: 4fr 8fr
+  .input-area
+    grid-area: fileInput
+
   .level-slider
-    --v-theme-surface-variant: var(--tw-colors-player-500)
+    @apply tw-pr-8
+    > *
+      --v-theme-surface-variant: var(--tw-colors-player-500)
+.video-area
+  grid-area: video
+.cue-area
+  @apply tw-relative tw-overflow-y-scroll
+  grid-area: cue
+  .cue-add-btn
+    --v-theme-surface: var(--tw-colors-player-600)
+    --v-theme-on-surface: var(--tw-colors-white)
+    @apply tw-absolute tw-bottom-1 tw-left-1 tw-right-1 tw-z-10
 .wave-area
+  grid-area: timeline
   @apply tw-relative tw-overflow-hidden tw-select-none
   .time-line-canvas
     --time-line-font-color: var(--tw-colors-player-900)
@@ -34,7 +52,7 @@
   .wave-area-cursor
     @apply tw-h-full tw-w-full tw-top-0 tw-left-0 tw-absolute tw-transition-opacity tw-duration-200
     .cursor-area, .hover-cursor
-      @apply tw-h-full tw-absolute tw-flex tw-justify-center
+      @apply tw-h-full tw-absolute tw-flex tw-justify-center tw-bg-transparent
       width: 1px
       transform: translateX(var(--cursor-position))
       .cursor

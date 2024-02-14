@@ -7,10 +7,10 @@ interface TranslateResult {
 
 export default defineNuxtPlugin(() => {
   const nuxt = useNuxtApp()
-  const numFormat = 'HH:mm:ss.SSS'
+  const timeFormat = 'HH:mm:ss.SSS'
 
   function timeFormatCheckForEdit (time: string) {
-    return /\d{1,}:\d{2}:\d{2}\.\d{3}/.test(time) ? time : '0:0:0.000'
+    return !!/\d{1,}:\d{2}:\d{2}\.\d{3}/.test(time)
   }
   function timeFormatCheck (time: string) {
     return /\d{1,}:\d{1,2}:\d{1,2}\.\d{1,3}/.test(time) ? time : '0:0:0.000'
@@ -18,6 +18,9 @@ export default defineNuxtPlugin(() => {
   function convertTimeToSecond (time: string) {
     const [hours, minutes, seconds, milliseconds] = timeFormatCheck(time).split(/[:.]/g).map(v => +v)
     return nuxt.$dayjs.duration({ hours, minutes, seconds, milliseconds }).asMilliseconds() / 1000
+  }
+  function convertSecondToTime (sec: number) {
+    return nuxt.$dayjs.utc(sec * 1000).format(timeFormat)
   }
   function parseSbv (txt: string) {
     const data = { cues: [] as VTTCue[] } as TranslateResult
@@ -84,8 +87,8 @@ export default defineNuxtPlugin(() => {
       const endTimeBuffer = cur.endTime * 1000
       const endTime = Math.max(endMinTime, endTimeBuffer)
       const text = cur.text
-      const st = nuxt.$dayjs.utc(startTime).format(numFormat)
-      const et = nuxt.$dayjs.utc(endTime).format(numFormat)
+      const st = convertSecondToTime(startTime)
+      const et = convertSecondToTime(endTime)
       return acc + `${st} --> ${et}\n${text}\n\n`
     }, 'WEBVTT\n\n')
   }
@@ -106,9 +109,11 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       webVtt: {
+        timeFormat,
         timeFormatCheckForEdit,
         timeFormatCheck,
         convertTimeToSecond,
+        convertSecondToTime,
         parseSubtitle,
         makeVttFromJson,
         convertJsonToFile

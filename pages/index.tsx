@@ -105,25 +105,23 @@ export default defineNuxtComponent({
     })
     return {
       levelDatasMax,
-      // Refs
+      data,
+      currentTimePosition,
+      fileSelect,
+
       waveArea,
+      waveHeight,
       waveCanvas,
       timelineCanvas,
+      displayPx,
       currentCursorArea,
       currentCursor,
-      // reactive
+
       cueList,
-      cueLastEvent,
-      data,
-      // computed value
-      displayPx,
-      waveHeight,
       mouseCursor,
-      currentTimePosition,
       pointerStyle,
+      cueLastEvent,
       subtitleArea,
-      // methods
-      fileSelect,
       addCue,
       genCueEditArea,
       genCueArea
@@ -133,85 +131,84 @@ export default defineNuxtComponent({
     return <VContainer class={styles['index-page']} style={{
       cursor: this.pointerStyle
     }} fluid>
-      <input type="file" onChange={this.fileSelect}></input>
-      <VRow>
-        <VCol cols="4">
-          {this.genCueEditArea()}
-          <VBtn block onClick={() => this.addCue()}>
-            Add Cue
-          </VBtn>
-        </VCol>
-        <VCol>
-          <VideoPlayer src={this.data.videoFileSrc}></VideoPlayer>
-        </VCol>
-      </VRow>
-      <VRow class="mx-8">
-        <VCol>
-          <div ref={(el) => { this.waveArea = el as HTMLDivElement }} class={styles['wave-area']}>
-            <canvas
-              ref={(el) => { this.timelineCanvas = el as HTMLCanvasElement }}
-              class={styles['time-line-canvas']}
-              height="20"
-              width={this.displayPx}
-              style={{
-                width: '100%',
-                height: '20px'
-              }}
-            />
-            <canvas
-              ref={(el) => { this.waveCanvas = el as HTMLCanvasElement }}
-              height={this.waveHeight * 2}
-              width={this.displayPx}
-              style={{
-                width: '100%',
-                height: `${this.waveHeight * 2}px`
-              }}
-            />
-            <div
-              class={styles['subtitle-area']}
-              style={{
-                '--display-width': `${this.subtitleArea.width}px`,
-                '--scroll-position': `-${this.subtitleArea.position}px`
-              }}
-            >
-              {this.genCueArea()}
-            </div>
-            <div class={styles['wave-area-cursor']}>
-              <div
-                class={[styles['hover-cursor'], 'tw-bg-transparent', this.mouseCursor.display ? styles.display : '']}
+      <div class={styles['input-area']}>
+        <input type="file" onChange={this.fileSelect}></input>
+      </div>
+      <div class={styles['cue-area']}>
+        {this.genCueEditArea()}
+        <VBtn onClick={() => this.addCue()} class={styles['cue-add-btn']}>
+          Add Cue
+        </VBtn>
+      </div>
+      <VideoPlayer class={styles['video-area']} src={this.data.videoFileSrc} v-model:currentTime={this.data.currentTime}></VideoPlayer>
+      <div class={styles['wave-area']}>
+        <VRow class="tw-flex-nowrap">
+          <VCol class="tw-overflow-scroll">
+            <div ref={(el) => { this.waveArea = el as HTMLDivElement }}>
+              <canvas
+                ref={(el) => { this.timelineCanvas = el as HTMLCanvasElement }}
+                class={styles['time-line-canvas']}
+                height="20"
+                width={this.displayPx}
                 style={{
-                  '--cursor-position': `${this.mouseCursor.position}px`
+                  width: '100%',
+                  height: '20px'
+                }}
+              />
+              <canvas
+                ref={(el) => { this.waveCanvas = el as HTMLCanvasElement }}
+                height={this.waveHeight * 2}
+                width={this.displayPx}
+                style={{
+                  width: '100%',
+                  height: `${this.waveHeight * 2}px`
+                }}
+              />
+              <div
+                class={styles['subtitle-area']}
+                style={{
+                  '--display-width': `${this.subtitleArea.width}px`,
+                  '--scroll-position': `-${this.subtitleArea.position}px`
                 }}
               >
-                <div class={[styles.cursor, 'tw-bg-red-300']}></div>
+                {this.genCueArea()}
               </div>
-              <div
-                ref={(el) => { this.currentCursorArea = el as HTMLDivElement }}
-                class={[styles['cursor-area'], 'tw-bg-transparent']}
-                style={{
-                  '--cursor-position': `${this.currentTimePosition}px`
-                }}
-              >
+              <div class={styles['wave-area-cursor']}>
                 <div
-                  ref={(el) => { this.currentCursor = el as HTMLDivElement }}
-                  class={[styles.cursor, 'tw-bg-red-500']}
-                ></div>
+                  class={[styles['hover-cursor'], this.mouseCursor.display ? styles.display : '']}
+                  style={{
+                    '--cursor-position': `${this.mouseCursor.position}px`
+                  }}
+                >
+                  <div class={[styles.cursor]}></div>
+                </div>
+                <div
+                  ref={(el) => { this.currentCursorArea = el as HTMLDivElement }}
+                  class={[styles['cursor-area']]}
+                  style={{
+                    '--cursor-position': `${this.currentTimePosition}px`
+                  }}
+                >
+                  <div
+                    ref={(el) => { this.currentCursor = el as HTMLDivElement }}
+                    class={[styles.cursor]}
+                  ></div>
+                </div>
               </div>
             </div>
-          </div>
-        </VCol>
-        <VCol cols="auto">
-          <VSlider
-            class={styles['level-slider']}
-            v-model={this.data.displayLevel}
-            direction="vertical"
-            hide-details
-            step={1}
-            max={this.levelDatasMax}
-            min={0}
-          />
-        </VCol>
-      </VRow>
+          </VCol>
+          <VCol cols="auto" class={styles['level-slider']}>
+            <VSlider
+              v-model={this.data.displayLevel}
+              direction="vertical"
+              hide-details
+              step={1}
+              max={this.levelDatasMax}
+              min={0}
+            />
+          </VCol>
+        </VRow>
+      </div>
     </VContainer>
   }
 })

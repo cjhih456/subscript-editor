@@ -52,6 +52,7 @@
     "@ffmpeg/util": "^0.12.1",
     "@mdi/js": "^7.4.47",
     "@pinia/nuxt": "^0.4.2",
+    "@vee-validate/yup": "^4.12.5",
     "@vue/server-renderer": "^3.3.13",
     "buffer": "^6.0.3",
     "core-js": "^3.6",
@@ -64,11 +65,13 @@
     "react-dom": "^18.2.0",
     "sanitize-html": "^2.7.2",
     "uuid": "^9.0.1",
+    "vee-validate": "^4.12.5",
     "video.js": "^8.10.0",
     "videojs-vtt.js": "^0.15.5",
     "vue": "^3.3.13",
     "vue-demi": "^0.14.5",
     "vuetify": "^3.5.1",
-    "vuetify-nuxt-module": "^0.10.3"
+    "vuetify-nuxt-module": "^0.10.3",
+    "yup": "^1.3.3"
   }
 }

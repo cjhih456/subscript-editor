@@ -46,7 +46,7 @@ export default defineNuxtComponent({
           }
         </div>
         <div
-          class={this.contentClass}
+          class={[this.contentClass, 'tw-h-full']}
         >
           {this.$slots.default
             ? this.$slots.default()
