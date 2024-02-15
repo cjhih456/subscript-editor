@@ -55,6 +55,7 @@ export default defineNuxtConfig({
       }
     },
     vuetifyOptions: {
+      theme: false,
       icons: {
         defaultSet: 'mdi-svg'
       }
