@@ -12347,10 +12347,15 @@ vuetify-nuxt-module@^0.10.3:
     vite-plugin-vuetify "^2.0.1"
     vuetify "^3.4.10"
 
-vuetify@^3.4.10, vuetify@^3.5.1:
+vuetify@^3.4.10:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.5.1.tgz#c2f35dad5e54a090e87e55ed1a4e76091199ed4a"
   integrity sha512-fkhU4UFnX/lBARXg+n9mBCDPTaEDHoYGx9SZ5A/1LlzM7LohoqldmrNgza4WgpPTLIWqr6NvYp2NvT2IrcTfhg==
+
+vuetify@^3.5.4:
+  version "3.5.4"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.5.4.tgz#f919c5194995a123815c277a95812bc230e33464"
+  integrity sha512-fHgfWMI7+z/UtbVPOezX+O1MNBOOMBW9HnKejcBIyQQ7jFRnTHbDQmbINf25FK0wrg/zkjfzyOmWWREKW39eXg==
 
 walker@^1.0.8:
   version "1.0.8"

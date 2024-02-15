@@ -140,7 +140,12 @@ export default defineNuxtComponent({
           Add Cue
         </VBtn>
       </div>
-      <VideoPlayer class={styles['video-area']} src={this.data.videoFileSrc} v-model:currentTime={this.data.currentTime}></VideoPlayer>
+      <VideoPlayer
+        class={styles['video-area']}
+        v-model:currentTime={this.data.currentTime}
+        subscript={this.cueList}
+        src={this.data.videoFileSrc}
+      ></VideoPlayer>
       <div class={styles['wave-area']}>
         <VRow class="tw-flex-nowrap">
           <VCol class="tw-overflow-scroll">

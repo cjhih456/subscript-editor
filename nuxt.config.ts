@@ -50,12 +50,11 @@ export default defineNuxtConfig({
   vuetify: {
     moduleOptions: {
       importComposables: true,
-      styles: {
-        configFile: 'assets/styles/variable/vuetify-settings-variable.scss'
-      }
+      styles: 'none'
     },
     vuetifyOptions: {
       theme: false,
+      directives: true,
       icons: {
         defaultSet: 'mdi-svg'
       }

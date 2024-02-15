@@ -4,6 +4,7 @@ import { toTypedSchema } from '@vee-validate/yup'
 import { number, object, string } from 'yup'
 import { mdiTrashCan } from '@mdi/js'
 import { CueTimeInput } from '#components'
+import styles from '~/assets/styles/components/cue/CueEdit.module.sass'
 
 export default defineNuxtComponent({
   name: 'CueEdit',
@@ -71,14 +72,16 @@ export default defineNuxtComponent({
         endTime.value.value = newVal.endTime
       }
     })
-    function deleteCue () {
+    function deleteCue (e: Event) {
+      e.stopPropagation()
+      e.preventDefault()
       emit('delete', props.idx)
     }
     return { startTimeDisplay, endTimeDisplay, startTime, endTime, text, handleSubmit, deleteCue }
   },
   render () {
-    return <VExpansionPanel>
-      <VExpansionPanelTitle>
+    return <VExpansionPanel class={styles['cue-edit']}>
+      <VExpansionPanelTitle class={styles['title-area']}>
         <VRow no-gutters class={['tw-items-center']}>
           <VCol>
             start: {this.startTimeDisplay}
@@ -91,6 +94,7 @@ export default defineNuxtComponent({
               color="tw-text-red-400"
               icon
               size={'small'}
+              variant='outlined'
               flat
               onClick={this.deleteCue}
             >
@@ -99,7 +103,7 @@ export default defineNuxtComponent({
           </VCol>
         </VRow>
       </VExpansionPanelTitle>
-      <VExpansionPanelText>
+      <VExpansionPanelText class={styles['text-area']}>
         <VRow>
           <VCol>
             <CueTimeInput v-model_lazy={this.startTime.value.value}></CueTimeInput>
@@ -111,7 +115,6 @@ export default defineNuxtComponent({
         <VTextarea
           class={['tw-my-2']}
           v-model={this.text.value.value}
-          variant='outlined'
           hideDetails
         />
       </VExpansionPanelText>

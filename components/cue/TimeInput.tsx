@@ -39,7 +39,6 @@ export default defineNuxtComponent({
     return <VTextField
       v-model={this.data.input}
       hideDetails
-      variant='outlined'
       density='compact'
     ></VTextField>
   }

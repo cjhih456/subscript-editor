@@ -3,6 +3,13 @@ import type { WritableComputedRef } from 'vue'
 import { VExpansionPanels } from 'vuetify/lib/components/index.mjs'
 import { CueEdit } from '#components'
 
+export interface CueData {
+  idx: string
+  startTime: number
+  endTime: number
+  text: string
+}
+
 export default function CueArea (
   waveArea: ComputedRef<HTMLDivElement | null | undefined>,
   currentCursor: ComputedRef<HTMLDivElement | null | undefined>,

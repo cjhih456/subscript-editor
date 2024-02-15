@@ -1,6 +1,6 @@
 import { VTTCue, WebVTT } from 'videojs-vtt.js'
 
-interface TranslateResult {
+export interface TranslateResult {
   cues: VTTCue[]
   regions?: VTTRegion[]
 }
