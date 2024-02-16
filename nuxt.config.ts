@@ -31,7 +31,6 @@ export default defineNuxtConfig({
     }
   },
   css: [
-    '@mdi/font/css/materialdesignicons.min.css',
     '@/assets/styles/css/main.css',
     '@/assets/styles/init.sass',
     'video.js/dist/video-js.css'
@@ -50,7 +49,9 @@ export default defineNuxtConfig({
   vuetify: {
     moduleOptions: {
       importComposables: true,
-      styles: 'none'
+      styles: {
+        configFile: 'assets/styles/variable/custom-vuetify.scss'
+      }
     },
     vuetifyOptions: {
       theme: false,

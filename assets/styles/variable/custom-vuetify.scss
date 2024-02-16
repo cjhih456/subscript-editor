@@ -1,0 +1,5 @@
+@use 'vuetify/settings' with (
+  $utilities: false,
+  $color-pack: false,
+  $slider-vertical-min-height: 100px
+);
