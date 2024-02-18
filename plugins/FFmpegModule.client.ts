@@ -18,6 +18,9 @@ export default defineNuxtPlugin(() => {
   function setLoading (v: boolean) {
     data.onLoading = v
   }
+  /**
+   * initialization ffmpeg wasm worker.
+   */
   async function load () {
     if (data.onLoading) {
       let watcher: WatchStopHandle
@@ -43,7 +46,11 @@ export default defineNuxtPlugin(() => {
     })
     setLoaded(result)
   }
-
+  /**
+   * Return the duration of the original file
+   * Please use after transcode functions.
+   * @returns duration
+   */
   function takeMediaFileDuration () {
     const durationStr = messageRef.messages.slice(0).reverse().find(v => v.includes('Duration:'))
     if (durationStr) {
@@ -55,11 +62,10 @@ export default defineNuxtPlugin(() => {
     return 0
   }
   /**
-   * make wave data from file's audio channel
-   * @param file VideoFile
-   * @param inputFileName VideoFileName
-   * @param outputFileName OutputFileName
-   * @returns wave data & min, max value object
+   * Generate waveform data from the audio channel of the original file
+   * @param inputFileName origin input file name
+   * @param outputFileName s16le waveform data name
+   * @returns waveform data & min, max object
    */
   async function transcodeWave (inputFileName: string, outputFileName: string, waveBySec: number) {
     await ffmpegRef.value.exec([
@@ -110,6 +116,13 @@ export default defineNuxtPlugin(() => {
       maxMinValue
     }
   }
+  /**
+   * Transform the video file using the provided options.
+   * @param inputFileName saved origin file name
+   * @param outputFileName output file name
+   * @param options ffmpeg options
+   * @returns video file data (Uint8Array)
+   */
   async function transcodeVideo (inputFileName: string, outputFileName: string, options: any = {}) {
     const command = ['-i', inputFileName]
 
@@ -121,6 +134,13 @@ export default defineNuxtPlugin(() => {
     const data = await ffmpegRef.value.readFile(outputFileName) as Uint8Array
     return data
   }
+  /**
+   * Extract the audio stream from the video file to create a WAV file.
+   * @param inputFileName saved origin file name
+   * @param outputFileName output file name
+   * @param options ffmpeg options for wav format file (bitrate, channel, etc)
+   * @returns audio file data (Uint8Array)
+   */
   async function transcodeAudio (inputFileName: string, outputFileName: string, options: any = {}) {
     const command = ['-i', inputFileName, '-ar', '16000']
 

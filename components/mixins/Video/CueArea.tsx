@@ -10,6 +10,17 @@ export interface CueData {
   text: string
 }
 
+/**
+ * Methods and data for handling subscript data.
+ * This module initializes cursor events.
+ * @param waveArea - Element for the waveform directory.
+ * @param currentCursor - Element for the current cursor directory.
+ * @param currentCursorArea - Element containing the current cursor directory.
+ * @param lazyScroll - Scrolled position.
+ * @param pixPerSec - Computed value by the AudioWave module.
+ * @param duration - Media's duration.
+ * @param currentTime - Current time in seconds.
+ */
 export default function CueArea (
   waveArea: ComputedRef<HTMLDivElement | null | undefined>,
   currentCursor: ComputedRef<HTMLDivElement | null | undefined>,
@@ -19,17 +30,44 @@ export default function CueArea (
   duration: WritableComputedRef<number>,
   currentTime: WritableComputedRef<number>
 ) {
+  const alertMessage = ref<string>()
+  /**
+   * convert second to pixel
+   * @param sec second data
+   * @returns pixel
+   */
   function secToPix (sec: number) {
     return pixPerSec.value * sec
   }
+  /**
+   * convert pixel to second
+   * @param pix pixel data
+   * @returns second
+   */
   function pixToSec (pix: number) {
     return pix / pixPerSec.value
   }
   class CueData {
+    /**
+     * uuid of cue
+     */
     idx: string
+    /**
+     * cue's start time
+     */
     startTime: number
+    /**
+     * cue's end time
+     */
     endTime: number
+    /**
+     * cue's text data
+     */
     text: string
+    /**
+     * Will be use on cueDragEvent function.
+     * That method will be call on drag cue's start, end, middle side.
+     */
     lazy: {
       startTime?: number
       endTime?: number
@@ -60,6 +98,9 @@ export default function CueArea (
       }
     }
 
+    /**
+     * commit lazy data
+     */
     update () {
       if ((this.lazy.startTime ?? this.startTime) <= (this.lazy.endTime ?? this.endTime)) {
         if (this.startTime !== this.lazy.startTime && this.lazy.startTime) {
@@ -86,6 +127,9 @@ export default function CueArea (
     lastMouseEvent: '',
     selectedCue: undefined
   })
+  /**
+   * values for cursor control.
+   */
   const mouseCursor = shallowRef({
     position: 0,
     display: false
@@ -110,7 +154,6 @@ export default function CueArea (
       position: e.x - waveAreaPosition.value,
       display: false
     }
-    // this.lastCue = undefined
     data.cursorDisplay = 'col-resize'
     switch (e.type) {
       case 'mousedown':
@@ -172,16 +215,16 @@ export default function CueArea (
     }
   }
   /**
-   * 갱신할 시간이 duration값과 0 사이값인지 유효성 검사 및 값 수정
-   * @param value 새로 갱신할 시간
+   * Validates and modifies the value to ensure it falls between 0 and the duration.
+   * @param {number} value - The new time value to update.
    */
   function minMaxDuration (value: number) {
     return Math.max(Math.min(value, duration.value), 0)
   }
   /**
-   * 커서를 마우스로 드래그시 발생하는 이밴트를 처리하기 위한 함수이다.
-   * @param cue 위치 변경할 CueData 객체
-   * @param isUp mouseUp이벤트 케이스인 경우
+   * Function to handle events triggered by dragging the cursor with the mouse.
+   * @param cue - CueData object to update the position.
+   * @param isUp - Indicates if it's a mouseUp event case.
    * @returns {void}
    */
   function cueMoveEvent (cue: CueData, isUp: boolean) {
@@ -202,20 +245,20 @@ export default function CueArea (
   function pointerEvent (e: MouseEvent) {
     data.cursorDisplay = 'auto'
     if (e.type === 'mousemove') {
-      // TODO: 마우스 커서 위치에 따라 place holder 바 위치 갱신
+      // TODO: Update the position of the placeholder bar based on the mouse cursor position.
       mouseCursor.value = {
         position: e.x - waveAreaPosition.value,
         display: true
       }
     } else if (e.type === 'mouseup' || e.type === 'mousedown') {
-      // TODO: 커서 드래그 이벤트와 동일하게 처리(currentTime 갱신, 마우스 포인터 변경, 등)
+      // TODO: Handle the placeholder bar movement similarly to cursor drag events (update currentTime, change mouse pointer, etc.).
       cursorDragEvent(e)
     }
   }
   function waveAreaMouseEvent (e: Event) {
     requestAnimationFrame(() => {
       const mouseEvent = e as MouseEvent
-      // TODO: 수행중 이던 이밴트가 있는 경우 해당 이밴트 우선처리
+      // TODO: If there is an ongoing event, prioritize that event.
       if (data.lastMouseEvent === 'cursor') {
         return cursorDragEvent(mouseEvent)
       } else if (data.lastMouseEvent?.startsWith('cue-')) {
@@ -234,16 +277,17 @@ export default function CueArea (
       })
 
       switch (target) {
+        // TODO: 1. If the mouse cursor is over waveArea, change mouse cursor position.
+
         case waveArea.value:
-          // TODO: 1. waveArea 에 마우스커서가 있는 경우 > mouse Cursor position 변화
           return pointerEvent(mouseEvent)
-        // TODO: 2. cursor 에 마우스커서가 있는 경우 > 마우스의 모양을 col-resize로 전환한다. cursorDragEvent 이밴트 수행
-        // TODO: 2-1. cursor-area(currentTime) 에 마우스커서가 있는 경우 > cursor가 있는 경우 type 2를 수행한다.
+        // TODO: 2. If the mouse cursor is over the cursor, change the cursor to col-resize and perform cursorDragEvent.
+        // TODO: 2-1. If the mouse cursor is over cursor-area (currentTime), perform type 2 when the cursor is present.
         case currentCursor.value:
         case currentCursorArea.value:
           return cursorDragEvent(mouseEvent)
         default:
-          // TODO: 3. cue에 커서가 있는 경우 > cueDragEvent이밴트 수행
+          // TODO: 3. If the cursor is over the cue, perform cueDragEvent.
           if (target) {
             cueDragEvent(mouseEvent, target as HTMLDivElement)
           } else {
@@ -291,6 +335,11 @@ export default function CueArea (
     return data.cueData.map(v => genCue(v))
   }
   function addCue (cue?: VTTCue) {
+    if (!duration.value) {
+      alertMessage.value = 'Please, select video file first'
+      setTimeout(() => { alertMessage.value = undefined }, 2000)
+      return
+    }
     const cueData = new CueData()
     if (cue) {
       cueData.startTime = cue.startTime
@@ -317,6 +366,7 @@ export default function CueArea (
     </VExpansionPanels>
   }
   return {
+    alertMessage: computed(() => alertMessage.value),
     mouseCursor: computed(() => mouseCursor.value),
     currentTimePosition,
     cueList: data.cueData,

@@ -7,6 +7,8 @@
   grid-template-columns: 4fr 8fr
   .input-area
     grid-area: fileInput
+  .alert
+    @apply tw-fixed tw-bottom-5 tw-left-5
 
   .level-slider
     @apply tw-pr-8
@@ -23,7 +25,8 @@
     @apply tw-absolute tw-bottom-1 tw-left-1 tw-right-1 tw-z-10
 .wave-area
   grid-area: timeline
-  @apply tw-relative tw-overflow-hidden tw-select-none
+  .wave-display
+    @apply tw-relative tw-overflow-hidden tw-select-none
   .time-line-canvas
     --time-line-font-color: var(--tw-colors-player-900)
     --time-line-mark-color: var(--tw-colors-player-600)

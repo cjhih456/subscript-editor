@@ -1,4 +1,4 @@
-import { VBtn, VCol, VContainer, VRow, VSlider } from 'vuetify/components'
+import { VAlert, VBtn, VCol, VContainer, VRow, VScrollYReverseTransition, VSlider } from 'vuetify/components'
 import styles from '~/assets/styles/pages/index.module.sass'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
 
@@ -51,7 +51,7 @@ export default defineNuxtComponent({
         data.currentTime = v
       }
     })
-    const { pixPerSec, levelDatasMax, cueGeneratedData } = AudioWave(
+    const { pixPerSec, levelDatasMax, cueGeneratedData, alertMessage: audioAlertMessage } = AudioWave(
       selectedFile,
       computed(() => waveCanvas.value),
       computed(() => timelineCanvas.value),
@@ -59,9 +59,11 @@ export default defineNuxtComponent({
       computed(() => data.displayLevel),
       displayPx,
       duration,
-      waveHeight
+      waveHeight,
+      480
     )
     const {
+      alertMessage: cueAlertMessage,
       cueList,
       cueLastEvent,
       mouseCursor,
@@ -80,6 +82,9 @@ export default defineNuxtComponent({
       duration,
       currentTime
     )
+    const alertMessages = computed(() => {
+      return cueAlertMessage.value || audioAlertMessage.value
+    })
     function fileSelect (event: Event) {
       const target = event.target as HTMLInputElement
       if (target && target.files) {
@@ -108,6 +113,7 @@ export default defineNuxtComponent({
       data,
       currentTimePosition,
       fileSelect,
+      alertMessages,
 
       waveArea,
       waveHeight,
@@ -131,6 +137,11 @@ export default defineNuxtComponent({
     return <VContainer class={styles['index-page']} style={{
       cursor: this.pointerStyle
     }} fluid>
+      <VScrollYReverseTransition>
+      {
+        this.alertMessages ? <VAlert class={styles.alert} title={this.alertMessages}/> : undefined
+      }
+      </VScrollYReverseTransition>
       <div class={styles['input-area']}>
         <input type="file" onChange={this.fileSelect}></input>
       </div>
@@ -149,7 +160,7 @@ export default defineNuxtComponent({
       <div class={styles['wave-area']}>
         <VRow class="tw-flex-nowrap">
           <VCol class="tw-overflow-scroll">
-            <div ref={(el) => { this.waveArea = el as HTMLDivElement }}>
+            <div class={styles['wave-display']} ref={(el) => { this.waveArea = el as HTMLDivElement }}>
               <canvas
                 ref={(el) => { this.timelineCanvas = el as HTMLCanvasElement }}
                 class={styles['time-line-canvas']}
@@ -201,12 +212,13 @@ export default defineNuxtComponent({
                 </div>
               </div>
             </div>
+            <VSlider v-model={this.data.scrollValue} hideDetails max={this.data.duration}></VSlider>
           </VCol>
           <VCol cols="auto" class={styles['level-slider']}>
             <VSlider
               v-model={this.data.displayLevel}
               direction="vertical"
-              hide-details
+              hideDetails
               step={1}
               max={this.levelDatasMax}
               min={0}
