@@ -1,4 +1,4 @@
-import { VTTCue, WebVTT } from 'videojs-vtt.js'
+import { WebVTT } from 'videojs-vtt.js'
 
 export interface TranslateResult {
   cues: VTTCue[]

@@ -9,9 +9,7 @@
     "typecheck": "nuxt typecheck",
     "storybook": "storybook dev --port 6006",
     "build:storybook": "storybook build",
-    "build-storybook": "storybook build",
-    "deploy": "gh-pages --dotfiles -d .output/public",
-    "predeploy": "nuxt generate"
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
     "@mdi/font": "^7.4.47",
