@@ -46,6 +46,11 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+          bundler-cache: true
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
