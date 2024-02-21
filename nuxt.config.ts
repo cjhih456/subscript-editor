@@ -72,7 +72,9 @@ export default defineNuxtConfig({
       crossOriginResourcePolicy: 'cross-origin',
       crossOriginOpenerPolicy: 'same-origin',
       crossOriginEmbedderPolicy: import.meta.env.DEV ? 'unsafe-none' : 'require-corp',
-      permissionsPolicy: 'fullscreen=self'
+      permissionsPolicy: {
+        fullscreen: 'self'
+      }
     },
     corsHandler: {
       origin: '*',
