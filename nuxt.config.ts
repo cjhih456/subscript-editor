@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-8',
       script: [{
-        src: '/worker.js'
+        src: './worker.js'
       }]
     }
   },
