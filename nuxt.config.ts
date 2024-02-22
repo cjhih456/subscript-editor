@@ -2,7 +2,10 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      charset: 'utf-8'
+      charset: 'utf-8',
+      script: [{
+        src: '/worker.js'
+      }]
     }
   },
   typescript: {
@@ -72,6 +75,9 @@ export default defineNuxtConfig({
       crossOriginResourcePolicy: 'cross-origin',
       crossOriginOpenerPolicy: 'same-origin',
       crossOriginEmbedderPolicy: import.meta.env.DEV ? 'unsafe-none' : 'require-corp',
+      contentSecurityPolicy: {
+        'frame-ancestors': "'unsafe-inline'"
+      },
       permissionsPolicy: {
         fullscreen: 'self'
       }
