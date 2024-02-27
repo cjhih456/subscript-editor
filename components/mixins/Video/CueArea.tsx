@@ -317,8 +317,8 @@ export default function CueArea (
       )
     })
   })
-  function genCue (cue: CueData) {
-    return <div
+  function genCue (cue: CueData, idx: number, cache: unknown[]) {
+    return withMemo([cue.text, cue.startPosition, cue.width], () => <div
       class="cue-bar tw-bg-gray-300"
       data-id={cue.idx}
       style={{
@@ -329,10 +329,10 @@ export default function CueArea (
       <span>
         <pre>{cue.text}</pre>
       </span>
-    </div>
+    </div>, cache, idx)
   }
-  function genCueArea () {
-    return data.cueData.map(v => genCue(v))
+  function genCueArea (cache: unknown[], memoCnt: number) {
+    return data.cueData.map((v, idx) => genCue(v, idx + memoCnt, cache))
   }
   function addCue (cue?: VTTCue) {
     if (!duration.value) {

@@ -1,7 +1,6 @@
 import { VAlert, VBtn, VCol, VContainer, VRow, VScrollYReverseTransition, VSlider } from 'vuetify/components'
 import styles from '~/assets/styles/pages/index.module.sass'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
-
 import AudioWave from '~/components/mixins/Video/AudioWave'
 import CueArea from '~/components/mixins/Video/CueArea'
 
@@ -133,7 +132,7 @@ export default defineNuxtComponent({
       genCueArea
     }
   },
-  render () {
+  render (_ctx: any, cache: unknown[]) {
     return <VContainer class={styles['index-page']} style={{
       cursor: this.pointerStyle
     }} fluid>
@@ -187,9 +186,9 @@ export default defineNuxtComponent({
                   '--scroll-position': `-${this.subtitleArea.position}px`
                 }}
               >
-                {this.genCueArea()}
+                {this.genCueArea(cache, 1)}
               </div>
-              <div class={styles['wave-area-cursor']}>
+              {withMemo([this.mouseCursor, this.currentTimePosition], () => <div class={styles['wave-area-cursor']}>
                 <div
                   class={[styles['hover-cursor'], this.mouseCursor.display ? styles.display : '']}
                   style={{
@@ -210,7 +209,7 @@ export default defineNuxtComponent({
                     class={[styles.cursor]}
                   ></div>
                 </div>
-              </div>
+              </div>, cache, 0)}
             </div>
             <VSlider v-model={this.data.scrollValue} hideDetails max={this.data.duration}></VSlider>
           </VCol>

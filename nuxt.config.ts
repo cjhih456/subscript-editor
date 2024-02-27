@@ -3,9 +3,11 @@ export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-8',
-      script: [{
-        src: './worker.js'
-      }]
+      script: import.meta.env.DEV
+        ? []
+        : [{
+            src: './worker.js'
+          }]
     }
   },
   typescript: {
