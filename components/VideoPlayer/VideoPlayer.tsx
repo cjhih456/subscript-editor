@@ -58,7 +58,6 @@ export default defineNuxtComponent({
     })
     watch(() => props.subscript, async (newVal) => {
       if (!videoPlayer.value) { return }
-      if (!textTrack.value) { textTrack.value = videoPlayer.value.addTextTrack('subtitles', 'En', 'en') }
       if (newVal && textTrack.value) {
         if (textTrackCueList.value?.cues.length) {
           textTrackCueList.value?.cues.forEach((cue) => {
@@ -70,7 +69,6 @@ export default defineNuxtComponent({
           textTrack.value?.addCue(cue)
         })
         textTrack.value.mode = 'showing'
-        videoPlayer.value.trigger({ type: 'loadedmetadata', target: textTrack.value })
         videoPlayer.value.trigger({ type: 'texttrackchange' })
       }
     }, { deep: true })
@@ -92,6 +90,9 @@ export default defineNuxtComponent({
             preload: 'metadata',
             playsinline: true,
             inactivityTimeout: 1000,
+            tech: {
+              featuresNativeTextTracks: true
+            },
             userActions: {
               hotkeys (e: KeyboardEvent) {
                 if (!videoPlayer.value) { return }
@@ -129,6 +130,11 @@ export default defineNuxtComponent({
           }, () => {
             videoPlayerReady.value = true
             if (!videoPlayer.value) { return }
+            textTrack.value = videoPlayer.value.addTextTrack('subtitles', 'En', 'en')
+            videoPlayer.value.trigger({ type: 'loadedmetadata', target: textTrack.value })
+            videoPlayer.value.on(['timeupdate'], () => {
+              videoPlayer.value?.trigger({ type: 'texttrackchange' })
+            })
             videoPlayer.value.on(['useractive', 'userinactive'], updateUserActiveState)
             videoPlayer.value.on(
               ['play', 'pause', 'ended', 'seeked'],
@@ -141,6 +147,9 @@ export default defineNuxtComponent({
     })
     onBeforeUnmount(() => {
       if (!videoPlayer.value) { return }
+      videoPlayer.value.off(['timeupdate'], () => {
+        videoPlayer.value?.trigger({ type: 'texttrackchange' })
+      })
       videoPlayer.value.off(['useractive', 'userinactive'], updateUserActiveState)
       videoPlayer.value.off(
         ['play', 'pause', 'ended', 'seeked'],

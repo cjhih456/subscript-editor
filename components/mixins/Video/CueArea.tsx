@@ -31,6 +31,7 @@ export default function CueArea (
   currentTime: WritableComputedRef<number>
 ) {
   const alertMessage = ref<string>()
+  const nuxtApp = useNuxtApp()
   /**
    * convert second to pixel
    * @param sec second data
@@ -348,6 +349,15 @@ export default function CueArea (
     }
     data.cueData.push(cueData)
   }
+  function saveSubscribe () {
+    const file = nuxtApp.$webVtt.convertJsonToFile(data.cueData)
+    const fileURL = URL.createObjectURL(file as Blob)
+    const aTag = document.createElement('a')
+    aTag.href = fileURL
+    aTag.download = file.name
+    aTag.click()
+    URL.revokeObjectURL(fileURL)
+  }
   function deleteCue (idx: string) {
     data.cueData = data.cueData.filter(v => v.idx !== idx)
   }
@@ -376,6 +386,7 @@ export default function CueArea (
     addCue,
     deleteCue,
     genCueArea,
-    genCueEditArea
+    genCueEditArea,
+    saveSubscribe
   }
 }

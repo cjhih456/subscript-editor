@@ -71,7 +71,8 @@ export default defineNuxtComponent({
       subtitleArea,
       addCue,
       genCueEditArea,
-      genCueArea
+      genCueArea,
+      saveSubscribe
     } = CueArea(
       computed(() => waveArea.value),
       computed(() => currentCursor.value),
@@ -129,7 +130,8 @@ export default defineNuxtComponent({
       subtitleArea,
       addCue,
       genCueEditArea,
-      genCueArea
+      genCueArea,
+      saveSubscribe
     }
   },
   render (_ctx: any, cache: unknown[]) {
@@ -141,9 +143,12 @@ export default defineNuxtComponent({
         this.alertMessages ? <VAlert class={styles.alert} title={this.alertMessages}/> : undefined
       }
       </VScrollYReverseTransition>
-      <div class={styles['input-area']}>
+      <VRow class={styles['input-area']}>
         <input type="file" onChange={this.fileSelect}></input>
-      </div>
+        <VBtn onClick={this.saveSubscribe} disabled={!this.cueList.length}>
+          Save Subscribe
+        </VBtn>
+      </VRow>
       <div class={styles['cue-area']}>
         {this.genCueEditArea()}
         <VBtn onClick={() => this.addCue()} class={styles['cue-add-btn']}>

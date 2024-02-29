@@ -82,9 +82,9 @@ export default defineNuxtPlugin(() => {
   }
   function jsonToString (jsonData: TranslateResult) {
     return jsonData.cues.reduce((acc, cur) => {
-      const startTime = cur.startTime * 1000
-      const endMinTime = startTime + 1000
-      const endTimeBuffer = cur.endTime * 1000
+      const startTime = cur.startTime
+      const endMinTime = startTime + 1
+      const endTimeBuffer = cur.endTime
       const endTime = Math.max(endMinTime, endTimeBuffer)
       const text = cur.text
       const st = convertSecondToTime(startTime)
