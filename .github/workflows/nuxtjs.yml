@@ -17,7 +17,7 @@ jobs:
       - run: yarn install
       - run: NUXT_APP_BASE_URL=/subscript-editor/ yarn build --preset 'github-pages'
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./.output/public
   # Deployment job
