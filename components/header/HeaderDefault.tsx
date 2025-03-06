@@ -2,7 +2,7 @@ export default defineNuxtComponent({
   name: 'HeaderDefault',
   setup () {
     return () => {
-      return <div>Default header components</div>
+      return <div>Subtitle Editor</div>
     }
   }
 })
