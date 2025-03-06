@@ -145,7 +145,7 @@ export default defineNuxtComponent({
       </VScrollYReverseTransition>
       <VRow class={styles['input-area']}>
         <input type="file" onChange={this.fileSelect}></input>
-        <VBtn onClick={this.saveSubscribe} disabled={!this.cueList.length}>
+        <VBtn onClick={this.saveSubscribe} disabled={!this.cueList.length} class={styles['cue-save-btn']}>
           Save Subscribe
         </VBtn>
       </VRow>
