@@ -1,6 +1,4 @@
 import { ofetch, type FetchOptions } from 'ofetch'
-import { useAuthStore } from '~~/stores/Auth'
-import { useUserStore } from '~~/stores/User'
 
 type ApiMethod = 'get' | 'head' | 'patch' | 'post' | 'put' | 'delete' | 'connect' | 'options' | 'trace'
 
@@ -42,8 +40,6 @@ interface CustomFetch<T> {
 }
 
 function customFetch<T> (url: string, options?: FetchOptions<'json'> & {method: ApiMethod}) {
-  const userStore = useUserStore()
-  const authStore = useAuthStore()
   const config = useRuntimeConfig()
   const ctx = {
     // @ts-ignore
@@ -51,36 +47,12 @@ function customFetch<T> (url: string, options?: FetchOptions<'json'> & {method: 
       ...options,
       keepalive: options?.keepalive ?? true,
       baseURL: options?.baseURL ?? config.public.BACKEND_API,
-      cache: options?.cache ?? 'no-cache',
+      cache: options?.cache ?? 'no-cache'
       // eslint-disable-next-line require-await
       // async onResponse() {
       //   // { request, response, options }
       //   console.log('[fetch response]')
       // },
-      // eslint-disable-next-line require-await
-      async onResponseError ({ response }) {
-        // { request, response, options }
-        if (
-          response.status === 403 ||
-          (response.status === 400 &&
-            response._data.code === userStore.userAccessTokenActive)
-        ) {
-          ctx.tokenRefreshNeed = await authStore.tokenRefresh()
-        }
-      },
-      // eslint-disable-next-line require-await
-      async onRequest ({ options }) {
-        if (userStore.userAccessTokenActive) {
-          options.headers = options.headers
-            ? {
-                ...options.headers,
-                access_token: userStore.userAccessTokenActive || ''
-              }
-            : {
-                access_token: userStore.userAccessTokenActive || ''
-              }
-        }
-      }
       // eslint-disable-next-line require-await
       // async onRequestError() {
       //   { request, options, error }

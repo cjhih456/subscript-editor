@@ -1,5 +1,6 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
+  compatibilityDate: '2025-06-05',
   app: {
     head: {
       charset: 'utf-8',
@@ -45,12 +46,7 @@ export default defineNuxtConfig({
       BACKEND_API: 'http://localhost:3000'
     }
   },
-  modules: [[
-    '@pinia/nuxt',
-    {
-      autoImports: ['defineStore', ['defineStore', 'definePiniaStore']]
-    }
-  ], '@nuxtjs/storybook', '@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'vuetify-nuxt-module'],
+  modules: ['@nuxtjs/storybook', '@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'vuetify-nuxt-module'],
   vuetify: {
     moduleOptions: {
       importComposables: true,
@@ -88,8 +84,7 @@ export default defineNuxtConfig({
     }
   },
   storybook: {
-    devtools: true,
-    version: 'v7'
+    port: 6006
   },
   nitro: {
     routeRules: {
