@@ -17,7 +17,7 @@ export default defineNuxtConfig({
               integrity: 'sha384-rQEcC031XfytcqUuCLKA3ijYnmFEz247ZPEv1Abi7USpTphR8b6kyepOyI55QKv9'
             }
           ],
-          script: [{ src: './worker.js', type: 'module', crossorigin: 'use-credentials', integrity: 'sha384-rQEcC031XfytcqUuCLKA3ijYnmFEz247ZPEv1Abi7USpTphR8b6kyepOyI55QKv9' }]
+          script: [{ src: './worker.js', crossorigin: 'use-credentials', integrity: 'sha384-rQEcC031XfytcqUuCLKA3ijYnmFEz247ZPEv1Abi7USpTphR8b6kyepOyI55QKv9' }]
         }
   },
   typescript: {
