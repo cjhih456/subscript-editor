@@ -2,14 +2,23 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-06-05',
   app: {
-    head: {
-      charset: 'utf-8',
-      script: import.meta.env.DEV
-        ? []
-        : [{
-            src: './worker.js'
-          }]
-    }
+    head: import.meta.env.DEV
+      ? {
+          charset: 'utf-8'
+        }
+      : {
+          charset: 'utf-8',
+          link: [
+            {
+              as: 'script',
+              rel: 'preload',
+              href: './worker.js',
+              crossorigin: 'use-credentials',
+              integrity: 'sha384-rQEcC031XfytcqUuCLKA3ijYnmFEz247ZPEv1Abi7USpTphR8b6kyepOyI55QKv9'
+            }
+          ],
+          script: [{ src: './worker.js', type: 'module', crossorigin: 'use-credentials', integrity: 'sha384-rQEcC031XfytcqUuCLKA3ijYnmFEz247ZPEv1Abi7USpTphR8b6kyepOyI55QKv9' }]
+        }
   },
   typescript: {
     shim: true,
@@ -69,10 +78,12 @@ export default defineNuxtConfig({
     plugins: ['utc', 'customParseFormat', 'duration']
   },
   security: {
+    sri: true,
+    removeLoggers: false,
     headers: {
       crossOriginResourcePolicy: 'cross-origin',
       crossOriginOpenerPolicy: 'same-origin',
-      crossOriginEmbedderPolicy: import.meta.env.DEV ? 'unsafe-none' : 'require-corp',
+      crossOriginEmbedderPolicy: 'require-corp',
       permissionsPolicy: {
         fullscreen: 'self'
       }
