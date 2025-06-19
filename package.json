@@ -7,6 +7,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",
+    "cleanup": "nuxt cleanup",
     "storybook": "storybook dev --port 6006",
     "build:storybook": "storybook build",
     "build-storybook": "storybook build"
@@ -43,8 +44,8 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "@ffmpeg/ffmpeg": "^0.12.10",
-    "@ffmpeg/util": "^0.12.1",
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
     "@mdi/js": "^7.4.47",
     "@vee-validate/yup": "^4.12.5",
     "buffer": "^6.0.3",

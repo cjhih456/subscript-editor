@@ -33,7 +33,7 @@ export default defineNuxtPlugin(() => {
       })
     }
     setLoading(true)
-    const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm'
+    const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.10/dist/esm'
     ffmpegRef.value.on('log', ({ message }) => {
       messageRef.messages.push(message)
     })
@@ -150,7 +150,7 @@ export default defineNuxtPlugin(() => {
     command.push(outputFileName)
 
     await ffmpegRef.value.exec(command)
-    const data = await ffmpegRef.value.readFile(outputFileName) as Uint8Array
+    const data = await ffmpegRef.value.readFile(outputFileName)
     ffmpegRef.value.deleteFile(outputFileName)
     return data
   }
