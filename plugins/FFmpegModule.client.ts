@@ -22,6 +22,9 @@ export default defineNuxtPlugin(() => {
    * initialization ffmpeg wasm worker.
    */
   async function load () {
+    if (data.loaded) {
+      return Promise.resolve(true)
+    }
     if (data.onLoading) {
       let watcher: WatchStopHandle
       return new Promise((resolve) => {

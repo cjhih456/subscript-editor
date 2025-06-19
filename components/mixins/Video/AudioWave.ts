@@ -257,6 +257,7 @@ export default function AudioWave (
   watch(() => file.value, (n) => {
     if (n) {
       n.arrayBuffer().then(async (v: ArrayBuffer) => {
+        await nuxt.$ffmpeg.load()
         await nuxt.$ffmpeg.writeFile(new Uint8Array(v), 'video')
         await nuxt.$ffmpeg.transcodeWave('video', 'out.data', waveBySec).then((obj) => {
           data.waveformData = obj.wave.map((v, idx) =>
@@ -271,7 +272,7 @@ export default function AudioWave (
         duration.value = await nuxt.$ffmpeg.takeMediaFileDuration()
         // take audio file for whisper
         const audioFile = await nuxt.$ffmpeg.transcodeAudio('video', 'out.wav')
-        const file = new File([audioFile.buffer], 'out.wav', { type: 'audio/wav' })
+        const file = new File([audioFile], 'out.wav', { type: 'audio/wav' })
         const formData = fetchData('post', {
           audio_file: file
         })
@@ -304,16 +305,11 @@ export default function AudioWave (
       genWave()
     }
   })
-  onMounted(async () => {
-    if (waveCanvas.value) {
-      waveCanvas.value.height = waveHeight * 2
-    }
-    await nuxt.$ffmpeg.load()
-  })
   return {
     pixPerSec,
     levelDatasMax: computed(() => levelDatas.length),
     cueGeneratedData: computed(() => data.cueGeneratedData),
-    alertMessage: computed(() => alertMessage.value)
+    alertMessage: computed(() => alertMessage.value),
+    loadFFmpeg: () => nuxt.$ffmpeg.load()
   }
 }

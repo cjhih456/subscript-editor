@@ -50,7 +50,7 @@ export default defineNuxtComponent({
         data.currentTime = v
       }
     })
-    const { pixPerSec, levelDatasMax, cueGeneratedData, alertMessage: audioAlertMessage } = AudioWave(
+    const { pixPerSec, levelDatasMax, cueGeneratedData, alertMessage: audioAlertMessage, loadFFmpeg } = AudioWave(
       selectedFile,
       computed(() => waveCanvas.value),
       computed(() => timelineCanvas.value),
@@ -98,9 +98,10 @@ export default defineNuxtComponent({
     watch(() => cueGeneratedData.value, (cues) => {
       if (cues && cues.length) { cues.forEach(addCue) }
     })
-    onMounted(() => {
+    onMounted(async () => {
       window.addEventListener('resize', windowResizeEvent, false)
       windowResizeEvent()
+      await loadFFmpeg()
     })
     onBeforeUnmount(() => {
       window.removeEventListener('resize', windowResizeEvent, false)
