@@ -45,11 +45,7 @@ export default defineNuxtConfig({
       }
     }
   },
-  css: [
-    '@/assets/styles/css/main.css',
-    '@/assets/styles/init.sass',
-    'video.js/dist/video-js.css'
-  ],
+  css: ['@/assets/styles/init.sass'],
   runtimeConfig: {
     public: {
       BACKEND_API: 'http://localhost:3000'

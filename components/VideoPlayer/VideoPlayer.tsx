@@ -8,6 +8,7 @@ import BigPlayButton from './BigPlayButton'
 import { ClientOnly } from '#components'
 import styles from '@/assets/styles/components/VideoPlayer/VideoPlayer.module.sass'
 import type { TranslateResult } from '~/plugins/WebVttPlugin'
+import 'video.js/dist/video-js.css'
 
 export default defineNuxtComponent({
   name: 'VideoPlayer',
