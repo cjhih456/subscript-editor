@@ -12,29 +12,22 @@
 
   .level-slider
     @apply tw-pr-8
-    > *
-      --v-theme-surface-variant: var(--tw-colors-player-500)
-  .cue-save-btn
-    --v-theme-surface: var(--tw-colors-player-600)
-    --v-theme-on-surface: var(--tw-colors-white)
 .video-area
   grid-area: video
 .cue-area
   @apply tw-relative tw-overflow-y-scroll
   grid-area: cue
   .cue-add-btn
-    --v-theme-surface: var(--tw-colors-player-600)
-    --v-theme-on-surface: var(--tw-colors-white)
     @apply tw-absolute tw-bottom-1 tw-left-1 tw-right-1 tw-z-10
 .wave-area
   grid-area: timeline
   .wave-display
     @apply tw-relative tw-overflow-hidden tw-select-none
   .time-line-canvas
-    --time-line-font-color: var(--tw-colors-player-900)
-    --time-line-mark-color: var(--tw-colors-player-600)
+    --time-line-font-color: theme(colors.slate.900)
+    --time-line-mark-color: theme(colors.slate.600)
   .wave-line-canvas
-    --wave-line-bar-color: var(--tw-colors-player-300)
+    --wave-line-bar-color: theme(colors.slate.300)
   .subtitle-area
     @apply tw-relative
     min-height: 50px
