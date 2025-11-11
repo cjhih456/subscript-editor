@@ -120,24 +120,6 @@ export default defineNuxtPlugin(() => {
     }
   }
   /**
-   * Transform the video file using the provided options.
-   * @param inputFileName saved origin file name
-   * @param outputFileName output file name
-   * @param options ffmpeg options
-   * @returns video file data (Uint8Array)
-   */
-  async function transcodeVideo (inputFileName: string, outputFileName: string, options: any = {}) {
-    const command = ['-i', inputFileName]
-
-    for (const [key, value] of Object.entries(options)) {
-      command.push(key, String(value))
-    }
-    command.push(outputFileName)
-    await ffmpegRef.value.exec(command)
-    const data = await ffmpegRef.value.readFile(outputFileName) as Uint8Array
-    return data
-  }
-  /**
    * Extract the audio stream from the video file to create a WAV file.
    * @param inputFileName saved origin file name
    * @param outputFileName output file name
@@ -153,9 +135,9 @@ export default defineNuxtPlugin(() => {
     command.push(outputFileName)
 
     await ffmpegRef.value.exec(command)
-    const data = await ffmpegRef.value.readFile(outputFileName)
+    const data = await ffmpegRef.value.readFile(outputFileName, 'binary') as Uint8Array
     ffmpegRef.value.deleteFile(outputFileName)
-    return data
+    return new Uint8Array(data)
   }
   async function writeFile (file: Uint8Array, inputFileName: string) {
     await ffmpegRef.value.writeFile(inputFileName, file)
@@ -167,8 +149,7 @@ export default defineNuxtPlugin(() => {
         writeFile,
         takeMediaFileDuration,
         transcodeWave,
-        transcodeAudio,
-        transcodeVideo
+        transcodeAudio
       }
     }
   }
