@@ -1,4 +1,4 @@
-import { VAlert, VBtn, VCol, VContainer, VRow, VScrollYReverseTransition, VSlider } from 'vuetify/components'
+import { VAlert, VBtn, VCol, VContainer, VRow, VScrollYReverseTransition, VSlider, VFileInput } from 'vuetify/components'
 import styles from '~/assets/styles/pages/index.module.sass'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
 import AudioWave from '~/components/mixins/Video/AudioWave'
@@ -85,11 +85,20 @@ export default defineNuxtComponent({
     const alertMessages = computed(() => {
       return cueAlertMessage.value || audioAlertMessage.value
     })
-    function fileSelect (event: Event) {
-      const target = event.target as HTMLInputElement
-      if (target && target.files) {
-        data.videoFile = target.files[0]
-        data.videoFileSrc = URL.createObjectURL(data.videoFile)
+    function fileSelect (file: File | File[] | null) {
+      if (!file) { return }
+      if (Array.isArray(file)) {
+        data.videoFile = file[0]
+      } else {
+        data.videoFile = file
+      }
+      data.videoFileSrc = URL.createObjectURL(data.videoFile)
+    }
+    function fileSelectRules (value: File) {
+      if (value && value.type.startsWith('video/')) {
+        return true
+      } else {
+        return 'File must be a video'
       }
     }
     function windowResizeEvent () {
@@ -114,6 +123,7 @@ export default defineNuxtComponent({
       data,
       currentTimePosition,
       fileSelect,
+      fileSelectRules,
       alertMessages,
 
       waveArea,
@@ -145,10 +155,22 @@ export default defineNuxtComponent({
       }
       </VScrollYReverseTransition>
       <VRow class={styles['input-area']}>
-        <input type="file" onChange={this.fileSelect}></input>
-        <VBtn onClick={this.saveSubscribe} disabled={!this.cueList.length} class={styles['cue-save-btn']}>
-          Save Subscribe
-        </VBtn>
+        <VCol>
+          <VFileInput
+            variant="outlined"
+            density="compact"
+            color="primary"
+            showSize={1024}
+            accept="video/*"
+            onUpdate:modelValue={this.fileSelect}
+            rules={[this.fileSelectRules]}
+          />
+        </VCol>
+        <VCol cols="auto">
+          <VBtn onClick={this.saveSubscribe} disabled={!this.cueList.length} class={styles['cue-save-btn']}>
+            Save Subscribe
+          </VBtn>
+        </VCol>
       </VRow>
       <div class={styles['cue-area']}>
         {this.genCueEditArea()}
