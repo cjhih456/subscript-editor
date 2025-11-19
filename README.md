@@ -13,6 +13,13 @@
 - whisper(optional, sub module - nuxt proxy)
   - If you use Whisper, you can generate subtitles automatically.
 
+### Featured
+- change UI/UX, Vuetify -> shadcn/vue, @nuxtjs/color-mode 
+- clean-up directory, file system. 
+- editor history system
+- when rendering timeline & wave, use OffscreenCanvas & Worker
+- use Provide & Inject
+
 ### Whisper endpoint
 [Whisper Setup document](https://ahmetoner.com/whisper-asr-webservice/run/)
 On Mac os, not support gpu yet.
