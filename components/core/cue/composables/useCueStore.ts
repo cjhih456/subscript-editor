@@ -15,7 +15,7 @@ interface HistoryData {
   data: CueData
 }
 
-export default function useCueDataHistoryStore () {
+export default function useCueStore () {
   const cueStore = ref<Map<string, CueDataInterface>>(new Map())
   const historyStack = ref<HistoryData[]>([])
   const currentIndex = ref<number>(-1)
