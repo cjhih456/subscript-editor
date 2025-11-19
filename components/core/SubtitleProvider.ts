@@ -26,5 +26,8 @@ export default defineNuxtComponent({
     provide(PIX_PER_SEC, pixPerSec)
     provide(WAVE_DATA, waveData)
     provide(CUE_STORE, cueStore)
+  },
+  render () {
+    return this.$slots.default?.()
   }
 })
