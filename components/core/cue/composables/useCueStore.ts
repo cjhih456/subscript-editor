@@ -32,8 +32,12 @@ export default function useCueStore () {
     currentIndex.value++
   }
 
-  function get (idx: string) {
-    return cueStore.value.get(idx)
+  function get (idx: string): CueDataInterface {
+    const data = cueStore.value.get(idx)
+    if (!data) {
+      throw new Error(`Cue data not found: ${idx}`)
+    }
+    return data
   }
 
   function cleanDuration (num1: number, num2: number, maxDuration: number = Infinity): [number, number] {
