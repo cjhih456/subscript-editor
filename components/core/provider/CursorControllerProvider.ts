@@ -248,7 +248,7 @@ export function provideCursorController (searchDepth: number = 2) {
  * 커서 컨트롤러 기능을 사용하기 위한 훅입니다.
  * @returns 커서 컨트롤러 객체
  */
-export function useCursorControler (): CursorController {
+export function useCursorController (): CursorController {
   const cursorController = inject<CursorController>(CursorControllerKey)
 
   if (!cursorController) {
