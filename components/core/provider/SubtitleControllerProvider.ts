@@ -17,6 +17,7 @@ export function provideSubtitleController () {
   const pixPerSec = ref<number>(0)
   const waveData = ref<number[]>([])
   const cueStore = useCueStore()
+  const displayWidth = ref<number>(0)
 
   provide(VIDEO_FILE, videoFile)
   provide(SCROLL_VALUE, scrollValue)
@@ -25,15 +26,30 @@ export function provideSubtitleController () {
   provide(PIX_PER_SEC, pixPerSec)
   provide(WAVE_DATA, waveData)
   provide(CUE_STORE, cueStore)
-  return {
+
+  function windowResizeEvent () {
+    displayWidth.value = document.documentElement.offsetWidth
+  }
+
+  onMounted(() => {
+    window.addEventListener('resize', windowResizeEvent, false)
+    windowResizeEvent()
+  })
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', windowResizeEvent, false)
+  })
+
+  return readonly({
     videoFile,
     scrollValue,
     duration,
     currentTime,
     pixPerSec,
     waveData,
-    cueStore
-  }
+    cueStore,
+    displayWidth
+  })
 }
 
 export function useVideoFile () {
