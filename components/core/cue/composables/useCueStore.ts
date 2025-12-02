@@ -15,7 +15,16 @@ interface HistoryData {
   data: CueData
 }
 
-export default function useCueStore () {
+export interface CueStoreInterface {
+  get: (idx: string) => CueDataInterface
+  create: () => void
+  update: (idx: string, cueData: CueDataInterface) => void
+  remove: (idx: string) => void
+  undo: () => void
+  redo: () => void
+}
+
+export default function useCueStore (): CueStoreInterface {
   const cueStore = ref<Map<string, CueDataInterface>>(new Map())
   const historyStack = ref<HistoryData[]>([])
   const currentIndex = ref<number>(-1)
