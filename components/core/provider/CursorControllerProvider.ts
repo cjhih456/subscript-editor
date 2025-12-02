@@ -7,7 +7,7 @@ export type CursorControlElementType = 'Cue' | 'CueEdge' | 'LayoutSpliterX' | 'L
 interface RegisteredElement {
   id: string
   type: CursorControlElementType
-  handler: (event: MouseEvent, element: HTMLElement, part?: 'start' | 'end' | 'middle') => void
+  handler?: (event: MouseEvent, element: HTMLElement, part?: 'start' | 'end' | 'middle') => void
   threshold: number // 요소 근처로 간주되는 픽셀 거리
   edgeThreshold?: number // Cue 요소의 가장자리 임계값 (픽셀)
 }
@@ -36,8 +36,7 @@ export interface CursorController {
   registerElement: (
     element: HTMLElement,
     type: CursorControlElementType,
-    handler: (event: MouseEvent, element: HTMLElement, part?: 'start' | 'end' | 'middle') => void,
-    options?: { id?: string, threshold?: number, edgeThreshold?: number }
+    options?: { id?: string, threshold?: number, edgeThreshold?: number, handler?: (event: MouseEvent, element: HTMLElement, part?: 'start' | 'end' | 'middle') => void }
   ) => string
   unregisterElement: (element: HTMLElement) => void
 }
@@ -71,7 +70,7 @@ export function provideCursorController (searchDepth: number = 2) {
       if (!activeElement) { return }
       const registeredElement = registeredElements.value.get(activeElement)
       if (!registeredElement) { return }
-      registeredElement.handler(event, activeElement, activeDragElementPart.value || undefined)
+      registeredElement.handler?.(event, activeElement, activeDragElementPart.value || undefined)
     }
 
     // 드래그 중이 아니면 마우스 위치에 따라 커서 스타일 변경
@@ -86,7 +85,7 @@ export function provideCursorController (searchDepth: number = 2) {
       const { element, part } = result
       activeDragElementId.value = new WeakRef(element)
       activeDragElementPart.value = part || null
-      result.registeredElement.handler(event, element, part)
+      result.registeredElement.handler?.(event, element, part)
     }
   }
 
@@ -97,7 +96,7 @@ export function provideCursorController (searchDepth: number = 2) {
       if (!activeElement) { return }
       const registeredElement = registeredElements.value.get(activeElement)
       if (!registeredElement) { return }
-      registeredElement.handler(event, activeElement, activeDragElementPart.value || undefined)
+      registeredElement.handler?.(event, activeElement, activeDragElementPart.value || undefined)
       activeDragElementId.value = null
       activeDragElementPart.value = null
     }
@@ -175,8 +174,7 @@ export function provideCursorController (searchDepth: number = 2) {
   function registerElement (
     element: HTMLElement,
     type: CursorControlElementType,
-    handler: (event: MouseEvent, element: HTMLElement, part?: 'start' | 'end' | 'middle') => void,
-    options: { id?: string, threshold?: number, edgeThreshold?: number } = {}
+    options: { id?: string, threshold?: number, edgeThreshold?: number, handler?: (event: MouseEvent, element: HTMLElement, part?: 'start' | 'end' | 'middle') => void } = {}
   ) {
     const id = options.id || `element-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     const threshold = options.threshold || 10
@@ -185,7 +183,7 @@ export function provideCursorController (searchDepth: number = 2) {
     registeredElements.value.set(element, {
       id,
       type,
-      handler,
+      handler: options.handler,
       threshold,
       edgeThreshold
     })
