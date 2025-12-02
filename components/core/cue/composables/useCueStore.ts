@@ -72,6 +72,7 @@ export default function useCueStore () {
   function undo () {
     if (currentIndex.value < 0) { return }
     const history = historyStack.value[--currentIndex.value]
+    if (!history) { return }
     if (history.action === 'add') {
       cueStore.value.delete(history.data.idx)
     } else if (history.action === 'update') {
@@ -84,6 +85,7 @@ export default function useCueStore () {
   function redo () {
     if (currentIndex.value >= historyStack.value.length - 1) { return }
     const history = historyStack.value[++currentIndex.value]
+    if (!history) { return }
     if (history.action === 'add') {
       cueStore.value.set(history.data.idx, history.data)
     } else if (history.action === 'update') {
