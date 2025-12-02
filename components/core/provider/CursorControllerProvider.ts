@@ -6,7 +6,6 @@ export type CursorControlElementType = 'Cue' | 'CueEdge' | 'LayoutSpliterX' | 'L
 // 등록된 요소의 정보를 저장하는 인터페이스
 interface RegisteredElement {
   id: string
-  element: HTMLElement
   type: CursorControlElementType
   handler: (event: MouseEvent, element: HTMLElement, part?: 'start' | 'end' | 'middle') => void
   threshold: number // 요소 근처로 간주되는 픽셀 거리
@@ -40,7 +39,7 @@ export interface CursorController {
     handler: (event: MouseEvent, element: HTMLElement, part?: 'start' | 'end' | 'middle') => void,
     options?: { id?: string, threshold?: number, edgeThreshold?: number }
   ) => string
-  unregisterElement: (id: string) => void
+  unregisterElement: (element: HTMLElement) => void
 }
 
 // 의존성 주입을 위한 키 정의
@@ -50,13 +49,13 @@ export const CursorControllerKey: InjectionKey<CursorController> = Symbol('Curso
  * 커서 컨트롤러 Provider
  * 애플리케이션에 커서 컨트롤러 기능을 제공합니다.
  */
-export function provideCursorController () {
+export function provideCursorController (searchDepth: number = 2) {
   // 등록된 요소들을 저장하는 맵
-  const registeredElements = ref<Map<string, RegisteredElement>>(new Map())
+  const registeredElements = ref<WeakMap<HTMLElement, RegisteredElement>>(new WeakMap())
   // 현재 커서 스타일
   const cursorStyle = ref<string>('auto')
   // 현재 드래그 중인 요소의 ID
-  const activeDragElementId = ref<string | null>(null)
+  const activeDragElementId = ref<WeakRef<HTMLElement> | null>(null)
   // 마우스 위치
   const mousePosition = ref({ x: 0, y: 0 })
   // 현재 드래그 중인 요소의 부분 (가장자리 또는 중앙)
@@ -68,11 +67,11 @@ export function provideCursorController () {
 
     // 드래그 중인 요소가 있으면 해당 요소의 핸들러 호출
     if (activeDragElementId.value) {
-      const activeElement = registeredElements.value.get(activeDragElementId.value)
-      if (activeElement) {
-        activeElement.handler(event, activeElement.element, activeDragElementPart.value || undefined)
-        return
-      }
+      const activeElement = activeDragElementId.value.deref()
+      if (!activeElement) { return }
+      const registeredElement = registeredElements.value.get(activeElement)
+      if (!registeredElement) { return }
+      registeredElement.handler(event, activeElement, activeDragElementPart.value || undefined)
     }
 
     // 드래그 중이 아니면 마우스 위치에 따라 커서 스타일 변경
@@ -81,23 +80,24 @@ export function provideCursorController () {
 
   function handleMouseDown (event: MouseEvent) {
     // 마우스 다운 이벤트가 발생한 요소 찾기
-    const result = findNearestElement(event.clientX, event.clientY)
+    const result = findRegistedElement(event)
 
     if (result) {
       const { element, part } = result
-      activeDragElementId.value = element.id
+      activeDragElementId.value = new WeakRef(element)
       activeDragElementPart.value = part || null
-      element.handler(event, element.element, part)
+      result.registeredElement.handler(event, element, part)
     }
   }
 
   function handleMouseUp (event: MouseEvent) {
     // 드래그 중인 요소가 있으면 해당 요소의 핸들러 호출 후 드래그 종료
     if (activeDragElementId.value) {
-      const activeElement = registeredElements.value.get(activeDragElementId.value)
-      if (activeElement) {
-        activeElement.handler(event, activeElement.element, activeDragElementPart.value || undefined)
-      }
+      const activeElement = activeDragElementId.value.deref()
+      if (!activeElement) { return }
+      const registeredElement = registeredElements.value.get(activeElement)
+      if (!registeredElement) { return }
+      registeredElement.handler(event, activeElement, activeDragElementPart.value || undefined)
       activeDragElementId.value = null
       activeDragElementPart.value = null
     }
@@ -107,68 +107,61 @@ export function provideCursorController () {
   }
 
   // 마우스 위치에 가장 가까운 등록된 요소와 부분(가장자리 또는 중앙) 찾기
-  function findNearestElement (x: number, y: number): { element: RegisteredElement, part?: 'start' | 'end' | 'middle' } | null {
-    let nearestElement: RegisteredElement | null = null
-    let minDistance = Infinity
+  function findRegistedElement (event: MouseEvent): { element: HTMLElement, registeredElement: RegisteredElement, part?: 'start' | 'end' | 'middle' } | null {
+    const { clientX: x, target: eventTarget } = event
+    let detectedRegistedElement: RegisteredElement | null = null
     let elementPart: 'start' | 'end' | 'middle' | undefined
 
-    for (const element of registeredElements.value.values()) {
-      const rect = element.element.getBoundingClientRect()
-
-      // 요소와의 거리 계산
-      const distance = calculateDistanceToElement(x, y, rect)
-
-      // 임계값 내에 있고 가장 가까운 요소 선택
-      if (distance <= element.threshold && distance < minDistance) {
-        minDistance = distance
-        nearestElement = element
-
-        // Cue 요소인 경우 가장자리 또는 중앙 부분 구분
-        if (element.type === 'Cue') {
-          const edgeThreshold = element.edgeThreshold || 8
-          const relativeX = x - rect.left
-
-          if (relativeX <= edgeThreshold) {
-            elementPart = 'start'
-          } else if (relativeX >= rect.width - edgeThreshold) {
-            elementPart = 'end'
-          } else {
-            elementPart = 'middle'
-          }
-        }
+    let target = eventTarget as HTMLElement
+    for (let i = 0; i < searchDepth; i++) {
+      if (!target) { break }
+      if (registeredElements.value.has(target)) {
+        detectedRegistedElement = registeredElements.value.get(target) ?? null
+      } else {
+        target = target.parentElement as HTMLElement
       }
     }
 
-    if (!nearestElement) {
-      return null
+    if (!detectedRegistedElement) { return null }
+
+    const rect = target.getBoundingClientRect()
+
+    if (detectedRegistedElement.type === 'Cue') {
+      const edgeThreshold = detectedRegistedElement.edgeThreshold || 8
+      const relativeX = x - rect.left
+      if (relativeX <= edgeThreshold) {
+        elementPart = 'start'
+      } else {
+        const relativeX = x - rect.right
+        if (relativeX <= edgeThreshold) {
+          elementPart = 'end'
+        } else {
+          elementPart = 'middle'
+        }
+      }
+    } else {
+      elementPart = 'middle'
     }
-
-    return { element: nearestElement, part: elementPart }
-  }
-
-  // 점과 요소 사이의 거리 계산
-  function calculateDistanceToElement (x: number, y: number, rect: DOMRect): number {
-    const dx = Math.max(rect.left - x, 0, x - rect.right)
-    const dy = Math.max(rect.top - y, 0, y - rect.bottom)
-    return Math.sqrt(dx * dx + dy * dy)
+    return { element: target, registeredElement: detectedRegistedElement, part: elementPart }
   }
 
   // 커서 스타일 업데이트
   function updateCursorStyle () {
-    const result = findNearestElement(mousePosition.value.x, mousePosition.value.y)
-
-    if (result) {
-      const { element, part } = result
+    if (activeDragElementId.value) {
+      const activeElement = activeDragElementId.value.deref()
+      if (!activeElement) { return }
+      const registeredElement = registeredElements.value.get(activeElement)
+      if (!registeredElement) { return }
 
       // Cue 요소인 경우 부분에 따라 다른 커서 스타일 적용
-      if (element.type === 'Cue' && part) {
-        if (part === 'start' || part === 'end') {
+      if (registeredElement.type === 'Cue' && activeDragElementPart.value) {
+        if (activeDragElementPart.value === 'start' || activeDragElementPart.value === 'end') {
           cursorStyle.value = cursorStyleMap.CueEdge
         } else {
           cursorStyle.value = cursorStyleMap.Cue
         }
       } else {
-        cursorStyle.value = cursorStyleMap[element.type]
+        cursorStyle.value = cursorStyleMap[registeredElement.type]
       }
     } else {
       cursorStyle.value = 'auto'
@@ -189,9 +182,8 @@ export function provideCursorController () {
     const threshold = options.threshold || 10
     const edgeThreshold = options.edgeThreshold || 8
 
-    registeredElements.value.set(id, {
+    registeredElements.value.set(element, {
       id,
-      element,
       type,
       handler,
       threshold,
@@ -202,8 +194,8 @@ export function provideCursorController () {
   }
 
   // 요소 등록 해제 함수
-  function unregisterElement (id: string) {
-    registeredElements.value.delete(id)
+  function unregisterElement (element: HTMLElement) {
+    registeredElements.value.delete(element)
   }
 
   // 컴포넌트 마운트 시 이벤트 리스너 등록
@@ -230,7 +222,12 @@ export function provideCursorController () {
     // 현재 드래그 중인지 여부
     isDragging: computed(() => activeDragElementId.value !== null),
     // 현재 드래그 중인 요소의 ID
-    activeDragElementId: computed(() => activeDragElementId.value),
+    activeDragElementId: computed(() => {
+      if (!activeDragElementId.value) { return null }
+      const activeElement = activeDragElementId.value.deref()
+      if (!activeElement) { return null }
+      return registeredElements.value.get(activeElement)?.id ?? null
+    }),
     // 현재 드래그 중인 요소의 부분 (가장자리 또는 중앙)
     activeDragElementPart: computed(() => activeDragElementPart.value),
     // 현재 마우스 위치
