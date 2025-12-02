@@ -25,22 +25,47 @@ export function provideSubtitleController () {
   provide(PIX_PER_SEC, pixPerSec)
   provide(WAVE_DATA, waveData)
   provide(CUE_STORE, cueStore)
+  return {
+    videoFile,
+    scrollValue,
+    duration,
+    currentTime,
+    pixPerSec,
+    waveData,
+    cueStore
+  }
 }
 
 export function useVideoFile () {
-  return inject<Ref<File | null>>(VIDEO_FILE)
+  const videoFile = inject<Ref<File | null>>(VIDEO_FILE)
+  if (!videoFile) {
+    throw new Error('VIDEO_FILE is not injected')
+  }
+  return videoFile
 }
 
 export function useScrollValue () {
-  return inject<ComputedRef<number>>(SCROLL_VALUE)
+  const scrollValue = inject<ComputedRef<number>>(SCROLL_VALUE)
+  if (!scrollValue) {
+    throw new Error('SCROLL_VALUE is not injected')
+  }
+  return scrollValue
 }
 
 export function useDuration () {
-  return inject<ComputedRef<number>>(DURATION)
+  const duration = inject<ComputedRef<number>>(DURATION)
+  if (!duration) {
+    throw new Error('DURATION is not injected')
+  }
+  return duration
 }
 
 export function useCurrentTime () {
-  return inject<ComputedRef<number>>(CURRENT_TIME)
+  const currentTime = inject<ComputedRef<number>>(CURRENT_TIME)
+  if (!currentTime) {
+    throw new Error('CURRENT_TIME is not injected')
+  }
+  return currentTime
 }
 
 export function usePixPerSec () {
