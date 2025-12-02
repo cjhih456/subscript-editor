@@ -1,4 +1,5 @@
 import type { WritableComputedRef } from 'vue'
+import useFFmpeg from '~/components/core/wave/composables/useFFmpeg'
 interface LevelData {
   displayTerm: number,
   /**
@@ -26,12 +27,12 @@ interface LevelData {
  * @param widthSize - Canvas's width size.
  * @param waveHeight - Wave height, will be two times this value (waveHeight * 2 = canvas height).
  * @param waveBySec - Number of waves per second used for rendering waveform.
- * Default is 400, calculated for compression.
+ * Default is 480, calculated for compression.
  * If the output has a sample rate of 48000 Hz and 480 waves per second,
  * the waveform data length will be (48000 * 2) / 480 * duration (in seconds).
  */
 export default function AudioWave (
-  file: ComputedRef<File|undefined>,
+  file: File | undefined,
   waveCanvas: ComputedRef<HTMLCanvasElement | null | undefined>,
   timelineCanvas: ComputedRef<HTMLCanvasElement | null | undefined>,
   lazyScroll: ComputedRef<number>,
@@ -42,7 +43,6 @@ export default function AudioWave (
   waveBySec: number = 480
 ) {
   const nuxt = useNuxtApp()
-  const alertMessage = ref()
   /**
    * display level sampling data
    */
@@ -252,48 +252,21 @@ export default function AudioWave (
   /**
    * Detect the new file, generate waveform data, and extract a WAV file.
    */
-  watch(() => file.value, async (fileValue) => {
+
+  const { convertWave, waveSerialize, whisperTranscribe } = useFFmpeg()
+
+  watch(() => file, async (fileValue) => {
     if (!fileValue) { return }
-    const arrayBuffer = await fileValue.arrayBuffer()
-    await nuxt.$ffmpeg.load()
-    await nuxt.$ffmpeg.writeFile(new Uint8Array(arrayBuffer), 'video')
-    await nuxt.$ffmpeg.transcodeWave('video', 'out.data', waveBySec).then((obj) => {
-      data.waveformData = obj.wave.map((v, idx) =>
-        Math.round(
-          (waveHeight * v) / Math.abs(obj.maxMinValue[idx % 2 ? 'min' : 'max'])
-        )
-      )
-      data.dataByLevel = {}
-    })
+    const { wave, maxMinValue, duration: convertedDuration } = await convertWave(fileValue)
     // take duration of file
-    duration.value = await nuxt.$ffmpeg.takeMediaFileDuration()
-    // take audio file for whisper
-    const audioFile = await nuxt.$ffmpeg.transcodeAudio('video', 'out.wav')
-    const file = new File([audioFile], 'out.wav', { type: 'audio/wav' })
-    const formData = fetchData('post', {
-      audio_file: file
-    })
-    useCustomFetch('http://localhost:3000/whisper/asr', {
-      query: {
-        encode: false,
-        task: 'transcribe',
-        word_timestamps: true,
-        output: 'vtt'
-      },
-      cache: 'default',
-      keepalive: false,
-      duplex: 'half',
-      body: formData,
-      method: 'post'
-    }).then(async (result: any) => {
-      const cueList = await nuxt.$webVtt.parseSubtitle(result)
-      if (cueList) {
-        data.cueGeneratedData = cueList.cues
-      }
-    }).catch(() => {
-      alertMessage.value = 'Whisper are not working now.'
-      setTimeout(() => { alertMessage.value = undefined }, 2000)
-    })
+    duration.value = convertedDuration
+    data.waveformData = waveSerialize(wave, maxMinValue, waveHeight, pixPerSec.value)
+    data.dataByLevel = {}
+    // take Cues from Whisper
+    const cueList = await whisperTranscribe(fileValue)
+    if (cueList) {
+      data.cueGeneratedData = cueList
+    }
   })
   watch(() => [lazyScroll.value, widthSize.value, displayLevel.value, data.waveformData], (newVal, oldVal) => {
     if (newVal[0] !== oldVal[0] || newVal[1] !== oldVal[1] || newVal[2] !== oldVal[2] || newVal[3] !== oldVal[3]) {
@@ -304,7 +277,6 @@ export default function AudioWave (
     pixPerSec,
     levelDatasMax: computed(() => levelDatas.length),
     cueGeneratedData: computed(() => data.cueGeneratedData),
-    alertMessage: computed(() => alertMessage.value),
     loadFFmpeg: () => nuxt.$ffmpeg.load()
   }
 }
