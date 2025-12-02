@@ -1,4 +1,5 @@
-import { useCueStore, usePixPerSec } from '../../SubtitleInjecter'
+import useCueStore from '../composables/useCueStore'
+import useCueControl from '../composables/useCueControl'
 
 export default defineNuxtComponent({
   name: 'Cue',
@@ -10,23 +11,15 @@ export default defineNuxtComponent({
   },
   setup ({ idx }) {
     const { get: getCue } = useCueStore()
-    const pixPerSec = usePixPerSec()
+    const element = useTemplateRef<HTMLDivElement>('cue')
     const cue = getCue(idx)
-
-    const startPosition = computed(() => {
-      return pixPerSec.value * (cue?.startTime ?? 0)
-    })
-    const endPosition = computed(() => {
-      return pixPerSec.value * (cue?.endTime ?? 0)
-    })
-    const width = computed(() => {
-      return endPosition.value - startPosition.value
-    })
+    const { cueDisplayPosition: displayPosition } = useCueControl(idx, element)
 
     const style = computed(() => {
+      const { width, left } = displayPosition.value
       return {
-        width: width.value + 'px',
-        left: startPosition.value + 'px'
+        width: width + 'px',
+        left: left + 'px'
       }
     })
 
@@ -37,11 +30,13 @@ export default defineNuxtComponent({
   },
   render () {
     return <div
+      ref='cue'
       class="bg-gray-300/60"
       style={this.style}
-      v-memo={[this.cue.text, this.cue.startTime, this.cue.endTime]}
     >
-      <span>
+      <span
+        v-memo={[this.cue.text]}
+      >
         <pre>{this.cue?.text ?? ''}</pre>
       </span>
     </div>

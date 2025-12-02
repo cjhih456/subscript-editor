@@ -1,3 +1,4 @@
+import type { ShallowRef } from 'vue'
 import { usePixPerSec } from '../../provider/SubtitleControllerProvider'
 import useCueStore from './useCueStore'
 import { useCursorController } from '~/components/core/provider/CursorControllerProvider'
@@ -5,7 +6,7 @@ import { useCursorController } from '~/components/core/provider/CursorController
 /**
  * when Dragging Cue, this module will be used to control the cue data.
  */
-export default function useCueControl (id: string, element: Ref<HTMLElement>) {
+export default function useCueControl (id: string, element: Readonly<ShallowRef<HTMLDivElement | null>>) {
   const pixPerSec = usePixPerSec()
   const cueStore = useCueStore()
   const { registerElement, unregisterElement } = useCursorController()
@@ -104,10 +105,12 @@ export default function useCueControl (id: string, element: Ref<HTMLElement>) {
   }
 
   onMounted(() => {
+    if (!element.value) { return }
     registerElement(element.value, 'Cue', { handler: onMouseEvent })
   })
 
   onBeforeUnmount(() => {
+    if (!element.value) { return }
     unregisterElement(element.value)
   })
 
