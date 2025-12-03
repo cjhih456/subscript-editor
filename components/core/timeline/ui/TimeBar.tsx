@@ -83,8 +83,9 @@ export default defineNuxtComponent({
       context.textAlign = 'left'
       context.textBaseline = 'bottom'
 
-      let time = scrollValue.value / pixPerSec.value
-      let position = scrollValue.value % pixPerSec.value
+      let time = Math.floor(scrollValue.value / stepLevel.value.stepTime) * stepLevel.value.stepTime
+      let position = (time - scrollValue.value) * pixPerSec.value
+
       while (position < canvasWidth) {
         drawTimeLabel(nuxt.$dayjs((time) * 1000)
           .utc()

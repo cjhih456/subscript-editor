@@ -42,8 +42,12 @@ export default defineNuxtComponent({
       context.clearRect(0, 0, canvasWidth, waveHeight)
       context.beginPath()
 
+      // scrollValue를 고려하여 파형 데이터의 시작 위치 계산
+      const scrollOffset = Math.floor(scrollValue.value * audioRate.value)
+
       for (let i = 0; i < canvasWidth; i += 2) {
-        const start = Math.floor(i * samplePerPixel.value)
+        // scrollValue에 따른 오프셋 적용
+        const start = Math.floor(i * samplePerPixel.value) + scrollOffset
         const end = start + samplePerPixel.value * 2
 
         if (start >= waveData.value.length) {
@@ -53,8 +57,10 @@ export default defineNuxtComponent({
         let max = -127
         let min = 128
         for (let j = start; j < end; j++) {
-          if (waveData.value[j] > max) { max = waveData.value[j] }
-          if (waveData.value[j] < min) { min = waveData.value[j] }
+          if (j >= 0 && j < waveData.value.length) {
+            if (waveData.value[j] > max) { max = waveData.value[j] }
+            if (waveData.value[j] < min) { min = waveData.value[j] }
+          }
         }
         context.fillRect(i * 2, waveHalfHeight.value - (max / scaleValue.value) * waveHeight, 2, ((max - min) / scaleValue.value) * waveHeight)
       }
