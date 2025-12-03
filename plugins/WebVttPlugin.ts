@@ -16,7 +16,14 @@ export default defineNuxtPlugin(() => {
     return /\d{1,}:\d{1,2}:\d{1,2}\.\d{1,3}/.test(time) ? time : '0:0:0.000'
   }
   function convertTimeToSecond (time: string) {
-    const [hours, minutes, seconds, milliseconds] = timeFormatCheck(time).split(/[:.]/g).map(v => +v)
+    const [hours, minutes, seconds, milliseconds] = timeFormatCheck(time).split(/[:.]/g).map((v, idx) => {
+      if (idx !== 3) { return Number(v) }
+      if (v.length === 1) {
+        return Number(v) * 100
+      } else if (v.length === 2) {
+        return Number(v) * 10
+      } else { return Number(v) }
+    })
     return nuxt.$dayjs.duration({ hours, minutes, seconds, milliseconds }).asMilliseconds() / 1000
   }
   function convertSecondToTime (sec: number) {

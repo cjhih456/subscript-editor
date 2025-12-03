@@ -5,7 +5,7 @@ export default function useFFmpeg () {
     await nuxt.$ffmpeg.load()
   }
 
-  async function convertWave (file: File, outputAudioRate: number = 200) {
+  async function convertWave (file: File, outputAudioRate: number) {
     await loadFFmpeg()
     const arrayBuffer = await file.arrayBuffer()
     await nuxt.$ffmpeg.writeFile(new Uint8Array(arrayBuffer), 'video')
