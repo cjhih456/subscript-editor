@@ -22,7 +22,7 @@ export default defineNuxtComponent({
 
     const waveHalfHeight = computed(() => waveHeight / 2)
 
-    watch([displayWidth, waveData, pixPerSec, scrollValue, waveHeight], () => {
+    watch(() => [displayWidth.value, waveData.value, pixPerSec.value, scrollValue.value, waveHeight], () => {
       requestAnimationFrame(() => {
         canvas.value?.setAttribute('width', canvas.value.offsetWidth.toString())
         drawWave()
