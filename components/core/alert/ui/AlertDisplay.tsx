@@ -5,14 +5,13 @@ export default defineNuxtComponent({
   name: 'AlertDisplay',
   setup () {
     const nuxt = useNuxtApp()
-    const alertMessage = computed(() => nuxt.$alert.alertMessage)
     return {
-      alertMessage
+      alertMessage: nuxt.$alert.alertMessage
     }
   },
   render () {
     return <VScrollYReverseTransition>
-      {this.alertMessage.value.map((message: string, index: number) => (
+      {this.alertMessage.map((message: string, index: number) => (
         <VAlert key={index} class={styles.alert} title={message} />
       ))}
     </VScrollYReverseTransition>
