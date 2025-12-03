@@ -5,8 +5,11 @@ export default defineNuxtComponent({
   name: 'AlertDisplay',
   setup () {
     const nuxt = useNuxtApp()
+    const alertMessage = computed(() => {
+      return import.meta.env.SSR ? [] : nuxt.$alert.alertMessage.value
+    })
     return {
-      alertMessage: nuxt.$alert.alertMessage
+      alertMessage
     }
   },
   render () {
