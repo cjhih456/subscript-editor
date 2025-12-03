@@ -6,7 +6,7 @@ import { provideCursorController } from '~/components/core/provider/CursorContro
 import { provideSubtitleController } from '~/components/core/provider/SubtitleControllerProvider'
 import CueArea from '~/components/mixins/Video/CueArea'
 import FileSelect from '~/components/core/file-select/ui/FileSelect'
-import useFFmpeg from '~/components/core/wave/composables/useFFmpeg'
+import useFFmpeg from '~/components/core/file-select/composables/useFFmpeg'
 import TimeBar from '~/components/core/timeline/ui/TimeBar'
 import WaveBar from '~/components/core/timeline/ui/WaveBar'
 
