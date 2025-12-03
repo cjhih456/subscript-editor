@@ -24,6 +24,7 @@ export default defineNuxtComponent({
 
     watch([displayWidth, waveData, pixPerSec, scrollValue, waveHeight], () => {
       requestAnimationFrame(() => {
+        canvas.value?.setAttribute('width', canvas.value.offsetWidth.toString())
         drawWave()
       })
     })
@@ -74,7 +75,6 @@ export default defineNuxtComponent({
       ref='canvas'
       class="tw-w-full"
       height={this.waveHeight}
-      width={(this.$refs.canvas as HTMLCanvasElement)?.offsetWidth || 0}
     />
   }
 })

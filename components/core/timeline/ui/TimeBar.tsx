@@ -64,6 +64,7 @@ export default defineNuxtComponent({
 
     watch([displayWidth, timeBarHeight, fontSize, scrollValue, pixPerSec], () => {
       requestAnimationFrame(() => {
+        canvas.value?.setAttribute('width', canvas.value.offsetWidth.toString())
         drawTimeBar()
       })
     })
@@ -112,7 +113,6 @@ export default defineNuxtComponent({
       ref='canvas'
       class="tw-w-full"
       height={this.timeBarHeight}
-      width={(this.$refs.canvas as HTMLCanvasElement)?.offsetWidth || 0}
     />
   }
 })

@@ -63,12 +63,12 @@ export function provideSubtitleController () {
   }
 
   onMounted(() => {
-    document.addEventListener('resize', windowResizeEvent, false)
+    window.addEventListener('resize', windowResizeEvent, false)
     windowResizeEvent()
   })
 
   onBeforeUnmount(() => {
-    document.removeEventListener('resize', windowResizeEvent, false)
+    window.removeEventListener('resize', windowResizeEvent, false)
   })
 
   return {
