@@ -16,6 +16,7 @@ interface HistoryData {
 }
 
 export interface CueStoreInterface {
+  getAllIds: () => string[]
   get: (idx: string) => CueDataInterface
   create: () => void
   update: (idx: string, cueData: CueDataInterface) => void
@@ -28,6 +29,10 @@ export default function useCueStore (): CueStoreInterface {
   const cueStore = ref<Map<string, CueDataInterface>>(new Map())
   const historyStack = ref<HistoryData[]>([])
   const currentIndex = ref<number>(-1)
+
+  function getAllIds (): string[] {
+    return Array.from(cueStore.value.keys())
+  }
 
   function addHistory (action: 'add' | 'update' | 'delete', data: CueData) {
     const history: HistoryData = {
@@ -105,6 +110,7 @@ export default function useCueStore (): CueStoreInterface {
   }
 
   return {
+    getAllIds,
     get,
     create,
     update,
