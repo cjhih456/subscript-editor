@@ -3,8 +3,13 @@ import useFileSelect from '../composables/useFileSelect'
 
 export default defineNuxtComponent({
   name: 'FileSelect',
-  setup () {
-    const { fileSelect, fileSelectRules } = useFileSelect()
+  emits: ['fileSelect'],
+  setup (_props, { emit }) {
+    const { fileSelect, fileSelectRules } = useFileSelect({
+      onFileSelect: (file: File | null) => {
+        emit('fileSelect', file)
+      }
+    })
     return {
       fileSelect,
       fileSelectRules
