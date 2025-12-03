@@ -1,7 +1,7 @@
 import { ref, onMounted, onBeforeUnmount, computed, provide, inject, type ComputedRef, type InjectionKey } from 'vue'
 
 // 커서 컨트롤러에서 지원하는 요소 타입
-export type CursorControlElementType = 'Cue' | 'CueEdge' | 'LayoutSpliterX' | 'LayoutSpliterY'
+export type CursorControlElementType = 'Cue' | 'CueEdge' | 'LayoutSpliterX' | 'LayoutSpliterY' | 'TimelineCursor'
 
 // 등록된 요소의 정보를 저장하는 인터페이스
 interface RegisteredElement {
@@ -17,7 +17,8 @@ const cursorStyleMap: Record<CursorControlElementType, string> = {
   Cue: 'move',
   CueEdge: 'col-resize',
   LayoutSpliterX: 'col-resize',
-  LayoutSpliterY: 'row-resize'
+  LayoutSpliterY: 'row-resize',
+  TimelineCursor: 'col-resize'
 }
 
 // 커서 컨트롤러 인터페이스 정의
@@ -116,6 +117,7 @@ export function provideCursorController (searchDepth: number = 2) {
       if (!target) { break }
       if (registeredElements.value.has(target)) {
         detectedRegistedElement = registeredElements.value.get(target) ?? null
+        break
       } else {
         target = target.parentElement as HTMLElement
       }
@@ -127,16 +129,12 @@ export function provideCursorController (searchDepth: number = 2) {
 
     if (detectedRegistedElement.type === 'Cue') {
       const edgeThreshold = detectedRegistedElement.edgeThreshold || 8
-      const relativeX = x - rect.left
-      if (relativeX <= edgeThreshold) {
+      if (x <= rect.left + edgeThreshold) {
         elementPart = 'start'
+      } else if (x >= rect.right - edgeThreshold) {
+        elementPart = 'end'
       } else {
-        const relativeX = x - rect.right
-        if (relativeX <= edgeThreshold) {
-          elementPart = 'end'
-        } else {
-          elementPart = 'middle'
-        }
+        elementPart = 'middle'
       }
     } else {
       elementPart = 'middle'

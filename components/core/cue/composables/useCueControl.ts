@@ -1,4 +1,4 @@
-import type { ShallowRef } from 'vue'
+import { type ShallowRef } from 'vue'
 import { usePixPerSec } from '../../provider/SubtitleControllerProvider'
 import useCueStore from './useCueStore'
 import { useCursorController } from '~/components/core/provider/CursorControllerProvider'
@@ -11,9 +11,23 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
   const cueStore = useCueStore()
   const { registerElement, unregisterElement } = useCursorController()
 
+  const cueParentScrollValues = computed(() => {
+    if (!element.value?.parentElement) {
+      return {
+        scrollLeft: 0,
+        left: 0
+      }
+    }
+    const rect = element.value.parentElement.getBoundingClientRect()
+    return {
+      scrollLeft: element.value.parentElement.scrollLeft,
+      left: rect.left
+    }
+  })
+
   const cue = computed(() => cueStore.get(id))
 
-  const lazyCueData = ref<{
+  const lazyCueData = shallowRef<{
     displayPosition?: {
       left: number,
       width: number
@@ -24,13 +38,10 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
     startPosition: 0
   })
 
-  function getAbsolutePosition (event: MouseEvent, element: HTMLElement) {
-    const parentElement = element.parentElement
+  function getAbsolutePosition (event: MouseEvent) {
     let position = 0
-    if (parentElement) {
-      position += parentElement.scrollLeft - parentElement.getBoundingClientRect().left
-    }
-    position += event.clientX - event.offsetX
+    position += cueParentScrollValues.value.scrollLeft - cueParentScrollValues.value.left
+    position += event.clientX - cueParentScrollValues.value.left
     return position
   }
 
@@ -44,9 +55,9 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
     }
   }
 
-  function onMouseDown (event: MouseEvent, element: HTMLElement, _part?: 'start' | 'end' | 'middle') {
+  function onMouseDown (event: MouseEvent, _element: HTMLElement, _part?: 'start' | 'end' | 'middle') {
     // 현재 cue 데이터를 기반으로 lazyCueData 초기화
-    const position = getAbsolutePosition(event, element)
+    const position = getAbsolutePosition(event)
 
     lazyCueData.value = {
       displayPosition: {
@@ -61,8 +72,15 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
     if (!lazyCueData.value.displayPosition) { return }
 
     // 마우스 업 시 cue 데이터 업데이트
-    const newStartTime = lazyCueData.value.displayPosition.left / pixPerSec.value
-    const newEndTime = (lazyCueData.value.displayPosition.left + lazyCueData.value.displayPosition.width) / pixPerSec.value
+    const displayPosition = toRaw(lazyCueData.value.displayPosition)
+    const pixPerSecRaw = toRaw(pixPerSec.value)
+    const newStartTime = displayPosition.left / pixPerSecRaw
+    const newEndTime = (displayPosition.left + displayPosition.width) / pixPerSecRaw
+
+    lazyCueData.value = {
+      displayPosition: undefined,
+      startPosition: 0
+    }
 
     // cueStore를 사용하여 데이터 업데이트
     cueStore.update(id, {
@@ -72,10 +90,10 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
     })
   }
 
-  function onMouseMove (event: MouseEvent, element: HTMLElement, part?: 'start' | 'end' | 'middle') {
+  function onMouseMove (event: MouseEvent, _element: HTMLElement, part?: 'start' | 'end' | 'middle') {
     if (!lazyCueData.value.displayPosition) { return }
 
-    const absolutePosition = getAbsolutePosition(event, element)
+    const absolutePosition = getAbsolutePosition(event)
     // 마우스 이동 거리 계산
     const deltaX = absolutePosition - lazyCueData.value.startPosition
 
@@ -93,7 +111,7 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
     } else {
       newLeft += deltaX
     }
-    if (newWidth < 0) {
+    if (newWidth > 0) {
       lazyCueData.value = {
         displayPosition: {
           left: newLeft,
@@ -115,8 +133,7 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
   })
 
   const cueDisplayPosition = computed(() => {
-    if (lazyCueData.value.displayPosition) { return lazyCueData.value.displayPosition }
-    return {
+    return lazyCueData.value.displayPosition ?? {
       left: cue.value.startTime * pixPerSec.value,
       width: cue.value.endTime * pixPerSec.value - cue.value.startTime * pixPerSec.value
     }

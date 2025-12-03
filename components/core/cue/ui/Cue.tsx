@@ -12,7 +12,7 @@ export default defineNuxtComponent({
   setup ({ idx }) {
     const { get: getCue } = useCueStore()
     const element = useTemplateRef<HTMLDivElement>('cue')
-    const cue = getCue(idx)
+    const cue = computed(() => getCue(idx))
     const { cueDisplayPosition: displayPosition } = useCueControl(idx, element)
 
     const style = computed(() => {
@@ -31,13 +31,11 @@ export default defineNuxtComponent({
   render () {
     return <div
       ref='cue'
-      class="bg-gray-300/60"
+      class="tw-bg-gray-300/60 tw-absolute tw-h-full"
       style={this.style}
     >
-      <span
-        v-memo={[this.cue.text]}
-      >
-        <pre>{this.cue?.text ?? ''}</pre>
+      <span>
+        <pre>{this.cue.text ?? ''}</pre>
       </span>
     </div>
   }
