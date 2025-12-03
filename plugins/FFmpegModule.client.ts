@@ -87,8 +87,8 @@ export default defineNuxtPlugin(() => {
     ffmpegRef.value.deleteFile(outputFileName)
     const wave = [] as number[]
     const maxMinValue = {
-      max: 127,
-      min: -128
+      max: -127,
+      min: 128
     }
     Int8Array.from(data).forEach((byte) => {
       if (byte < maxMinValue.min) { maxMinValue.min = byte }
