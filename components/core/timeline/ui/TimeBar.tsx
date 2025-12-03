@@ -109,7 +109,7 @@ export default defineNuxtComponent({
   render () {
     return <canvas
       ref='canvas'
-      class="tw-absolute tw-left-0 tw-right-0 tw-w-full"
+      class="tw-w-full"
       height={this.timeBarHeight}
       width={(this.$refs.canvas as HTMLCanvasElement)?.offsetWidth || 0}
     />
