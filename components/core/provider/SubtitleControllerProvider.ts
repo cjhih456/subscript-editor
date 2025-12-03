@@ -12,6 +12,7 @@ export const WAVE_DATA = Symbol('waveData')
 export const CUE_STORE = Symbol('cueStore')
 export const WAVE_MIN_MAX_VALUE = Symbol('waveMinMaxValue')
 export const DISPLAY_WIDTH = Symbol('displayWidth')
+export const AUDIO_RATE = Symbol('audioRate')
 
 interface VideoFileObjectUrl {
   videoFileObjectUrl: Ref<string | null>,
@@ -39,6 +40,7 @@ export function provideSubtitleController () {
   const waveMinMaxValue = ref<{ min: number, max: number }>({ min: 0, max: 0 })
   const cueStore = useCueStoreOrigin()
   const displayWidth = ref<number>(0)
+  const audioRate = ref<number>(200)
 
   provide(VIDEO_FILE, videoFile)
   provide<VideoFileObjectUrl>(VIDEO_FILE_OBJECT_URL, {
@@ -54,6 +56,7 @@ export function provideSubtitleController () {
   provide(WAVE_MIN_MAX_VALUE, waveMinMaxValue)
   provide(CUE_STORE, cueStore)
   provide(DISPLAY_WIDTH, displayWidth)
+  provide(AUDIO_RATE, audioRate)
 
   function windowResizeEvent () {
     displayWidth.value = document.documentElement.offsetWidth
@@ -80,7 +83,8 @@ export function provideSubtitleController () {
     waveData,
     cueStore,
     waveMinMaxValue,
-    displayWidth
+    displayWidth,
+    audioRate
   }
 }
 
@@ -162,4 +166,12 @@ export function useDisplayWidth () {
     throw new Error('DISPLAY_WIDTH is not injected')
   }
   return displayWidth
+}
+
+export function useAudioRate () {
+  const audioRate = inject<ComputedRef<number>>(AUDIO_RATE)
+  if (!audioRate) {
+    throw new Error('AUDIO_RATE is not injected')
+  }
+  return audioRate
 }
