@@ -4,7 +4,7 @@ import Cue from './Cue'
 export default defineNuxtComponent({
   name: 'CueBar',
   setup () {
-    const scrollValue = useScrollValue()
+    const { value: scrollValue } = useScrollValue()
     const scrollArea = useTemplateRef<HTMLDivElement>('scrollArea')
     const { allIds } = useCueStore()
     const duration = useDuration()

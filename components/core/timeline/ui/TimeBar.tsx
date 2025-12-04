@@ -16,7 +16,7 @@ export default defineNuxtComponent({
     const nuxt = useNuxtApp()
     const canvas = useTemplateRef<HTMLCanvasElement>('canvas')
     const pixPerSec = usePixPerSec()
-    const scrollValue = useScrollValue()
+    const { time: scrollTime } = useScrollValue()
 
     const displayWidth = useDisplayWidth()
     const stepLevel = computed(() => {
@@ -62,7 +62,7 @@ export default defineNuxtComponent({
       }
     })
 
-    watch(() => [displayWidth.value, scrollValue.value, pixPerSec.value, timeBarHeight, fontSize], () => {
+    watch(() => [displayWidth.value, scrollTime.value, pixPerSec.value, timeBarHeight, fontSize], () => {
       requestAnimationFrame(() => {
         canvas.value?.setAttribute('width', canvas.value.offsetWidth.toString())
         drawTimeBar()
@@ -84,8 +84,8 @@ export default defineNuxtComponent({
       context.textAlign = 'left'
       context.textBaseline = 'bottom'
 
-      let time = Math.floor(scrollValue.value / stepLevel.value.stepTime) * stepLevel.value.stepTime
-      let position = (time - scrollValue.value) * pixPerSec.value
+      let time = Math.floor(scrollTime.value / stepLevel.value.stepTime) * stepLevel.value.stepTime
+      let position = (time - scrollTime.value) * pixPerSec.value
 
       while (position < canvasWidth) {
         drawTimeLabel(nuxt.$dayjs((time) * 1000)

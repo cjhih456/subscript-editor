@@ -120,7 +120,6 @@ export default defineNuxtComponent({
                 </div>
               </div>, cache, 0)} */}
             </div>
-            <VSlider v-model={this.scrollValue} hideDetails max={this.duration}></VSlider>
           </VCol>
           <VCol cols="auto" class={styles['level-slider']}>
             <VSlider

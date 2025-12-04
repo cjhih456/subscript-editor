@@ -12,7 +12,7 @@ export default defineNuxtComponent({
     const canvas = useTemplateRef<HTMLCanvasElement>('canvas')
     const pixPerSec = usePixPerSec()
     const audioRate = useAudioRate()
-    const scrollValue = useScrollValue()
+    const { time: scrollTime } = useScrollValue()
     const displayWidth = useDisplayWidth()
     const waveData = useWaveData()
     const waveMinMaxValue = useWaveMinMaxValue()
@@ -22,7 +22,7 @@ export default defineNuxtComponent({
 
     const waveHalfHeight = computed(() => waveHeight / 2)
 
-    watch(() => [displayWidth.value, waveData.value, pixPerSec.value, scrollValue.value, waveHeight], () => {
+    watch(() => [displayWidth.value, waveData.value, pixPerSec.value, scrollTime.value, waveHeight], () => {
       requestAnimationFrame(() => {
         canvas.value?.setAttribute('width', canvas.value.offsetWidth.toString())
         drawWave()
@@ -44,7 +44,7 @@ export default defineNuxtComponent({
       context.beginPath()
 
       // scrollValue를 고려하여 파형 데이터의 시작 위치 계산
-      const scrollOffset = Math.floor(scrollValue.value * audioRate.value)
+      const scrollOffset = Math.floor(scrollTime.value * audioRate.value)
 
       for (let i = 0; i < canvasWidth; i += 2) {
         // scrollValue에 따른 오프셋 적용
