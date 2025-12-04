@@ -8,9 +8,9 @@ import FileSelect from '~/components/core/file-select/ui/FileSelect'
 import useFFmpeg from '~/components/core/file-select/composables/useFFmpeg'
 import TimeBar from '~/components/core/timeline/ui/TimeBar'
 import WaveBar from '~/components/core/timeline/ui/WaveBar'
+import BarArea from '~/components/core/timeline/ui/BarArea'
 import CueBar from '~/components/core/cue/ui/CueBar'
 import CueEditArea from '~/components/core/cue/ui/CueEditArea'
-
 export default defineNuxtComponent({
   name: 'IndexPage',
   setup () {
@@ -19,9 +19,6 @@ export default defineNuxtComponent({
     const { create: createCue, get: getCue, allIds } = data.cueStore
     const cueCount = computed(() => allIds.value.length)
     const allCues = computed(() => allIds.value.map(id => getCue(id)))
-    const waveArea = ref<HTMLDivElement | null>(null)
-    const currentCursorArea = ref<HTMLDivElement | null>()
-    const currentCursor = ref<HTMLDivElement | null>()
 
     const { loadFFmpeg, convertWave, waveSerialize } = useFFmpeg()
     const { videoFileObjectUrl, setVideoFileObjectUrl, clearVideoFileObjectUrl } = data
@@ -58,9 +55,6 @@ export default defineNuxtComponent({
       waveHeight,
       allCues,
       cueCount,
-      waveArea,
-      currentCursorArea,
-      currentCursor,
       onFileSelect,
       createCue
     }
@@ -93,10 +87,19 @@ export default defineNuxtComponent({
       <div class={styles['wave-area']}>
         <VRow class="tw-flex-nowrap">
           <VCol class="tw-overflow-scroll">
-            <div class={[styles['wave-display']]} ref={(el) => { this.waveArea = el as HTMLDivElement }}>
-              <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
-              <WaveBar waveHeight={this.waveHeight} />
-              <CueBar />
+            <BarArea>
+              {{
+                canvas: () => (
+                  <>
+                    <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
+                    <WaveBar waveHeight={this.waveHeight} />
+                  </>
+                ),
+                default: () => (
+                  <CueBar />
+                )
+              }}
+            </BarArea>
               {/* {withMemo([this.mouseCursor, this.currentTimePosition], () => <div class={styles['wave-area-cursor']}>
                 <div
                   class={[styles['hover-cursor'], this.mouseCursor.display ? styles.display : '']}
@@ -119,7 +122,6 @@ export default defineNuxtComponent({
                   ></div>
                 </div>
               </div>, cache, 0)} */}
-            </div>
           </VCol>
           <VCol cols="auto" class={styles['level-slider']}>
             <VSlider
