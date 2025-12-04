@@ -16,7 +16,7 @@ interface HistoryData {
 }
 
 export interface CueStoreInterface {
-  getAllIds: () => string[]
+  allIds: ComputedRef<string[]>
   get: (idx: string) => CueDataInterface
   create: () => void
   update: (idx: string, cueData: CueDataInterface) => void
@@ -27,12 +27,23 @@ export interface CueStoreInterface {
 
 export default function useCueStore (): CueStoreInterface {
   const cueStore = ref<Map<string, CueDataInterface>>(new Map())
+  const cueStoreKeys = ref<string[]>([])
   const historyStack = ref<HistoryData[]>([])
   const currentIndex = ref<number>(-1)
 
-  function getAllIds (): string[] {
-    return Array.from(cueStore.value.keys())
+  const storeCreateAction = (idx: string, cueData: CueDataInterface) => {
+    cueStore.value.set(idx, cueData)
+    cueStoreKeys.value.push(idx)
   }
+  const storeUpdateAction = (idx: string, cueData: CueDataInterface) => {
+    cueStore.value.set(idx, cueData)
+  }
+  const storeDeleteAction = (idx: string) => {
+    cueStore.value.delete(idx)
+    cueStoreKeys.value.splice(cueStoreKeys.value.indexOf(idx), 1)
+  }
+
+  const allIds = computed(() => cueStoreKeys.value)
 
   function addHistory (action: 'add' | 'update' | 'delete', data: CueData) {
     const history: HistoryData = {
@@ -66,21 +77,26 @@ export default function useCueStore (): CueStoreInterface {
       endTime: 0,
       text: ''
     }
-    cueStore.value.set(idx, cueData)
+    storeCreateAction(idx, cueData)
     addHistory('add', { idx, ...cueData })
   }
 
   function update (idx: string, cueData: CueDataInterface) {
     const [startTime, endTime] = cleanDuration(cueData.startTime, cueData.endTime)
-    cueStore.value.set(idx, cueData)
-    addHistory('update', { idx, ...cueData, startTime, endTime })
+    const cue: CueDataInterface = {
+      startTime,
+      endTime,
+      text: cueData.text
+    }
+    storeUpdateAction(idx, cue)
+    addHistory('update', { idx, ...cue })
   }
 
   function remove (idx: string) {
     const data = cueStore.value.get(idx)
     if (!data) { return }
+    storeDeleteAction(idx)
     addHistory('delete', { idx, ...data })
-    cueStore.value.delete(idx)
   }
 
   function undo () {
@@ -88,11 +104,11 @@ export default function useCueStore (): CueStoreInterface {
     const history = historyStack.value[--currentIndex.value]
     if (!history) { return }
     if (history.action === 'add') {
-      cueStore.value.delete(history.data.idx)
+      storeDeleteAction(history.data.idx)
     } else if (history.action === 'update') {
-      cueStore.value.set(history.data.idx, history.data)
+      storeUpdateAction(history.data.idx, history.data)
     } else if (history.action === 'delete') {
-      cueStore.value.set(history.data.idx, history.data)
+      storeCreateAction(history.data.idx, history.data)
     }
   }
 
@@ -101,16 +117,16 @@ export default function useCueStore (): CueStoreInterface {
     const history = historyStack.value[++currentIndex.value]
     if (!history) { return }
     if (history.action === 'add') {
-      cueStore.value.set(history.data.idx, history.data)
+      storeCreateAction(history.data.idx, history.data)
     } else if (history.action === 'update') {
-      cueStore.value.set(history.data.idx, history.data)
+      storeUpdateAction(history.data.idx, history.data)
     } else if (history.action === 'delete') {
-      cueStore.value.delete(history.data.idx)
+      storeDeleteAction(history.data.idx)
     }
   }
 
   return {
-    getAllIds,
+    allIds,
     get,
     create,
     update,

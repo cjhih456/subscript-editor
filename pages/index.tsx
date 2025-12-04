@@ -9,15 +9,16 @@ import useFFmpeg from '~/components/core/file-select/composables/useFFmpeg'
 import TimeBar from '~/components/core/timeline/ui/TimeBar'
 import WaveBar from '~/components/core/timeline/ui/WaveBar'
 import CueBar from '~/components/core/cue/ui/CueBar'
+import CueEditArea from '~/components/core/cue/ui/CueEditArea'
 
 export default defineNuxtComponent({
   name: 'IndexPage',
   setup () {
     provideCursorController(3)
     const data = provideSubtitleController()
-    const { create: createCue, getAllIds, getAllCues } = data.cueStore
-    const cues = computed(() => getAllCues())
-    const cueCount = computed(() => cues.value.length)
+    const { create: createCue, get: getCue, allIds } = data.cueStore
+    const cueCount = computed(() => allIds.value.length)
+    const allCues = computed(() => allIds.value.map(id => getCue(id)))
     const waveArea = ref<HTMLDivElement | null>(null)
     const currentCursorArea = ref<HTMLDivElement | null>()
     const currentCursor = ref<HTMLDivElement | null>()
@@ -52,11 +53,10 @@ export default defineNuxtComponent({
     const waveHeight = ref(50)
     return {
       ...data,
-      getAllIds,
       timeBarHeight,
       fontSize,
       waveHeight,
-      cues,
+      allCues,
       cueCount,
       waveArea,
       currentCursorArea,
@@ -79,9 +79,7 @@ export default defineNuxtComponent({
         </VCol>
       </VRow>
       <div class={styles['cue-area']}>
-        {
-          // this.cues.map(cue => <CueEdit key={cue.idx} idx={cue.idx} />)
-        }
+        <CueEditArea />
         <VBtn onClick={() => this.createCue()} class={styles['cue-add-btn']}>
           Add Cue
         </VBtn>
@@ -89,7 +87,7 @@ export default defineNuxtComponent({
       <VideoPlayer
         class={styles['video-area']}
         v-model:currentTime={this.currentTime}
-        subscript={this.cues}
+        subscript={this.allCues}
         src={this.videoFileObjectUrl || undefined}
       ></VideoPlayer>
       <div class={styles['wave-area']}>

@@ -1,6 +1,5 @@
 import { type ShallowRef } from 'vue'
-import { usePixPerSec } from '../../provider/SubtitleControllerProvider'
-import useCueStore from './useCueStore'
+import { usePixPerSec, useCueStore } from '../../provider/SubtitleControllerProvider'
 import { useCursorController } from '~/components/core/provider/CursorControllerProvider'
 
 /**
@@ -8,7 +7,8 @@ import { useCursorController } from '~/components/core/provider/CursorController
  */
 export default function useCueControl (id: string, element: Readonly<ShallowRef<HTMLDivElement | null>>) {
   const pixPerSec = usePixPerSec()
-  const cueStore = useCueStore()
+  const { update: updateCue, get: getCue } = useCueStore()
+  const cue = computed(() => getCue(id))
   const { registerElement, unregisterElement } = useCursorController()
 
   const cueParentScrollValues = computed(() => {
@@ -24,8 +24,6 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
       left: rect.left
     }
   })
-
-  const cue = computed(() => cueStore.get(id))
 
   const lazyCueData = shallowRef<{
     displayPosition?: {
@@ -83,8 +81,8 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
     }
 
     // cueStore를 사용하여 데이터 업데이트
-    cueStore.update(id, {
-      ...cue.value,
+    updateCue(id, {
+      text: cue.value.text,
       startTime: newStartTime,
       endTime: newEndTime
     })

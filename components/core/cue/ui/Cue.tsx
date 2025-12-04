@@ -1,5 +1,5 @@
-import useCueStore from '../composables/useCueStore'
-import useCueControl from '../composables/useCueControl'
+import useCueControl from '~/components/core/cue/composables/useCueControl'
+import { useCueStore } from '~/components/core/provider/SubtitleControllerProvider'
 
 export default defineNuxtComponent({
   name: 'Cue',
@@ -31,7 +31,7 @@ export default defineNuxtComponent({
   render () {
     return <div
       ref='cue'
-      class="tw-bg-gray-300/60 tw-absolute tw-h-full"
+      class="tw-bg-gray-300/60 tw-absolute tw-h-full tw-overflow-hidden tw-border-gray-950 tw-border-[1px]"
       style={this.style}
     >
       <span>

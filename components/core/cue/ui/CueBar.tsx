@@ -1,28 +1,38 @@
-import { useCueStore, useDuration, usePixPerSec } from '../../provider/SubtitleControllerProvider'
+import { useCueStore, useDuration, usePixPerSec, useScrollValue } from '../../provider/SubtitleControllerProvider'
 import Cue from './Cue'
 
 export default defineNuxtComponent({
   name: 'CueBar',
   setup () {
-    const { getAllIds } = useCueStore()
+    const scrollValue = useScrollValue()
+    const scrollArea = useTemplateRef<HTMLDivElement>('scrollArea')
+    const { allIds } = useCueStore()
     const duration = useDuration()
     const pixPerSec = usePixPerSec()
-    const cues = getAllIds()
+
+    onMounted(() => {
+      if (!scrollArea.value) { return }
+      scrollArea.value.addEventListener('scroll', () => {
+        if (!scrollArea.value) { return }
+        scrollValue.value = scrollArea.value.scrollLeft
+      })
+    })
+
     return {
-      cues,
+      allIds,
       duration,
       pixPerSec
     }
   },
   render () {
-    return <div class="tw-w-full tw-overflow-x-scroll tw-pb-2">
+    return <div ref="scrollArea" class="tw-w-full tw-overflow-x-scroll tw-pb-2">
       <div class="tw-relative"
         style={{
           width: `${this.duration * this.pixPerSec}px`,
           height: '20px'
         }}
       >
-        {this.cues.map(idx => <Cue key={idx} idx={idx} />)}
+        {this.allIds.map(idx => <Cue key={idx} idx={idx} />)}
       </div>
     </div>
   }

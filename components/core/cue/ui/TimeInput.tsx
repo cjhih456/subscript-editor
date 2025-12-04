@@ -6,10 +6,15 @@ export default defineNuxtComponent({
     modelValue: {
       type: Number,
       default: ''
+    },
+    errorMessage: {
+      type: String,
+      default: ''
     }
   },
-  emits: ['change', 'update:modelValue'],
-  setup (props, ctx) {
+  emits: ['update:modelValue', 'change'],
+  setup (props, { emit }) {
+    const modelValue = useModel(props, 'modelValue')
     const nuxt = useNuxtApp()
     const data = reactive({
       input: ''
@@ -18,26 +23,25 @@ export default defineNuxtComponent({
       data.input = nuxt.$webVtt.convertSecondToTime(props.modelValue)
     })
     watch(() => props.modelValue, (newVal, oldVal) => {
-      if (newVal !== oldVal) {
-        if (nuxt.$webVtt.timeFormatCheckForEdit(data.input) && nuxt.$webVtt.convertTimeToSecond(data.input) !== newVal) {
-          data.input = nuxt.$webVtt.convertSecondToTime(newVal)
-        } else {
-          data.input = nuxt.$webVtt.convertSecondToTime(newVal)
-        }
-      }
+      if (newVal === oldVal) { return }
+      const newNum = nuxt.$webVtt.convertSecondToTime(newVal)
+      if (newNum === data.input) { return }
+      data.input = newNum
     })
     watch(() => data.input, (newVal, oldVal) => {
       if (newVal === oldVal) { return }
-      if (nuxt.$webVtt.timeFormatCheckForEdit(newVal)) {
-        const num = nuxt.$webVtt.convertTimeToSecond(newVal)
-        if (num) { return ctx.emit('update:modelValue', num) }
-      }
+      if (!nuxt.$webVtt.timeFormatCheckForEdit(newVal)) { return }
+      const num = nuxt.$webVtt.convertTimeToSecond(newVal)
+      if (num === modelValue.value) { return }
+      modelValue.value = num
+      emit('change', num)
     })
     return { data }
   },
   render () {
     return <VTextField
       v-model={this.data.input}
+      errorMessages={this.errorMessage}
       hideDetails
       density='compact'
     ></VTextField>
