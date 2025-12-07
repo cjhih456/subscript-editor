@@ -1,7 +1,13 @@
 import { WebVTT } from 'videojs-vtt.js'
 
+export interface VTTCueSlim {
+  startTime: number
+  endTime: number
+  text: string
+}
+
 export interface TranslateResult {
-  cues: VTTCue[]
+  cues: (VTTCue | VTTCueSlim)[]
   regions?: VTTRegion[]
 }
 
@@ -99,13 +105,13 @@ export default defineNuxtPlugin(() => {
       return acc + `${st} --> ${et}\n${text}\n\n`
     }, 'WEBVTT\n\n')
   }
-  function makeVttFromJson (jsonData: any[]) {
+  function makeVttFromJson (jsonData: VTTCueSlim[]) {
     if (jsonData) {
       return parseVtt(jsonToString({ cues: jsonData }))
     }
     return { cues: [] } as TranslateResult
   }
-  function convertJsonToFile (jsonData: any[]) {
+  function convertJsonToFile (jsonData: VTTCueSlim[]) {
     const stringBlob = jsonToString({ cues: jsonData })
     try {
       return new File([stringBlob], 'webvtt.vtt', { type: 'text/vtt' })

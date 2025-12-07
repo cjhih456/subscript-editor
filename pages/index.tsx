@@ -16,6 +16,7 @@ import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
 export default defineNuxtComponent({
   name: 'IndexPage',
   setup () {
+    const nuxt = useNuxtApp()
     const data = provideSubtitleController()
     const { create: createCue, get: getCue, allIds } = data.cueStore
     const cueCount = computed(() => allIds.value.length)
@@ -46,6 +47,18 @@ export default defineNuxtComponent({
       //   data.cueStore.registWhisperCue = cueList
       // }
     }
+
+    function saveAsFile () {
+      const allText = nuxt.$webVtt.convertJsonToFile(allCues.value)
+      const blob = new Blob([allText], { type: 'text/vtt' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'subtitle.vtt'
+      a.click()
+      URL.revokeObjectURL(url)
+    }
+
     const timeBarHeight = ref(20)
     const fontSize = ref(12)
     const waveHeight = ref(50)
@@ -57,7 +70,8 @@ export default defineNuxtComponent({
       allCues,
       cueCount,
       onFileSelect,
-      createCue
+      createCue,
+      saveAsFile
     }
   },
   render () {
@@ -68,14 +82,18 @@ export default defineNuxtComponent({
           <FileSelect onFileSelect={this.onFileSelect} />
         </VCol>
         <VCol cols="auto">
-          <VBtn disabled={!this.cueCount} class={styles['cue-save-btn']}>
+          <VBtn
+            disabled={!this.cueCount}
+            class={styles['cue-save-btn']}
+            onClick={this.saveAsFile}
+          >
             Save Subscribe
           </VBtn>
         </VCol>
       </VRow>
       <div class={styles['cue-area']}>
         <CueEditArea />
-        <VBtn onClick={() => this.createCue()} class={styles['cue-add-btn']}>
+        <VBtn onClick={this.createCue} class={styles['cue-add-btn']}>
           Add Cue
         </VBtn>
       </div>
