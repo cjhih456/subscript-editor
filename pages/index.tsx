@@ -10,6 +10,9 @@ import WaveBar from '~/components/core/timeline/ui/WaveBar'
 import BarArea from '~/components/core/timeline/ui/BarArea'
 import CueBar from '~/components/core/cue/ui/CueBar'
 import CueEditArea from '~/components/core/cue/ui/CueEditArea'
+import CurrentTimeCursor from '~/components/core/timeline/ui/CurrentTimeCursor'
+import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
+
 export default defineNuxtComponent({
   name: 'IndexPage',
   setup () {
@@ -95,31 +98,15 @@ export default defineNuxtComponent({
                 ),
                 default: () => (
                   <CueBar />
+                ),
+                cursor: () => (
+                  <>
+                    <CurrentTimeCursor />
+                    <CurrentCursor />
+                  </>
                 )
               }}
             </BarArea>
-              {/* {withMemo([this.mouseCursor, this.currentTimePosition], () => <div class={styles['wave-area-cursor']}>
-                <div
-                  class={[styles['hover-cursor'], this.mouseCursor.display ? styles.display : '']}
-                  style={{
-                    '--cursor-position': `${this.mouseCursor.position}px`
-                  }}
-                >
-                  <div class={[styles.cursor]}></div>
-                </div>
-                <div
-                  ref={(el) => { this.currentCursorArea = el as HTMLDivElement }}
-                  class={[styles['cursor-area']]}
-                  style={{
-                    '--cursor-position': `${this.currentTimePosition}px`
-                  }}
-                >
-                  <div
-                    ref={(el) => { this.currentCursor = el as HTMLDivElement }}
-                    class={[styles.cursor]}
-                  ></div>
-                </div>
-              </div>, cache, 0)} */}
           </VCol>
           <VCol cols="auto" class={styles['level-slider']}>
             <VSlider

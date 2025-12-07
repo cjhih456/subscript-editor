@@ -33,6 +33,7 @@ export default defineNuxtComponent({
         <div class="tw-sticky tw-top-0 tw-left-0 tw-right-0 tw-overflow-hidden">
           {this.$slots.canvas?.()}
         </div>
+        {this.$slots.cursor?.()}
         {this.$slots.default?.()}
       </div>
     </div>
