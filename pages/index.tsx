@@ -2,7 +2,6 @@ import { VBtn, VCol, VContainer, VRow, VSlider } from 'vuetify/components'
 import styles from '~/assets/styles/pages/index.module.sass'
 import AlertDisplay from '~/components/core/alert/ui/AlertDisplay'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
-import { provideCursorController } from '~/components/core/provider/CursorControllerProvider'
 import { provideSubtitleController } from '~/components/core/provider/SubtitleControllerProvider'
 import FileSelect from '~/components/core/file-select/ui/FileSelect'
 import useFFmpeg from '~/components/core/file-select/composables/useFFmpeg'
@@ -14,7 +13,6 @@ import CueEditArea from '~/components/core/cue/ui/CueEditArea'
 export default defineNuxtComponent({
   name: 'IndexPage',
   setup () {
-    provideCursorController(3)
     const data = provideSubtitleController()
     const { create: createCue, get: getCue, allIds } = data.cueStore
     const cueCount = computed(() => allIds.value.length)

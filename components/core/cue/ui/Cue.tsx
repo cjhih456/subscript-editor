@@ -34,8 +34,8 @@ export default defineNuxtComponent({
       class="tw-bg-gray-300/60 tw-absolute tw-h-full tw-overflow-hidden tw-border-gray-950 tw-border-[1px]"
       style={this.style}
     >
-      <span>
-        <pre>{this.cue.text ?? ''}</pre>
+      <span class="tw-pointer-events-none">
+        <pre class="selection:tw-bg-transparent tw-pointer-events-none">{this.cue.text ?? ''}</pre>
       </span>
     </div>
   }

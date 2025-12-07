@@ -1,10 +1,18 @@
 import { useScrollValue } from '../../provider/SubtitleControllerProvider'
+import { provideCursorController } from '../../provider/CursorControllerProvider'
 
 export default defineNuxtComponent({
   name: 'BarArea',
   setup () {
     const scrollArea = useTemplateRef<HTMLDivElement>('scrollArea')
-    const { value: scrollValue } = useScrollValue()
+    const { value: scrollValue, left: scrollClientLeft } = useScrollValue()
+
+    provideCursorController(3)
+
+    function windowResizeEvent () {
+      if (!scrollArea.value) { return }
+      scrollClientLeft.value = scrollArea.value.getBoundingClientRect().left
+    }
 
     onMounted(() => {
       if (!scrollArea.value) { return }
@@ -12,6 +20,11 @@ export default defineNuxtComponent({
         if (!scrollArea.value) { return }
         scrollValue.value = scrollArea.value.scrollLeft
       })
+      window.addEventListener('resize', windowResizeEvent, false)
+      windowResizeEvent()
+    })
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', windowResizeEvent, false)
     })
   },
   render () {

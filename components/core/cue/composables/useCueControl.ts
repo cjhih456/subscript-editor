@@ -1,5 +1,5 @@
 import { type ShallowRef } from 'vue'
-import { usePixPerSec, useCueStore } from '../../provider/SubtitleControllerProvider'
+import { usePixPerSec, useCueStore, useScrollValue } from '../../provider/SubtitleControllerProvider'
 import { useCursorController } from '~/components/core/provider/CursorControllerProvider'
 
 /**
@@ -11,19 +11,7 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
   const cue = computed(() => getCue(id))
   const { registerElement, unregisterElement } = useCursorController()
 
-  const cueParentScrollValues = computed(() => {
-    if (!element.value?.parentElement) {
-      return {
-        scrollLeft: 0,
-        left: 0
-      }
-    }
-    const rect = element.value.parentElement.getBoundingClientRect()
-    return {
-      scrollLeft: element.value.parentElement.scrollLeft,
-      left: rect.left
-    }
-  })
+  const { value: scrollValue, left: scrollClientLeft } = useScrollValue()
 
   const lazyCueData = shallowRef<{
     displayPosition?: {
@@ -38,8 +26,7 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
 
   function getAbsolutePosition (event: MouseEvent) {
     let position = 0
-    position += cueParentScrollValues.value.scrollLeft - cueParentScrollValues.value.left
-    position += event.clientX - cueParentScrollValues.value.left
+    position += event.clientX - scrollClientLeft.value + scrollValue.value
     return position
   }
 

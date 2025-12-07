@@ -25,27 +25,43 @@ export default defineNuxtComponent({
     const form = useTemplateRef<HTMLFormElement>('form')
 
     const { get: getCue, update: updateCue, remove: removeCue } = useCueStore()
-    const cue = getCue(idx)
+    const cue = computed(() => getCue(idx))
+
+    const { handleSubmit, validate } = useForm({
+      validationSchema: schema,
+      initialValues: {
+        startTime: cue.value.startTime || 0,
+        endTime: cue.value.endTime || 0,
+        text: cue.value.text || ''
+      }
+    })
+
+    const startTime = useField<number>('startTime')
+    const endTime = useField<number>('endTime')
+    const text = useField<string>('text')
+
     const startTimeDisplay = computed(() => {
       return nuxt.$webVtt.convertSecondToTime(startTime.value.value)
     })
     const endTimeDisplay = computed(() => {
       return nuxt.$webVtt.convertSecondToTime(endTime.value.value)
     })
-    const { handleSubmit, validate } = useForm({
-      validationSchema: schema,
-      initialValues: {
-        startTime: cue.startTime || 0,
-        endTime: cue.endTime || 0,
-        text: cue.text || ''
+
+    watch(() => cue.value, () => {
+      if (endTime.value.value !== cue.value.endTime) {
+        endTime.setValue(cue.value.endTime || 0)
+      }
+      if (startTime.value.value !== cue.value.startTime) {
+        startTime.setValue(cue.value.startTime || 0)
+      }
+      if (text.value.value !== cue.value.text) {
+        text.setValue(cue.value.text || '')
       }
     })
-    const startTime = useField<number>('startTime')
-    const endTime = useField<number>('endTime')
-    const text = useField<string>('text')
+
     const submit = handleSubmit((values) => {
       updateCue(idx, {
-        ...cue,
+        ...cue.value,
         ...values
       })
       return false
