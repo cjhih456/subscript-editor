@@ -51,7 +51,7 @@ export default defineNuxtConfig({
       BACKEND_API: 'http://localhost:3000'
     }
   },
-  modules: ['@nuxtjs/storybook', '@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'vuetify-nuxt-module'],
+  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'vuetify-nuxt-module'],
   vuetify: {
     moduleOptions: {
       importComposables: true,
@@ -89,9 +89,6 @@ export default defineNuxtConfig({
       methods: '*',
       allowHeaders: '*'
     }
-  },
-  storybook: {
-    port: 6006
   },
   nitro: {
     routeRules: {
