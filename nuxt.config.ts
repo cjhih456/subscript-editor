@@ -3,6 +3,10 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-06-05',
+  shadcn: {
+    prefix: '',
+    componentDir: '@/components/ui'
+  },
   app: {
     head: import.meta.env.DEV
       ? {
@@ -50,7 +54,7 @@ export default defineNuxtConfig({
       BACKEND_API: 'http://localhost:3000'
     }
   },
-  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt'],
+  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'shadcn-nuxt'],
   features: {
     inlineStyles: false
   },
@@ -94,10 +98,6 @@ export default defineNuxtConfig({
       }
     }
   },
-  // nitro: { // 활성화시 build되어 hot reload가 정상적으로 작동하지 않는다. dev환경에서는 undefined로 지정되게 하자.
-  //   minify: true,
-  //   serveStatic: false // TODO: if need CDN publish
-  // },
   devtools: {
     enabled: true
   }
