@@ -1,4 +1,6 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-06-05',
   app: {
@@ -24,12 +26,6 @@ export default defineNuxtConfig({
     shim: true,
     strict: true
   },
-  postcss: {
-    plugins: {
-      autoprefixer: {},
-      tailwindcss: {}
-    }
-  },
   build: {
     transpile: ['@ffmpeg/ffmpeg', '@ffmpeg/util']
   },
@@ -37,6 +33,9 @@ export default defineNuxtConfig({
     optimizeDeps: {
       exclude: ['vuetify', '@ffmpeg/ffmpeg', '@ffmpeg/util']
     },
+    plugins: [
+      tailwindcss()
+    ],
     server: {
       headers: {
         permissionsPolicy: 'fullscreen=self',
