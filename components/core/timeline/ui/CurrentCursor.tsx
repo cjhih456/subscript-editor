@@ -5,11 +5,11 @@ export default defineNuxtComponent({
   name: 'CurrentCursor',
   setup () {
     const { mousePosition } = useCursorController()
-    const { left: scrollClientLeft } = useScrollValue()
+    const { left: scrollClientLeft, value: scrollValue } = useScrollValue()
 
     const style = computed(() => {
       return {
-        left: mousePosition.value.x - scrollClientLeft.value + 'px'
+        left: mousePosition.value.x + scrollValue.value - scrollClientLeft.value + 'px'
       }
     })
 
