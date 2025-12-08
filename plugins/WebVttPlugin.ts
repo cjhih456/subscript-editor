@@ -24,11 +24,7 @@ export default defineNuxtPlugin(() => {
   function convertTimeToSecond (time: string) {
     const [hours, minutes, seconds, milliseconds] = timeFormatCheck(time).split(/[:.]/g).map((v, idx) => {
       if (idx !== 3) { return Number(v) }
-      if (v.length === 1) {
-        return Number(v) * 100
-      } else if (v.length === 2) {
-        return Number(v) * 10
-      } else { return Number(v) }
+      return Number(v.padEnd(3, '0'))
     })
     return nuxt.$dayjs.duration({ hours, minutes, seconds, milliseconds }).asMilliseconds() / 1000
   }
@@ -116,7 +112,7 @@ export default defineNuxtPlugin(() => {
     try {
       return new File([stringBlob], 'webvtt.vtt', { type: 'text/vtt' })
     } catch (err) {
-      return Object.assign(stringBlob, { name: 'webvtt.vtt' })
+      throw new Error('Failed to convert JSON to file')
     }
   }
   return {

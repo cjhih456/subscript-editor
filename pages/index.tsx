@@ -50,8 +50,7 @@ export default defineNuxtComponent({
 
     function saveAsFile () {
       const allText = nuxt.$webVtt.convertJsonToFile(allCues.value)
-      const blob = new Blob([allText], { type: 'text/vtt' })
-      const url = URL.createObjectURL(blob)
+      const url = URL.createObjectURL(allText)
       const a = document.createElement('a')
       a.href = url
       a.download = 'subtitle.vtt'

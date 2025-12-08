@@ -23,6 +23,13 @@ export default defineNuxtComponent({
       window.addEventListener('resize', windowResizeEvent, false)
       windowResizeEvent()
     })
+    onBeforeUpdate(() => {
+      window.removeEventListener('resize', windowResizeEvent, false)
+    })
+    onUpdated(() => {
+      window.addEventListener('resize', windowResizeEvent, false)
+    })
+
     onBeforeUnmount(() => {
       window.removeEventListener('resize', windowResizeEvent, false)
     })

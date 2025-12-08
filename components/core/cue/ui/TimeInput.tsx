@@ -5,7 +5,7 @@ export default defineNuxtComponent({
   props: {
     modelValue: {
       type: Number,
-      default: ''
+      default: 0
     },
     errorMessage: {
       type: String,

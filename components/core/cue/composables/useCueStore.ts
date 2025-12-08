@@ -100,7 +100,7 @@ export default function useCueStore (): CueStoreInterface {
   }
 
   function undo () {
-    if (currentIndex.value < 0) { return }
+    if (currentIndex.value <= 0) { return }
     const history = historyStack.value[--currentIndex.value]
     if (!history) { return }
     if (history.action === 'add') {

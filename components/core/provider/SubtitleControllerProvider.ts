@@ -124,7 +124,7 @@ export function useScrollValue () {
 }
 
 export function useDuration () {
-  const duration = inject<ComputedRef<number>>(DURATION)
+  const duration = inject<Ref<number>>(DURATION)
   if (!duration) {
     throw new Error('DURATION is not injected')
   }
@@ -132,7 +132,7 @@ export function useDuration () {
 }
 
 export function useWaveData () {
-  const waveData = inject<ComputedRef<number[]>>(WAVE_DATA)
+  const waveData = inject<Ref<number[]>>(WAVE_DATA)
   if (!waveData) {
     throw new Error('WAVE_DATA is not injected')
   }
@@ -140,7 +140,7 @@ export function useWaveData () {
 }
 
 export function useWaveMinMaxValue () {
-  const waveMinMaxValue = inject<ComputedRef<{ min: number, max: number }>>(WAVE_MIN_MAX_VALUE)
+  const waveMinMaxValue = inject<Ref<{ min: number, max: number }>>(WAVE_MIN_MAX_VALUE)
   if (!waveMinMaxValue) {
     throw new Error('WAVE_MIN_MAX_VALUE is not injected')
   }
@@ -148,7 +148,7 @@ export function useWaveMinMaxValue () {
 }
 
 export function useCurrentTime () {
-  const currentTime = inject<ComputedRef<number>>(CURRENT_TIME)
+  const currentTime = inject<Ref<number>>(CURRENT_TIME)
   if (!currentTime) {
     throw new Error('CURRENT_TIME is not injected')
   }
@@ -156,7 +156,7 @@ export function useCurrentTime () {
 }
 
 export function usePixPerSec () {
-  const pixPerSec = inject<ComputedRef<number>>(PIX_PER_SEC)
+  const pixPerSec = inject<Ref<number>>(PIX_PER_SEC)
   if (!pixPerSec) {
     throw new Error('PIX_PER_SEC is not injected')
   }
@@ -172,7 +172,7 @@ export function useCueStore (): CueStoreInterface {
 }
 
 export function useDisplayWidth () {
-  const displayWidth = inject<ComputedRef<number>>(DISPLAY_WIDTH)
+  const displayWidth = inject<Ref<number>>(DISPLAY_WIDTH)
   if (!displayWidth) {
     throw new Error('DISPLAY_WIDTH is not injected')
   }
@@ -180,7 +180,7 @@ export function useDisplayWidth () {
 }
 
 export function useAudioRate () {
-  const audioRate = inject<ComputedRef<number>>(AUDIO_RATE)
+  const audioRate = inject<Ref<number>>(AUDIO_RATE)
   if (!audioRate) {
     throw new Error('AUDIO_RATE is not injected')
   }
