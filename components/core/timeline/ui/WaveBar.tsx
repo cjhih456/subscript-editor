@@ -1,4 +1,4 @@
-import { useDisplayWidth, usePixPerSec, useScrollValue, useWaveData, useAudioRate, useWaveMinMaxValue } from '~/components/core/provider/SubtitleControllerProvider'
+import useWaveBarRender from '../composables/useWaveBarRender'
 
 export default defineNuxtComponent({
   name: 'WaveBar',
@@ -10,65 +10,7 @@ export default defineNuxtComponent({
   },
   setup ({ waveHeight }) {
     const canvas = useTemplateRef<HTMLCanvasElement>('canvas')
-    const pixPerSec = usePixPerSec()
-    const audioRate = useAudioRate()
-    const { time: scrollTime } = useScrollValue()
-    const displayWidth = useDisplayWidth()
-    const waveData = useWaveData()
-    const waveMinMaxValue = useWaveMinMaxValue()
-
-    const scaleValue = computed(() => Math.max(Math.abs(waveMinMaxValue.value.max), Math.abs(waveMinMaxValue.value.min)))
-    const samplePerPixel = computed(() => (audioRate.value / pixPerSec.value) * 2)
-
-    const waveHalfHeight = computed(() => waveHeight / 2)
-
-    watch(() => [displayWidth.value, waveData.value, pixPerSec.value, scrollTime.value, waveHeight], () => {
-      requestAnimationFrame(() => {
-        canvas.value?.setAttribute('width', canvas.value.offsetWidth.toString())
-        drawWave()
-      })
-    })
-    onMounted(() => {
-      requestAnimationFrame(() => {
-        drawWave()
-      })
-    })
-
-    function drawWave () {
-      if (!canvas.value) { return }
-      const context = canvas.value.getContext('2d')
-      if (!context) { return }
-      context.fillStyle = 'black'
-      const canvasWidth = canvas.value.offsetWidth
-      context.clearRect(0, 0, canvasWidth, waveHeight)
-      context.beginPath()
-
-      // scrollValue를 고려하여 파형 데이터의 시작 위치 계산
-      const scrollOffset = Math.floor(scrollTime.value * audioRate.value)
-
-      for (let i = 0; i < canvasWidth; i += 2) {
-        // scrollValue에 따른 오프셋 적용
-        const start = Math.floor(i * samplePerPixel.value) + scrollOffset
-        const end = start + samplePerPixel.value * 2
-
-        if (start >= waveData.value.length) {
-          break
-        }
-
-        let max = -127
-        let min = 128
-        for (let j = start; j < end; j++) {
-          if (j >= 0 && j < waveData.value.length) {
-            if (waveData.value[j] > max) { max = waveData.value[j] }
-            if (waveData.value[j] < min) { min = waveData.value[j] }
-          }
-        }
-        context.fillRect(i * 2, waveHalfHeight.value - (max / scaleValue.value) * waveHeight, 2, ((max - min) / scaleValue.value) * waveHeight)
-      }
-    }
-    return {
-      scaleValue
-    }
+    useWaveBarRender(canvas, waveHeight)
   },
   render () {
     return <canvas

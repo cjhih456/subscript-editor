@@ -14,11 +14,11 @@
   - If you use Whisper, you can generate subtitles automatically.
 
 ### Featured
-- change UI/UX, Vuetify -> shadcn/vue, @nuxtjs/color-mode 
-- clean-up directory, file system. 
-- editor history system
-- when rendering timeline & wave, use OffscreenCanvas & Worker
-- use Provide & Inject
+- [ ] change UI/UX, Vuetify -> shadcn/vue, @nuxtjs/color-mode 
+- [x] clean-up directory, file system.
+- [x] editor history system
+- [x] when rendering timeline & wave, use OffscreenCanvas & Worker
+- [x] use Provide & Inject - done
 
 ### Whisper endpoint
 [Whisper Setup document](https://ahmetoner.com/whisper-asr-webservice/run/)
