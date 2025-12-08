@@ -31,7 +31,7 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      exclude: ['vuetify', '@ffmpeg/ffmpeg', '@ffmpeg/util']
+      exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util']
     },
     plugins: [
       tailwindcss()
@@ -50,22 +50,7 @@ export default defineNuxtConfig({
       BACKEND_API: 'http://localhost:3000'
     }
   },
-  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'vuetify-nuxt-module'],
-  vuetify: {
-    moduleOptions: {
-      importComposables: true,
-      styles: {
-        configFile: 'assets/styles/variable/custom-vuetify.scss'
-      }
-    },
-    vuetifyOptions: {
-      theme: false,
-      directives: true,
-      icons: {
-        defaultSet: 'mdi-svg'
-      }
-    }
-  },
+  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt'],
   features: {
     inlineStyles: false
   },
