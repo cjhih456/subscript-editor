@@ -87,7 +87,7 @@ export default defineNuxtComponent({
         </VCol>
       </VRow>
       <div class={styles['cue-area']}>
-        <VRow class="tw-pb-2" justify='space-between'>
+        <VRow class="tw-pb-2" justify='space-between' dense>
           <VCol cols="auto">
             <VBtn onClick={this.createCue} icon>
               <VIcon icon={mdiPlus}></VIcon>
