@@ -46,10 +46,13 @@ export default function useWaveBarRender (
   }
 
   function render () {
-    if (!canvas.value || !worker || !waveData.value) { return }
+    if (!canvas.value || !worker) { return }
 
     const canvasWidth = canvas.value.offsetWidth
+    canvas.value.setAttribute('width', canvasWidth.toString())
     const waveDataRaw = toRaw(waveData.value)
+
+    if (!waveDataRaw) { return }
 
     const params: WaveBarRenderParams = {
       canvasWidth,
@@ -70,10 +73,7 @@ export default function useWaveBarRender (
 
   watch(() => [displayWidth.value, waveData.value, pixPerSec.value, scrollTime.value, waveHeight], () => {
     requestAnimationFrame(() => {
-      if (canvas.value && waveData.value) {
-        canvas.value.setAttribute('width', canvas.value.offsetWidth.toString())
-        render()
-      }
+      render()
     })
   })
 
