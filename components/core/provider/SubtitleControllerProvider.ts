@@ -34,12 +34,12 @@ export function provideSubtitleController () {
   }
   const duration = ref<number>(0)
   const currentTime = ref<number>(0)
-  const pixPerSec = ref<number>(1000)
+  const pixPerSec = ref<number>(200)
   const waveData = ref<number[]>([])
   const waveMinMaxValue = ref<{ min: number, max: number }>({ min: 0, max: 0 })
   const cueStore = useCueStoreOrigin()
   const displayWidth = ref<number>(0)
-  const audioRate = ref<number>(200)
+  const audioRate = ref<number>(1000)
 
   const scrollValue = ref<number>(0)
   const scrollClientLeft = ref<number>(0)

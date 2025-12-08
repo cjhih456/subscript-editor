@@ -66,7 +66,6 @@ export default function useWaveBarRender (
 
     const waveDataRaw = toRaw(waveData.value)
     const waveMinMaxValueRaw = toRaw(waveMinMaxValue.value)
-    // const waveDataArray = new Int8Array(waveDataRaw)
 
     const params: WaveBarRenderParams = {
       canvasWidth,

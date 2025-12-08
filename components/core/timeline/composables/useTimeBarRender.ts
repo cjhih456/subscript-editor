@@ -59,9 +59,15 @@ export default function useTimeBarRender (
         stepTime: 5
       }
     }
+    if (pixPerSec.value >= 10) {
+      return {
+        format: 'HH:mm:ss',
+        stepTime: 10
+      }
+    }
     return {
       format: 'HH:mm:ss',
-      stepTime: 10
+      stepTime: 20
     }
   })
 

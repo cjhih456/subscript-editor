@@ -152,7 +152,7 @@ export default defineNuxtComponent({
               hideDetails
               step={5}
               max={1000}
-              min={10}
+              min={5}
             />
           </VCol>
         </VRow>
