@@ -15,10 +15,10 @@ export default function useFFmpeg () {
   }
 
   function waveSerialize (waveformData: number[], minMaxValue: { min: number, max: number }, waveHeight: number) {
-    return waveformData.map((v, idx) =>
-      Math.round(
-        (waveHeight * v) / Math.abs(minMaxValue[idx % 2 ? 'min' : 'max'])
-      )
+    // 단일 샘플 값을 처리하도록 수정 (8비트 PCM 데이터)
+    const scaleValue = Math.max(Math.abs(minMaxValue.min), Math.abs(minMaxValue.max))
+    return waveformData.map(v =>
+      Math.round((waveHeight * v) / scaleValue)
     )
   }
 
