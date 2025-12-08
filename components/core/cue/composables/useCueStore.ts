@@ -12,11 +12,15 @@ export interface CueData extends CueDataInterface {
 
 interface HistoryData {
   action: 'add' | 'update' | 'delete'
-  data: CueData
+  idx: string
+  before?: CueDataInterface
+  after?: CueDataInterface
 }
 
 export interface CueStoreInterface {
   allIds: ComputedRef<string[]>
+  undoAble: ComputedRef<boolean>
+  redoAble: ComputedRef<boolean>
   get: (idx: string) => CueDataInterface
   create: () => void
   update: (idx: string, cueData: CueDataInterface) => void
@@ -30,6 +34,9 @@ export default function useCueStore (): CueStoreInterface {
   const cueStoreKeys = ref<string[]>([])
   const historyStack = ref<HistoryData[]>([])
   const currentIndex = ref<number>(-1)
+
+  const undoAble = computed(() => currentIndex.value >= 0)
+  const redoAble = computed(() => currentIndex.value < historyStack.value.length - 1)
 
   const storeCreateAction = (idx: string, cueData: CueDataInterface) => {
     cueStore.value.set(idx, cueData)
@@ -45,10 +52,12 @@ export default function useCueStore (): CueStoreInterface {
 
   const allIds = computed(() => cueStoreKeys.value)
 
-  function addHistory (action: 'add' | 'update' | 'delete', data: CueData) {
+  function addHistory (action: 'add' | 'update' | 'delete', idx: string, { before, after }: { before?: CueDataInterface, after?: CueDataInterface }) {
     const history: HistoryData = {
       action,
-      data
+      idx,
+      before,
+      after
     }
     if (currentIndex.value !== historyStack.value.length - 1) {
       historyStack.value = historyStack.value.slice(0, currentIndex.value + 1)
@@ -78,7 +87,7 @@ export default function useCueStore (): CueStoreInterface {
       text: ''
     }
     storeCreateAction(idx, cueData)
-    addHistory('add', { idx, ...cueData })
+    addHistory('add', idx, { after: cueData })
   }
 
   function update (idx: string, cueData: CueDataInterface) {
@@ -88,27 +97,30 @@ export default function useCueStore (): CueStoreInterface {
       endTime,
       text: cueData.text
     }
+    const before = cueStore.value.get(idx)
     storeUpdateAction(idx, cue)
-    addHistory('update', { idx, ...cue })
+    addHistory('update', idx, { before, after: cue })
   }
 
   function remove (idx: string) {
     const data = cueStore.value.get(idx)
     if (!data) { return }
     storeDeleteAction(idx)
-    addHistory('delete', { idx, ...data })
+    addHistory('delete', idx, { before: data })
   }
 
   function undo () {
-    if (currentIndex.value <= 0) { return }
-    const history = historyStack.value[--currentIndex.value]
+    if (currentIndex.value < 0) { return }
+    const history = historyStack.value[currentIndex.value--]
     if (!history) { return }
     if (history.action === 'add') {
-      storeDeleteAction(history.data.idx)
+      storeDeleteAction(history.idx)
     } else if (history.action === 'update') {
-      storeUpdateAction(history.data.idx, history.data)
+      if (!history.before) { return }
+      storeUpdateAction(history.idx, history.before)
     } else if (history.action === 'delete') {
-      storeCreateAction(history.data.idx, history.data)
+      if (!history.before) { return }
+      storeCreateAction(history.idx, history.before)
     }
   }
 
@@ -117,16 +129,20 @@ export default function useCueStore (): CueStoreInterface {
     const history = historyStack.value[++currentIndex.value]
     if (!history) { return }
     if (history.action === 'add') {
-      storeCreateAction(history.data.idx, history.data)
+      if (!history.after) { return }
+      storeCreateAction(history.idx, history.after)
     } else if (history.action === 'update') {
-      storeUpdateAction(history.data.idx, history.data)
+      if (!history.after) { return }
+      storeUpdateAction(history.idx, history.after)
     } else if (history.action === 'delete') {
-      storeDeleteAction(history.data.idx)
+      storeDeleteAction(history.idx)
     }
   }
 
   return {
     allIds,
+    undoAble,
+    redoAble,
     get,
     create,
     update,

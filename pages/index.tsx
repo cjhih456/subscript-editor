@@ -1,4 +1,5 @@
-import { VBtn, VCol, VContainer, VRow, VSlider } from 'vuetify/components'
+import { VBtn, VCol, VContainer, VIcon, VRow, VSlider } from 'vuetify/components'
+import { mdiFileExport, mdiPlus, mdiRedo, mdiUndo } from '@mdi/js'
 import styles from '~/assets/styles/pages/index.module.sass'
 import AlertDisplay from '~/components/core/alert/ui/AlertDisplay'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
@@ -18,7 +19,7 @@ export default defineNuxtComponent({
   setup () {
     const nuxt = useNuxtApp()
     const data = provideSubtitleController()
-    const { create: createCue, get: getCue, allIds } = data.cueStore
+    const { create: createCue, get: getCue, allIds, undo, redo, undoAble, redoAble } = data.cueStore
     const cueCount = computed(() => allIds.value.length)
     const allCues = computed(() => allIds.value.map(id => getCue(id)))
 
@@ -63,6 +64,10 @@ export default defineNuxtComponent({
     const waveHeight = ref(50)
     return {
       ...data,
+      redo,
+      undo,
+      undoAble,
+      redoAble,
       timeBarHeight,
       fontSize,
       waveHeight,
@@ -80,21 +85,35 @@ export default defineNuxtComponent({
         <VCol>
           <FileSelect onFileSelect={this.onFileSelect} />
         </VCol>
-        <VCol cols="auto">
-          <VBtn
-            disabled={!this.cueCount}
-            class={styles['cue-save-btn']}
-            onClick={this.saveAsFile}
-          >
-            Save Subscribe
-          </VBtn>
-        </VCol>
       </VRow>
       <div class={styles['cue-area']}>
+        <VRow class="tw-pb-2" justify='space-between'>
+          <VCol cols="auto">
+            <VBtn onClick={this.createCue} icon>
+              <VIcon icon={mdiPlus}></VIcon>
+            </VBtn>
+          </VCol>
+          <VCol cols="auto">
+            <VBtn onClick={this.undo} icon disabled={!this.undoAble}>
+              <VIcon icon={mdiUndo}></VIcon>
+            </VBtn>
+          </VCol>
+          <VCol cols="auto">
+            <VBtn onClick={this.redo} icon disabled={!this.redoAble}>
+              <VIcon icon={mdiRedo}></VIcon>
+            </VBtn>
+          </VCol>
+          <VCol cols="auto">
+            <VBtn
+              icon
+              disabled={!this.cueCount}
+              onClick={this.saveAsFile}
+            >
+              <VIcon icon={mdiFileExport}></VIcon>
+            </VBtn>
+          </VCol>
+        </VRow>
         <CueEditArea />
-        <VBtn onClick={this.createCue} class={styles['cue-add-btn']}>
-          Add Cue
-        </VBtn>
       </div>
       <VideoPlayer
         class={styles['video-area']}
