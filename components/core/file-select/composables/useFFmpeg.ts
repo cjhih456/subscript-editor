@@ -14,14 +14,6 @@ export default function useFFmpeg () {
     return { ...obj, duration }
   }
 
-  function waveSerialize (waveformData: number[], minMaxValue: { min: number, max: number }, waveHeight: number) {
-    // 단일 샘플 값을 처리하도록 수정 (8비트 PCM 데이터)
-    const scaleValue = Math.max(Math.abs(minMaxValue.min), Math.abs(minMaxValue.max))
-    return waveformData.map(v =>
-      Math.round((waveHeight * v) / scaleValue)
-    )
-  }
-
   async function whisperTranscribe (file: File) {
     await loadFFmpeg()
     const arrayBuffer = await file.arrayBuffer()
@@ -56,7 +48,6 @@ export default function useFFmpeg () {
   return {
     loadFFmpeg,
     convertWave,
-    waveSerialize,
     whisperTranscribe
   }
 }

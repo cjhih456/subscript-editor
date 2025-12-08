@@ -10,7 +10,7 @@ export const CURRENT_TIME = Symbol('currentTime')
 export const PIX_PER_SEC = Symbol('pixPerSec')
 export const WAVE_DATA = Symbol('waveData')
 export const CUE_STORE = Symbol('cueStore')
-export const WAVE_MIN_MAX_VALUE = Symbol('waveMinMaxValue')
+export const WAVE_SCALE_VALUE = Symbol('waveScaleValue')
 export const DISPLAY_WIDTH = Symbol('displayWidth')
 export const AUDIO_RATE = Symbol('audioRate')
 
@@ -35,8 +35,8 @@ export function provideSubtitleController () {
   const duration = ref<number>(0)
   const currentTime = ref<number>(0)
   const pixPerSec = ref<number>(200)
-  const waveData = ref<number[]>([])
-  const waveMinMaxValue = ref<{ min: number, max: number }>({ min: 0, max: 0 })
+  const waveData = ref<SharedArrayBuffer | null>(null)
+  const waveScaleValue = ref<number>(0)
   const cueStore = useCueStoreOrigin()
   const displayWidth = ref<number>(0)
   const audioRate = ref<number>(1000)
@@ -60,7 +60,7 @@ export function provideSubtitleController () {
   provide(CURRENT_TIME, currentTime)
   provide(PIX_PER_SEC, pixPerSec)
   provide(WAVE_DATA, waveData)
-  provide(WAVE_MIN_MAX_VALUE, waveMinMaxValue)
+  provide(WAVE_SCALE_VALUE, waveScaleValue)
   provide(CUE_STORE, cueStore)
   provide(DISPLAY_WIDTH, displayWidth)
   provide(AUDIO_RATE, audioRate)
@@ -89,7 +89,7 @@ export function provideSubtitleController () {
     pixPerSec,
     waveData,
     cueStore,
-    waveMinMaxValue,
+    waveScaleValue,
     displayWidth,
     audioRate
   }
@@ -132,19 +132,19 @@ export function useDuration () {
 }
 
 export function useWaveData () {
-  const waveData = inject<Ref<number[]>>(WAVE_DATA)
+  const waveData = inject<Ref<SharedArrayBuffer | null>>(WAVE_DATA)
   if (!waveData) {
     throw new Error('WAVE_DATA is not injected')
   }
   return waveData
 }
 
-export function useWaveMinMaxValue () {
-  const waveMinMaxValue = inject<Ref<{ min: number, max: number }>>(WAVE_MIN_MAX_VALUE)
-  if (!waveMinMaxValue) {
-    throw new Error('WAVE_MIN_MAX_VALUE is not injected')
+export function useWaveScaleValue () {
+  const waveScaleValue = inject<Ref<number>>(WAVE_SCALE_VALUE)
+  if (!waveScaleValue) {
+    throw new Error('WAVE_SCALE_VALUE is not injected')
   }
-  return waveMinMaxValue
+  return waveScaleValue
 }
 
 export function useCurrentTime () {

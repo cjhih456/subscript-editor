@@ -23,7 +23,7 @@ export default defineNuxtComponent({
     const cueCount = computed(() => allIds.value.length)
     const allCues = computed(() => allIds.value.map(id => getCue(id)))
 
-    const { loadFFmpeg, convertWave, waveSerialize } = useFFmpeg()
+    const { loadFFmpeg, convertWave } = useFFmpeg()
     const { videoFileObjectUrl, setVideoFileObjectUrl, clearVideoFileObjectUrl } = data
     onMounted(async () => {
       await loadFFmpeg()
@@ -34,11 +34,11 @@ export default defineNuxtComponent({
 
     async function onFileSelect (file: File | null) {
       if (!file) { return }
-      const { wave, maxMinValue, duration: convertedDuration } = await convertWave(file as File, data.audioRate.value)
+      const { wave, scaleValue, duration: convertedDuration } = await convertWave(file as File, data.audioRate.value)
       // take duration of file
-      data.waveMinMaxValue.value = maxMinValue
+      data.waveScaleValue.value = scaleValue
       data.duration.value = convertedDuration
-      data.waveData.value = waveSerialize(wave, maxMinValue, 25)
+      data.waveData.value = wave
       if (videoFileObjectUrl.value) {
         clearVideoFileObjectUrl()
       }

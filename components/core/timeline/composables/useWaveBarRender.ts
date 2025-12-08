@@ -1,18 +1,6 @@
 import type { ShallowRef } from 'vue'
-import { useDisplayWidth, usePixPerSec, useScrollValue, useWaveData, useAudioRate, useWaveMinMaxValue } from '../../provider/SubtitleControllerProvider'
-
-interface WaveBarRenderParams {
-  canvasWidth: number
-  waveHeight: number
-  pixPerSec: number
-  audioRate: number
-  scrollTime: number
-  waveData: number[]
-  waveMinMaxValue: {
-    min: number
-    max: number
-  }
-}
+import { useDisplayWidth, usePixPerSec, useScrollValue, useWaveData, useAudioRate, useWaveScaleValue } from '../../provider/SubtitleControllerProvider'
+import type { WaveBarRenderParams } from './useWaveBarRender.worker'
 
 export default function useWaveBarRender (
   canvas: Readonly<ShallowRef<HTMLCanvasElement | null>>,
@@ -23,9 +11,7 @@ export default function useWaveBarRender (
   const { time: scrollTime } = useScrollValue()
   const displayWidth = useDisplayWidth()
   const waveData = useWaveData()
-  const waveMinMaxValue = useWaveMinMaxValue()
-
-  const scaleValue = computed(() => Math.max(Math.abs(waveMinMaxValue.value.max), Math.abs(waveMinMaxValue.value.min)))
+  const waveScaleValue = useWaveScaleValue()
 
   let worker: Worker | null = null
   let offscreenCanvas: OffscreenCanvas | null = null
@@ -60,12 +46,10 @@ export default function useWaveBarRender (
   }
 
   function render () {
-    if (!canvas.value || !worker) { return }
+    if (!canvas.value || !worker || !waveData.value) { return }
 
     const canvasWidth = canvas.value.offsetWidth
-
     const waveDataRaw = toRaw(waveData.value)
-    const waveMinMaxValueRaw = toRaw(waveMinMaxValue.value)
 
     const params: WaveBarRenderParams = {
       canvasWidth,
@@ -74,7 +58,8 @@ export default function useWaveBarRender (
       audioRate: audioRate.value,
       scrollTime: scrollTime.value,
       waveData: waveDataRaw,
-      waveMinMaxValue: waveMinMaxValueRaw
+      waveDataLength: waveDataRaw.byteLength,
+      waveScaleValue: waveScaleValue.value
     }
 
     worker.postMessage({
@@ -85,7 +70,7 @@ export default function useWaveBarRender (
 
   watch(() => [displayWidth.value, waveData.value, pixPerSec.value, scrollTime.value, waveHeight], () => {
     requestAnimationFrame(() => {
-      if (canvas.value) {
+      if (canvas.value && waveData.value) {
         canvas.value.setAttribute('width', canvas.value.offsetWidth.toString())
         render()
       }
@@ -108,7 +93,6 @@ export default function useWaveBarRender (
   })
 
   return {
-    render,
-    scaleValue
+    render
   }
 }

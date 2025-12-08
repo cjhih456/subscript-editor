@@ -1,14 +1,12 @@
-interface WaveBarRenderParams {
+export interface WaveBarRenderParams {
   canvasWidth: number
   waveHeight: number
   pixPerSec: number
   audioRate: number
   scrollTime: number
-  waveData: number[]
-  waveMinMaxValue: {
-    min: number
-    max: number
-  }
+  waveData: SharedArrayBuffer | null
+  waveDataLength: number
+  waveScaleValue: number
 }
 
 interface WorkerMessage {
@@ -20,11 +18,13 @@ interface WorkerMessage {
 let ctx: OffscreenCanvasRenderingContext2D | null = null
 
 function renderWaveBar (params: WaveBarRenderParams) {
-  if (!ctx) { return }
+  if (!ctx || !params.waveData) { return }
 
-  const { canvasWidth, waveHeight, pixPerSec, audioRate, scrollTime, waveData, waveMinMaxValue } = params
+  const { canvasWidth, waveHeight, pixPerSec, audioRate, scrollTime, waveData, waveDataLength, waveScaleValue } = params
 
-  const scaleValue = Math.max(Math.abs(waveMinMaxValue.max), Math.abs(waveMinMaxValue.min))
+  // SharedArrayBuffer를 Int8Array로 래핑
+  const waveDataArray = new Int8Array(waveData)
+
   const samplePerPixel = (audioRate / pixPerSec) * 2
   const waveHalfHeight = waveHeight / 2
 
@@ -42,19 +42,20 @@ function renderWaveBar (params: WaveBarRenderParams) {
     const start = Math.floor(i * samplePerPixel) + scrollOffset
     const end = start + samplePerPixel * 2
 
-    if (start >= waveData.length) {
+    if (start >= waveDataLength) {
       break
     }
 
     let max = -127
     let min = 128
     for (let j = start; j < end; j++) {
-      if (j >= 0 && j < waveData.length) {
-        if (waveData[j] > max) { max = waveData[j] }
-        if (waveData[j] < min) { min = waveData[j] }
+      if (j >= 0 && j < waveDataLength) {
+        const value = waveDataArray[j]
+        if (value > max) { max = value }
+        if (value < min) { min = value }
       }
     }
-    ctx.fillRect(i * 2, waveHalfHeight - (max / scaleValue) * waveHeight, 2, ((max - min) / scaleValue) * waveHeight)
+    ctx.fillRect(i * 2, waveHalfHeight - (max / waveScaleValue) * waveHeight, 2, ((max - min) / waveScaleValue) * waveHeight)
   }
 }
 

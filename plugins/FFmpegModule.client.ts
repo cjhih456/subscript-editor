@@ -68,7 +68,7 @@ export default defineNuxtPlugin(() => {
    * @param inputFileName origin input file name
    * @param outputFileName s16le waveform data name
    * @param outputAudioRate output audio rate (Hz)
-   * @returns waveform data & min, max object
+   * @returns waveform data & scale value
    */
   async function transcodeWave (inputFileName: string, outputFileName: string, outputAudioRate: number) {
     await ffmpegRef.value.exec([
@@ -77,7 +77,7 @@ export default defineNuxtPlugin(() => {
       '-i', 'anullsrc=channel_layout=stereo:sample_rate=48000:duration=8.86',
       '-i', inputFileName,
       '-filter_complex', 'amix',
-      '-f', 's16le',
+      '-f', 's8',
       '-ac', '1',
       '-acodec', 'pcm_s8',
       '-ar', String(outputAudioRate),
@@ -85,19 +85,16 @@ export default defineNuxtPlugin(() => {
     ])
     const data = await ffmpegRef.value.readFile(outputFileName) as Uint8Array
     ffmpegRef.value.deleteFile(outputFileName)
-    const wave = [] as number[]
-    const maxMinValue = {
-      max: -128,
-      min: 127
-    }
-    Int8Array.from(data).forEach((byte) => {
-      if (byte < maxMinValue.min) { maxMinValue.min = byte }
-      if (byte > maxMinValue.max) { maxMinValue.max = byte }
-      wave.push(byte)
-    })
+
+    // SharedArrayBuffer 생성
+    const int8Data = Int8Array.from(data)
+    const sharedBuffer = new SharedArrayBuffer(int8Data.length)
+    const sharedArray = new Int8Array(sharedBuffer)
+    sharedArray.set(int8Data)
+
     return {
-      wave,
-      maxMinValue
+      wave: sharedBuffer,
+      scaleValue: 128
     }
   }
   /**
