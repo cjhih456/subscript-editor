@@ -1,5 +1,6 @@
 import type { ShallowRef } from 'vue'
 import { useDisplayWidth, usePixPerSec, useScrollValue, useWaveData, useAudioRate, useWaveScaleValue } from '../../provider/SubtitleControllerProvider'
+import WaveBarRenderWorker from './useWaveBarRender.worker?worker&inline'
 import type { WaveBarRenderParams } from './useWaveBarRender.worker'
 
 export default function useWaveBarRender (
@@ -23,10 +24,7 @@ export default function useWaveBarRender (
     offscreenCanvas = canvas.value.transferControlToOffscreen()
 
     // Worker 생성
-    worker = new Worker(
-      new URL('./useWaveBarRender.worker.ts', import.meta.url),
-      { type: 'module' }
-    )
+    worker = new WaveBarRenderWorker()
 
     // Worker에 OffscreenCanvas 전송
     worker.postMessage(

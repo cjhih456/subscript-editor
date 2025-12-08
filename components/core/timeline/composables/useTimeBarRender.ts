@@ -1,17 +1,7 @@
 import type { ShallowRef } from 'vue'
 import { usePixPerSec, useScrollValue, useDisplayWidth } from '../../provider/SubtitleControllerProvider'
-
-interface TimeBarRenderParams {
-  canvasWidth: number
-  timeBarHeight: number
-  fontSize: number
-  pixPerSec: number
-  scrollTime: number
-  stepLevel: {
-    format: string
-    stepTime: number
-  }
-}
+import TimeBarRenderWorker from './useTimeBarRender.worker?worker&inline'
+import type { TimeBarRenderParams } from './useTimeBarRender.worker'
 
 export default function useTimeBarRender (
   canvas: Readonly<ShallowRef<HTMLCanvasElement | null>>,
@@ -81,10 +71,7 @@ export default function useTimeBarRender (
     offscreenCanvas = canvas.value.transferControlToOffscreen()
 
     // Worker 생성
-    worker = new Worker(
-      new URL('./useTimeBarRender.worker.ts', import.meta.url),
-      { type: 'module' }
-    )
+    worker = new TimeBarRenderWorker()
 
     // Worker에 OffscreenCanvas 전송
     worker.postMessage(

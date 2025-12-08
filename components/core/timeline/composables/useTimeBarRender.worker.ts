@@ -1,4 +1,4 @@
-interface TimeBarRenderParams {
+export interface TimeBarRenderParams {
   canvasWidth: number
   timeBarHeight: number
   fontSize: number
