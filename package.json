@@ -46,6 +46,7 @@
     "postcss": "^8.4.35",
     "reka-ui": "^2.6.1",
     "sanitize-html": "^2.7.2",
+    "tailwind-merge": "^3.4.0",
     "uuid": "^9.0.1",
     "vee-validate": "^4.15.1",
     "video.js": "^8.23.3",
