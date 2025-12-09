@@ -2,7 +2,6 @@
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-06-05',
   shadcn: {
     prefix: '',
     componentDir: '@/components/ui'
@@ -51,7 +50,7 @@ export default defineNuxtConfig({
       }
     }
   },
-  css: ['@/assets/styles/init.sass'],
+  css: ['@/assets/styles/init.css'],
   runtimeConfig: {
     public: {
       BACKEND_API: 'http://localhost:3000'
