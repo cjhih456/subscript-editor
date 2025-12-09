@@ -1,5 +1,5 @@
-import { VExpansionPanels } from 'vuetify/components'
 import { ClientOnly } from '#components'
+import { Accordion } from '~/components/ui/accordion'
 import CueEdit from '~/components/core/cue/ui/CueEdit'
 import { useCueStore } from '~/components/core/provider/SubtitleControllerProvider'
 
@@ -13,9 +13,9 @@ export default defineNuxtComponent({
   },
   render () {
     return <ClientOnly>
-      <VExpansionPanels variant='accordion'>
+      <Accordion>
         {this.allIds.map(id => <CueEdit key={id} idx={id} />)}
-      </VExpansionPanels>
+      </Accordion>
     </ClientOnly>
   }
 })

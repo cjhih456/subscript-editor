@@ -1,10 +1,13 @@
-import { VExpansionPanel, VExpansionPanelTitle, VExpansionPanelText, VRow, VCol, VBtn, VIcon, VTextarea } from 'vuetify/components'
-import { useForm, useField } from 'vee-validate'
+
+import { useForm, useField, type ComponentFieldBindingObject } from 'vee-validate'
 import { object, string, number } from 'yup'
 import { toTypedSchema } from '@vee-validate/yup'
-import { mdiTrashCan } from '@mdi/js'
 import { useCueStore } from '~/components/core/provider/SubtitleControllerProvider'
 import TimeInput from '~/components/core/cue/ui/TimeInput'
+import { AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion'
+import { Button } from '~/components/ui/button'
+import { TrashIcon } from 'lucide-vue-next'
+import { InputGroup, InputGroupTextarea } from '~/components/ui/input-group'
 
 const schema = toTypedSchema(object({
   startTime: number().required(),
@@ -91,54 +94,47 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    // TODO: vue-shadcn/ui 적용시 수정
-    return <VExpansionPanel>
-      <VExpansionPanelTitle>
-        <VRow no-gutters class={['tw-items-center']}>
-          <VCol>
-            start: {this.startTimeDisplay}
-          </VCol>
-          <VCol>
-            end: {this.endTimeDisplay}
-          </VCol>
-          <VCol cols="auto">
-            <VBtn
-              color="tw-text-red-400"
-              icon
-              size={'small'}
-              variant='outlined'
-              flat
-              onClick={this.deleteCue}
-            >
-              <VIcon icon={mdiTrashCan}></VIcon>
-            </VBtn>
-          </VCol>
-        </VRow>
-      </VExpansionPanelTitle>
-      <VExpansionPanelText>
-        <form ref="form" onSubmit={this.submit} >
-          <VRow>
-            <VCol>
+    return <AccordionItem value={this.idx}>
+      <AccordionTrigger>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span>
+              {this.startTimeDisplay}
+            </span>
+            <span>
+              ~
+            </span>
+            <span>
+              {this.endTimeDisplay}
+            </span>
+          </div>
+          <div>
+            <Button onClick={this.deleteCue}>
+              <TrashIcon />
+            </Button>
+          </div>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent>
+        <form ref="form" onSubmit={this.submit} class="flex flex-col gap-2 p-2">
+          <div class="flex gap-2">
               <TimeInput
                 v-model={this.startTime.value.value}
                 onChange={this.onChange}
               />
-            </VCol>
-            <VCol>
               <TimeInput
                 v-model={this.endTime.value.value}
                 onChange={this.onChange}
               />
-            </VCol>
-          </VRow>
-          <VTextarea
-            class={['tw-my-2']}
-            v-model:modelValue={this.text.value.value}
-            hideDetails
-            onUpdate:modelValue={this.onTextChange}
-          />
+          </div>
+          <InputGroup>
+            <InputGroupTextarea
+              v-model={this.text.value.value}
+              onChange={this.onTextChange}
+            />
+          </InputGroup>
         </form>
-      </VExpansionPanelText>
-    </VExpansionPanel >
+      </AccordionContent>
+    </AccordionItem>
   }
 })
