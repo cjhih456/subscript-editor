@@ -21,7 +21,7 @@ interface VideoFileObjectUrl {
 }
 
 export function provideSubtitleController () {
-  const videoFile = ref<File | null>(null)
+  const videoFile = ref<File | undefined>(undefined)
   const videoFileObjectUrl = ref<string | null>(null)
   function setVideoFileObjectUrl (file: File) {
     videoFileObjectUrl.value = URL.createObjectURL(file)
@@ -96,7 +96,7 @@ export function provideSubtitleController () {
 }
 
 export function useVideoFile () {
-  const videoFile = inject<Ref<File | null>>(VIDEO_FILE)
+  const videoFile = inject<Ref<File | undefined>>(VIDEO_FILE)
   if (!videoFile) {
     throw new Error('VIDEO_FILE is not injected')
   }

@@ -5,18 +5,25 @@ import { cn } from "@/lib/utils"
 
 const props = defineProps<{
   class?: HTMLAttributes["class"]
-  defaultValue?: string | number
-  modelValue?: string | number
+  defaultValue?: string
+  modelValue?: string
 }>()
 
 const emits = defineEmits<{
-  (e: "update:modelValue", payload: string | number): void
+  (e: "update:modelValue", payload: string): void
+  (e: "change", payload: string): void
 }>()
 
 const modelValue = useVModel(props, "modelValue", emits, {
   passive: true,
-  defaultValue: props.defaultValue,
+  defaultValue: props.defaultValue
 })
+
+watch(() => modelValue.value, (newVal, oldVal) => {
+  if (newVal === oldVal) { return }
+  emits('change', newVal || '')
+})
+
 </script>
 
 <template>
