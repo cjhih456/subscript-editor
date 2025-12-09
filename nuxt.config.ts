@@ -54,7 +54,7 @@ export default defineNuxtConfig({
       BACKEND_API: 'http://localhost:3000'
     }
   },
-  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'shadcn-nuxt'],
+  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'shadcn-nuxt', '@nuxt/eslint'],
   features: {
     inlineStyles: false
   },
