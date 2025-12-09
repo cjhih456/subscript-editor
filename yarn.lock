@@ -8667,6 +8667,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lucide-vue-next@npm:^0.556.0":
+  version: 0.556.0
+  resolution: "lucide-vue-next@npm:0.556.0"
+  peerDependencies:
+    vue: ">=3.0.1"
+  checksum: 10c0/399f90140d127e15209913c7026c18f8d2b537a7389768a3fae96f6acb3e49ddfcd4729ab7c0e30b0572c7d3b87b1fe67ecce5d4a1d6539cdb3fc91124f4ee35
+  languageName: node
+  linkType: hard
+
 "m3u8-parser@npm:^7.1.0":
   version: 7.1.0
   resolution: "m3u8-parser@npm:7.1.0"
@@ -11403,6 +11412,7 @@ __metadata:
     dayjs-nuxt: "npm:^2.1.11"
     gh-pages: "npm:^6.1.1"
     lodash: "npm:^4.17.21"
+    lucide-vue-next: "npm:^0.556.0"
     nuxt: "npm:^4.2.1"
     nuxt-security: "npm:^2.2.0"
     ofetch: "npm:^1.3.3"
@@ -11422,6 +11432,7 @@ __metadata:
     videojs-vtt.js: "npm:^0.15.5"
     vite: "npm:^6.3.5"
     vue: "npm:^3.5.25"
+    vue-sonner: "npm:^2.0.9"
     yup: "npm:^1.3.3"
     zod: "npm:^4.1.13"
   languageName: unknown
@@ -13464,6 +13475,24 @@ __metadata:
   peerDependencies:
     vue: ^3.5.0
   checksum: 10c0/4528f4fded4b45b07d4e096116e9b5fd602af463e735f7e5133b1a258ce325ebc894dd7bc962a937556615fd42d06b0fb290dfae90e96f237862b7f74baa22a0
+  languageName: node
+  linkType: hard
+
+"vue-sonner@npm:^2.0.9":
+  version: 2.0.9
+  resolution: "vue-sonner@npm:2.0.9"
+  peerDependencies:
+    "@nuxt/kit": ^4.0.3
+    "@nuxt/schema": ^4.0.3
+    nuxt: ^4.0.3
+  peerDependenciesMeta:
+    "@nuxt/kit":
+      optional: true
+    "@nuxt/schema":
+      optional: true
+    nuxt:
+      optional: true
+  checksum: 10c0/0001fcfd9163dd69f74bbbdbd50f61d7ceb514bf16571562cd51b0824b89cee809de2f93e1bb13fcc06375a07bc3e8bc1f552cb98e8ba1a665c8aecda47e039c
   languageName: node
   linkType: hard
 
