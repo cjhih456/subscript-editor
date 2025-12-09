@@ -26,6 +26,9 @@ export default defineNuxtConfig({
           script: [{ src: './worker.js', crossorigin: 'use-credentials', integrity: 'sha384-rQEcC031XfytcqUuCLKA3ijYnmFEz247ZPEv1Abi7USpTphR8b6kyepOyI55QKv9' }]
         }
   },
+  colorMode: {
+    classSuffix: '',
+  },
   typescript: {
     shim: true,
     strict: true
@@ -54,7 +57,7 @@ export default defineNuxtConfig({
       BACKEND_API: 'http://localhost:3000'
     }
   },
-  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'shadcn-nuxt', '@nuxt/eslint'],
+  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'shadcn-nuxt', '@nuxtjs/color-mode', '@nuxt/eslint'],
   features: {
     inlineStyles: false
   },
