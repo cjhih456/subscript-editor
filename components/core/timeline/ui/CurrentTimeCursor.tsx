@@ -15,6 +15,6 @@ export default defineNuxtComponent({
     return { style }
   },
   render () {
-    return <div class="tw-absolute tw-top-0 tw-bottom-0 tw-w-[2px] tw-bg-red-500/70 tw-z-10" style={this.style}></div>
+    return <div class="absolute top-0 bottom-0 w-[2px] bg-red-500/70 z-10" style={this.style}></div>
   }
 })

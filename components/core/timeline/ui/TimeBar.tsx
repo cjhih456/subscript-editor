@@ -19,7 +19,7 @@ export default defineNuxtComponent({
   render () {
     return <canvas
       ref='canvas'
-      class="tw-w-full"
+      class="w-full"
       height={this.timeBarHeight}
     />
   }

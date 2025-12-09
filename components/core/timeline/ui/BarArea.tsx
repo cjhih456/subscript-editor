@@ -35,9 +35,9 @@ export default defineNuxtComponent({
     })
   },
   render () {
-    return <div class="tw-overflow-hidden">
-      <div ref="scrollArea" class="tw-relative tw-w-full tw-overflow-x-scroll tw-pb-2">
-        <div class="tw-sticky tw-top-0 tw-left-0 tw-right-0 tw-overflow-hidden">
+    return <div class="overflow-hidden">
+      <div ref="scrollArea" class="relative w-full overflow-x-scroll pb-2">
+        <div class="sticky top-0 left-0 right-0 overflow-hidden">
           {this.$slots.canvas?.()}
         </div>
         {this.$slots.cursor?.()}
