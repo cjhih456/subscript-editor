@@ -1,10 +1,7 @@
-import { VBtn, VCol, VContainer, VIcon, VRow, VSlider } from 'vuetify/components'
-import { mdiFileExport, mdiPlus, mdiRedo, mdiUndo } from '@mdi/js'
-import styles from '~/assets/styles/pages/index.module.sass'
 import AlertDisplay from '~/components/core/alert/ui/AlertDisplay'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
 import { provideSubtitleController } from '~/components/core/provider/SubtitleControllerProvider'
-import FileSelect from '~/components/core/file-select/ui/FileSelect'
+import FileSelect from '~/components/core/file-select/ui/FileSelect.vue'
 import useFFmpeg from '~/components/core/file-select/composables/useFFmpeg'
 import TimeBar from '~/components/core/timeline/ui/TimeBar'
 import WaveBar from '~/components/core/timeline/ui/WaveBar'
@@ -13,6 +10,10 @@ import CueBar from '~/components/core/cue/ui/CueBar'
 import CueEditArea from '~/components/core/cue/ui/CueEditArea'
 import CurrentTimeCursor from '~/components/core/timeline/ui/CurrentTimeCursor'
 import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
+import { Button } from '~/components/ui/button'
+import { Icon, Plus, Undo, Redo, Save } from 'lucide-vue-next'
+import { Slider } from '~/components/ui/slider'
+import { ClientOnly } from '#components'
 
 export default defineNuxtComponent({
   name: 'IndexPage',
@@ -32,7 +33,7 @@ export default defineNuxtComponent({
       clearVideoFileObjectUrl()
     })
 
-    async function onFileSelect (file: File | null) {
+    async function onFileSelect (file: File | undefined) {
       if (!file) { return }
       const { wave, scaleValue, duration: convertedDuration } = await convertWave(file as File, data.audioRate.value)
       // take duration of file
@@ -79,51 +80,72 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <VContainer class={styles['index-page']} fluid>
+    return <section class="flex flex-col gap-2">
       <AlertDisplay />
-      <VRow class={styles['input-area']}>
-        <VCol>
+      <div class="flex flex-1">
+        <div class="flex flex-col">
           <FileSelect onFileSelect={this.onFileSelect} />
-        </VCol>
-      </VRow>
-      <div class={styles['cue-area']}>
-        <VRow class="tw-pb-2" justify='space-between' dense>
-          <VCol cols="auto">
-            <VBtn onClick={this.createCue} icon>
-              <VIcon icon={mdiPlus}></VIcon>
-            </VBtn>
-          </VCol>
-          <VCol cols="auto">
-            <VBtn onClick={this.undo} icon disabled={!this.undoAble}>
-              <VIcon icon={mdiUndo}></VIcon>
-            </VBtn>
-          </VCol>
-          <VCol cols="auto">
-            <VBtn onClick={this.redo} icon disabled={!this.redoAble}>
-              <VIcon icon={mdiRedo}></VIcon>
-            </VBtn>
-          </VCol>
-          <VCol cols="auto">
-            <VBtn
-              icon
-              disabled={!this.cueCount}
-              onClick={this.saveAsFile}
-            >
-              <VIcon icon={mdiFileExport}></VIcon>
-            </VBtn>
-          </VCol>
-        </VRow>
-        <CueEditArea />
+          <div class="flex justify-between gap-2">
+            <Button onClick={this.createCue}>
+              <Plus />
+            </Button>
+            <Button onClick={this.undo} disabled={!this.undoAble}>
+              <Undo />
+            </Button>
+            <Button onClick={this.redo} disabled={!this.redoAble}>
+              <Redo />
+            </Button>
+            <Button onClick={this.saveAsFile}>
+              <Save />
+            </Button>
+          </div>
+          <CueEditArea />
+        </div>
+        <div class="flex-1">
+          {/* <VideoPlayer /> */}
+        </div>
       </div>
-      <VideoPlayer
-        class={styles['video-area']}
-        v-model:currentTime={this.currentTime}
-        subscript={this.allCues}
-        src={this.videoFileObjectUrl || undefined}
-      ></VideoPlayer>
-      <div class={styles['wave-area']}>
-        <VRow class="tw-flex-nowrap">
-          <VCol class="tw-overflow-scroll">
+      <div class="flex flex-auto w-full">
+        <div class="flex-1">
+          {/* <BarArea>
+            {{
+              canvas: () => (
+                <>
+                  <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
+                  <WaveBar waveHeight={this.waveHeight} />
+                </>
+              ),
+              default: () => (
+                <CueBar />
+              ),
+              cursor: () => (
+                <>
+                  <CurrentTimeCursor />
+                  <CurrentCursor />
+                </>
+              )
+            }}
+          </BarArea> */}
+        </div>
+        <div class="flex-auto">
+          <ClientOnly>
+            {/* <Slider
+              v-model={this.pixPerSec}
+              orientation="vertical"
+              step={5}
+              max={1000}
+              min={5}
+            /> */}
+          </ClientOnly>
+        </div>
+      </div>
+      {/**
+       * 
+    // <VContainer class={styles['index-page']} fluid>
+    
+    //   <div class={styles['wave-area']}>
+    //     <VRow class="tw-flex-nowrap">
+    //       <VCol class="tw-overflow-scroll">
             <BarArea>
               {{
                 canvas: () => (
@@ -143,20 +165,22 @@ export default defineNuxtComponent({
                 )
               }}
             </BarArea>
-          </VCol>
-          <VCol cols="auto" class={styles['level-slider']}>
-            <VSlider
-              v-model={this.pixPerSec}
-              direction="vertical"
-              reverse
-              hideDetails
-              step={5}
-              max={1000}
-              min={5}
-            />
-          </VCol>
-        </VRow>
-      </div>
-    </VContainer>
+    //       </VCol>
+    //       <VCol cols="auto" class={styles['level-slider']}>
+    //         <VSlider
+    //           v-model={this.pixPerSec}
+    //           direction="vertical"
+    //           reverse
+    //           hideDetails
+    //           step={5}
+    //           max={1000}
+    //           min={5}
+    //         />
+    //       </VCol>
+    //     </VRow>
+    //   </div>
+    // </VContainer>
+       */}
+    </section>
   }
 })

@@ -3,7 +3,7 @@ export default defineNuxtComponent({
   setup () {
     return () => {
       return <div>
-        <h3 class="tw-px-4 tw-font-bold">Subtitle Editor</h3>
+        <h3 class="px-4 font-bold">Subtitle Editor</h3>
       </div>
     }
   }

@@ -1,6 +1,8 @@
 <template>
-  <NuxtLoadingIndicator :duration="3000" />
   <NuxtLayout>
+    <template #header>
+      <component :is="headerStatus" />
+    </template>
     <template #default>
       <NuxtPage />
     </template>
