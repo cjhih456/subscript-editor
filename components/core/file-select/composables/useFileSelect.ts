@@ -1,17 +1,35 @@
 import { useVideoFile } from '~/components/core/provider/SubtitleControllerProvider'
 
 export default function useFileSelect ({ onFileSelect }: {
-  onFileSelect: (file: File | null) => void
+  onFileSelect: (file: File | undefined) => void
 }) {
+  const nuxt = useNuxtApp()
   const videoFile = useVideoFile()
-  function fileSelect (file: File | File[] | null) {
-    if (!file) { return }
-    if (Array.isArray(file)) {
-      videoFile.value = file[0]
-    } else {
-      videoFile.value = file
+
+  function fileChangeEvent (e: InputEvent) {
+    const target = e.target as HTMLInputElement
+    if (target.files) {
+      fileSelect(target.files[0])
     }
-    onFileSelect(videoFile.value)
+  }
+
+  function fileSelect (file: File | File[] | undefined) {
+    if (!file) { return }
+    let fileToSelect: File | undefined = undefined
+    if (Array.isArray(file)) {
+      fileToSelect = file[0] ?? undefined
+    } else {
+      fileToSelect = file
+    }
+    if (fileToSelect) {
+      const valide = fileSelectRules(fileToSelect)
+      if (typeof valide === 'string') {
+        nuxt.$alert.show(valide)
+      } else {
+        videoFile.value = fileToSelect
+        onFileSelect(fileToSelect)
+      }
+    }
   }
   function fileSelectRules (value: File) {
     if (value && value.type.startsWith('video/')) {
@@ -22,7 +40,6 @@ export default function useFileSelect ({ onFileSelect }: {
   }
 
   return {
-    fileSelect,
-    fileSelectRules
+    fileChangeEvent
   }
 }

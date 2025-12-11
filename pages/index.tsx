@@ -1,10 +1,7 @@
-import { VBtn, VCol, VContainer, VIcon, VRow, VSlider } from 'vuetify/components'
-import { mdiFileExport, mdiPlus, mdiRedo, mdiUndo } from '@mdi/js'
-import styles from '~/assets/styles/pages/index.module.sass'
 import AlertDisplay from '~/components/core/alert/ui/AlertDisplay'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
 import { provideSubtitleController } from '~/components/core/provider/SubtitleControllerProvider'
-import FileSelect from '~/components/core/file-select/ui/FileSelect'
+import FileSelect from '~/components/core/file-select/ui/FileSelect.vue'
 import useFFmpeg from '~/components/core/file-select/composables/useFFmpeg'
 import TimeBar from '~/components/core/timeline/ui/TimeBar'
 import WaveBar from '~/components/core/timeline/ui/WaveBar'
@@ -13,12 +10,30 @@ import CueBar from '~/components/core/cue/ui/CueBar'
 import CueEditArea from '~/components/core/cue/ui/CueEditArea'
 import CurrentTimeCursor from '~/components/core/timeline/ui/CurrentTimeCursor'
 import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
+import { Button } from '~/components/ui/button'
+import { Plus, Undo, Redo, Save } from 'lucide-vue-next'
+import { Slider } from '~/components/ui/slider'
+import { ClientOnly } from '#components'
 
 export default defineNuxtComponent({
   name: 'IndexPage',
   setup () {
     const nuxt = useNuxtApp()
     const data = provideSubtitleController()
+
+    const pixPerSec = computed<number[]>({
+      get: () => [data.pixPerSec.value],
+      set: (value) => {
+        if (value[0] === undefined) { return }
+        if (value[0] === data.pixPerSec.value) { return }
+        data.pixPerSec.value = value[0]
+      }
+    })
+
+    const timeBarHeight = ref(20)
+    const fontSize = ref(12)
+    const waveHeight = ref(50)
+
     const { create: createCue, get: getCue, allIds, undo, redo, undoAble, redoAble } = data.cueStore
     const cueCount = computed(() => allIds.value.length)
     const allCues = computed(() => allIds.value.map(id => getCue(id)))
@@ -32,7 +47,7 @@ export default defineNuxtComponent({
       clearVideoFileObjectUrl()
     })
 
-    async function onFileSelect (file: File | null) {
+    async function onFileSelect (file: File | undefined) {
       if (!file) { return }
       const { wave, scaleValue, duration: convertedDuration } = await convertWave(file as File, data.audioRate.value)
       // take duration of file
@@ -59,11 +74,9 @@ export default defineNuxtComponent({
       URL.revokeObjectURL(url)
     }
 
-    const timeBarHeight = ref(20)
-    const fontSize = ref(12)
-    const waveHeight = ref(50)
     return {
       ...data,
+      pixPerSec,
       redo,
       undo,
       undoAble,
@@ -77,86 +90,75 @@ export default defineNuxtComponent({
       createCue,
       saveAsFile
     }
+    
   },
   render () {
-    return <VContainer class={styles['index-page']} fluid>
+    return <section class="flex flex-col gap-2 flex-1 p-4">
       <AlertDisplay />
-      <VRow class={styles['input-area']}>
-        <VCol>
+      <div class="flex grow gap-2">
+        <div class="flex flex-col">
           <FileSelect onFileSelect={this.onFileSelect} />
-        </VCol>
-      </VRow>
-      <div class={styles['cue-area']}>
-        <VRow class="tw-pb-2" justify='space-between' dense>
-          <VCol cols="auto">
-            <VBtn onClick={this.createCue} icon>
-              <VIcon icon={mdiPlus}></VIcon>
-            </VBtn>
-          </VCol>
-          <VCol cols="auto">
-            <VBtn onClick={this.undo} icon disabled={!this.undoAble}>
-              <VIcon icon={mdiUndo}></VIcon>
-            </VBtn>
-          </VCol>
-          <VCol cols="auto">
-            <VBtn onClick={this.redo} icon disabled={!this.redoAble}>
-              <VIcon icon={mdiRedo}></VIcon>
-            </VBtn>
-          </VCol>
-          <VCol cols="auto">
-            <VBtn
-              icon
-              disabled={!this.cueCount}
-              onClick={this.saveAsFile}
-            >
-              <VIcon icon={mdiFileExport}></VIcon>
-            </VBtn>
-          </VCol>
-        </VRow>
-        <CueEditArea />
+          <div class="flex justify-between gap-2 pt-2">
+            <Button onClick={this.createCue} class="rounded-full">
+              <Plus />
+            </Button>
+            <Button onClick={this.undo} disabled={!this.undoAble} class="rounded-full">
+              <Undo />
+            </Button>
+            <Button onClick={this.redo} disabled={!this.redoAble} class="rounded-full">
+              <Redo />
+            </Button>
+            <Button onClick={this.saveAsFile} disabled={!this.allCues.length} class="rounded-full">
+              <Save />
+            </Button>
+          </div>
+          <div class="flex grow w-full">
+            <CueEditArea />
+          </div>
+        </div>
+        <div class="flex-1">
+          <ClientOnly>
+            <VideoPlayer
+              v-model:currentTime={this.currentTime}
+              subscript={this.allCues}
+              src={this.videoFileObjectUrl || undefined}
+            />
+          </ClientOnly>
+        </div>
       </div>
-      <VideoPlayer
-        class={styles['video-area']}
-        v-model:currentTime={this.currentTime}
-        subscript={this.allCues}
-        src={this.videoFileObjectUrl || undefined}
-      ></VideoPlayer>
-      <div class={styles['wave-area']}>
-        <VRow class="tw-flex-nowrap">
-          <VCol class="tw-overflow-scroll">
-            <BarArea>
-              {{
-                canvas: () => (
-                  <>
-                    <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
-                    <WaveBar waveHeight={this.waveHeight} />
-                  </>
-                ),
-                default: () => (
-                  <CueBar />
-                ),
-                cursor: () => (
-                  <>
-                    <CurrentTimeCursor />
-                    <CurrentCursor />
-                  </>
-                )
-              }}
-            </BarArea>
-          </VCol>
-          <VCol cols="auto" class={styles['level-slider']}>
-            <VSlider
+      <div class="flex w-full grow-0 gap-2">
+        <BarArea class="flex grow">
+          {{
+            canvas: () => (
+              <>
+                <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
+                <WaveBar waveHeight={this.waveHeight} />
+              </>
+            ),
+            default: () => (
+              <CueBar />
+            ),
+            cursor: () => (
+              <>
+                <CurrentTimeCursor />
+                <CurrentCursor />
+              </>
+            )
+          }}
+        </BarArea>
+        <div class="grow-0">
+          <ClientOnly>
+            <Slider
               v-model={this.pixPerSec}
-              direction="vertical"
-              reverse
-              hideDetails
-              step={5}
+              orientation="vertical"
               max={1000}
               min={5}
+              step={5}
+              inverted
             />
-          </VCol>
-        </VRow>
+          </ClientOnly>
+        </div>
       </div>
-    </VContainer>
+    </section>
   }
 })

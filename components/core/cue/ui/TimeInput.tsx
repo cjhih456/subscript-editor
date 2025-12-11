@@ -1,4 +1,4 @@
-import { VTextField } from 'vuetify/components'
+import { InputGroup, InputGroupInput } from '~/components/ui/input-group'
 
 export default defineNuxtComponent({
   name: 'TimeInput',
@@ -6,10 +6,6 @@ export default defineNuxtComponent({
     modelValue: {
       type: Number,
       default: 0
-    },
-    errorMessage: {
-      type: String,
-      default: ''
     }
   },
   emits: ['update:modelValue', 'change'],
@@ -39,11 +35,8 @@ export default defineNuxtComponent({
     return { data }
   },
   render () {
-    return <VTextField
-      v-model={this.data.input}
-      errorMessages={this.errorMessage}
-      hideDetails
-      density='compact'
-    ></VTextField>
+    return <InputGroup>
+      <InputGroupInput v-model={this.data.input} />
+    </InputGroup>
   }
 })

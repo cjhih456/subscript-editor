@@ -1,5 +1,6 @@
 import type { ShallowRef } from 'vue'
 import { useDisplayWidth, usePixPerSec, useScrollValue, useWaveData, useAudioRate, useWaveScaleValue } from '../../provider/SubtitleControllerProvider'
+import WaveBarRenderWorker from './useWaveBarRender.worker?worker&inline'
 import type { WaveBarRenderParams } from './useWaveBarRender.worker'
 
 export default function useWaveBarRender (
@@ -23,10 +24,7 @@ export default function useWaveBarRender (
     offscreenCanvas = canvas.value.transferControlToOffscreen()
 
     // Worker 생성
-    worker = new Worker(
-      new URL('./useWaveBarRender.worker.ts', import.meta.url),
-      { type: 'module' }
-    )
+    worker = new WaveBarRenderWorker()
 
     // Worker에 OffscreenCanvas 전송
     worker.postMessage(
@@ -50,6 +48,7 @@ export default function useWaveBarRender (
 
     const canvasWidth = canvas.value.offsetWidth
     canvas.value.setAttribute('width', canvasWidth.toString())
+    const waveColor = canvas.value.computedStyleMap().get('color')?.toString() || 'black'
     const waveDataRaw = toRaw(waveData.value)
 
     if (!waveDataRaw) { return }
@@ -62,7 +61,8 @@ export default function useWaveBarRender (
       scrollTime: scrollTime.value,
       waveData: waveDataRaw,
       waveDataLength: waveDataRaw.byteLength,
-      waveScaleValue: waveScaleValue.value
+      waveScaleValue: waveScaleValue.value,
+      waveColor: waveColor
     }
 
     worker.postMessage({
@@ -71,7 +71,9 @@ export default function useWaveBarRender (
     })
   }
 
-  watch(() => [displayWidth.value, waveData.value, pixPerSec.value, scrollTime.value, waveHeight], () => {
+  const colorMode = useColorMode()
+
+  watch(() => [displayWidth.value, waveData.value, pixPerSec.value, scrollTime.value, waveHeight, colorMode.value], () => {
     requestAnimationFrame(() => {
       render()
     })

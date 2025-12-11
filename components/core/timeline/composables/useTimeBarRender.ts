@@ -1,17 +1,7 @@
 import type { ShallowRef } from 'vue'
 import { usePixPerSec, useScrollValue, useDisplayWidth } from '../../provider/SubtitleControllerProvider'
-
-interface TimeBarRenderParams {
-  canvasWidth: number
-  timeBarHeight: number
-  fontSize: number
-  pixPerSec: number
-  scrollTime: number
-  stepLevel: {
-    format: string
-    stepTime: number
-  }
-}
+import TimeBarRenderWorker from './useTimeBarRender.worker?worker&inline'
+import type { TimeBarRenderParams } from './useTimeBarRender.worker'
 
 export default function useTimeBarRender (
   canvas: Readonly<ShallowRef<HTMLCanvasElement | null>>,
@@ -81,10 +71,7 @@ export default function useTimeBarRender (
     offscreenCanvas = canvas.value.transferControlToOffscreen()
 
     // Worker 생성
-    worker = new Worker(
-      new URL('./useTimeBarRender.worker.ts', import.meta.url),
-      { type: 'module' }
-    )
+    worker = new TimeBarRenderWorker()
 
     // Worker에 OffscreenCanvas 전송
     worker.postMessage(
@@ -109,13 +96,18 @@ export default function useTimeBarRender (
     const canvasWidth = canvas.value.offsetWidth
     canvas.value.setAttribute('width', canvasWidth.toString())
 
+    const timeColor = canvas.value.computedStyleMap().get('color')?.toString() || 'black'
+    const timeBorderColor = canvas.value.computedStyleMap().get('border-color')?.toString() || 'black'
+
     const params: TimeBarRenderParams = {
       canvasWidth,
       timeBarHeight,
       fontSize,
       pixPerSec: pixPerSec.value,
       scrollTime: scrollTime.value,
-      stepLevel: stepLevel.value
+      stepLevel: stepLevel.value,
+      timeColor,
+      timeBorderColor
     }
 
     worker.postMessage({
@@ -124,7 +116,9 @@ export default function useTimeBarRender (
     })
   }
 
-  watch(() => [displayWidth.value, scrollTime.value, pixPerSec.value, timeBarHeight, fontSize], () => {
+  const colorMode = useColorMode()
+
+  watch(() => [displayWidth.value, scrollTime.value, pixPerSec.value, timeBarHeight, fontSize, colorMode.value], () => {
     requestAnimationFrame(() => {
       render()
     })

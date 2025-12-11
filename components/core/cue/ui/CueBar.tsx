@@ -15,7 +15,7 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <div class="tw-relative"
+    return <div class="relative"
         style={{
           width: `${this.duration * this.pixPerSec}px`,
           height: '20px'

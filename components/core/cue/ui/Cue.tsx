@@ -31,11 +31,11 @@ export default defineNuxtComponent({
   render () {
     return <div
       ref='cue'
-      class="tw-bg-gray-300/60 tw-absolute tw-h-full tw-overflow-hidden tw-border-gray-950 tw-border-[1px]"
+      class="bg-gray-300/60 absolute h-full overflow-hidden border-gray-950 border"
       style={this.style}
     >
-      <span class="tw-pointer-events-none">
-        <pre class="selection:tw-bg-transparent tw-pointer-events-none">{this.cue.text ?? ''}</pre>
+      <span class="pointer-events-none">
+        <pre class="selection:bg-transparent pointer-events-none">{this.cue.text ?? ''}</pre>
       </span>
     </div>
   }
