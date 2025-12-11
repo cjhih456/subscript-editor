@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout class="bg-background text-foreground">
-    <template #header>
+    <template v-if="headerStatus" #header>
       <component :is="headerStatus" />
     </template>
     <template #default>
