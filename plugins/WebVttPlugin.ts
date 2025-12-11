@@ -101,9 +101,9 @@ export default defineNuxtPlugin(() => {
       return acc + `${st} --> ${et}\n${text}\n\n`
     }, 'WEBVTT\n\n')
   }
-  function makeVttFromJson (jsonData: VTTCueSlim[]) {
+  async function makeVttFromJson (jsonData: VTTCueSlim[]) {
     if (jsonData) {
-      return parseVtt(jsonToString({ cues: jsonData }))
+      return await parseVtt(jsonToString({ cues: jsonData }))
     }
     return { cues: [] } as TranslateResult
   }
