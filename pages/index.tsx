@@ -95,24 +95,24 @@ export default defineNuxtComponent({
   render () {
     return <section class="flex flex-col gap-2 flex-1 p-4">
       <AlertDisplay />
-      <div class="flex grow">
+      <div class="flex grow gap-2">
         <div class="flex flex-col">
           <FileSelect onFileSelect={this.onFileSelect} />
-          <div class="flex justify-between gap-2">
-            <Button onClick={this.createCue}>
+          <div class="flex justify-between gap-2 pt-2">
+            <Button onClick={this.createCue} class="rounded-full">
               <Plus />
             </Button>
-            <Button onClick={this.undo} disabled={!this.undoAble}>
+            <Button onClick={this.undo} disabled={!this.undoAble} class="rounded-full">
               <Undo />
             </Button>
-            <Button onClick={this.redo} disabled={!this.redoAble}>
+            <Button onClick={this.redo} disabled={!this.redoAble} class="rounded-full">
               <Redo />
             </Button>
-            <Button onClick={this.saveAsFile}>
+            <Button onClick={this.saveAsFile} disabled={!this.allCues.length} class="rounded-full">
               <Save />
             </Button>
           </div>
-          <div class="flex grow overflow-hidden">
+          <div class="flex grow w-full">
             <CueEditArea />
           </div>
         </div>

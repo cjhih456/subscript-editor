@@ -13,7 +13,7 @@ export default defineNuxtComponent({
   },
   render () {
     return <ClientOnly>
-      <Accordion>
+      <Accordion collapsible>
         {this.allIds.map(id => <CueEdit key={id} idx={id} />)}
       </Accordion>
     </ClientOnly>
