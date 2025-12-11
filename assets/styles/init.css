@@ -74,10 +74,10 @@
 * {
   scrollbar-color: var(--color-primary) var(--color-primary-foreground);
 }
-*::scrollbar-color {
-  background: var(--color-primary);
-}
 *::-webkit-scrollbar-thumb {
   background: var(--color-primary);
   border: 1px solid var(--color-primary);
+}
+*::-webkit-scrollbar-track {
+  background: var(--color-primary-foreground);
 }
