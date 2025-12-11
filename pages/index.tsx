@@ -20,6 +20,20 @@ export default defineNuxtComponent({
   setup () {
     const nuxt = useNuxtApp()
     const data = provideSubtitleController()
+
+    const pixPerSec = computed<number[]>({
+      get: () => [data.pixPerSec.value],
+      set: (value) => {
+        if (value[0] === undefined) { return }
+        if (value[0] === data.pixPerSec.value) { return }
+        data.pixPerSec.value = value[0]
+      }
+    })
+
+    const timeBarHeight = ref(20)
+    const fontSize = ref(12)
+    const waveHeight = ref(50)
+
     const { create: createCue, get: getCue, allIds, undo, redo, undoAble, redoAble } = data.cueStore
     const cueCount = computed(() => allIds.value.length)
     const allCues = computed(() => allIds.value.map(id => getCue(id)))
@@ -60,11 +74,9 @@ export default defineNuxtComponent({
       URL.revokeObjectURL(url)
     }
 
-    const timeBarHeight = ref(20)
-    const fontSize = ref(12)
-    const waveHeight = ref(50)
     return {
       ...data,
+      pixPerSec,
       redo,
       undo,
       undoAble,
@@ -78,11 +90,12 @@ export default defineNuxtComponent({
       createCue,
       saveAsFile
     }
+    
   },
   render () {
-    return <section class="flex flex-col gap-2">
+    return <section class="flex flex-col gap-2 flex-1 p-4">
       <AlertDisplay />
-      <div class="flex flex-1">
+      <div class="flex grow">
         <div class="flex flex-col">
           <FileSelect onFileSelect={this.onFileSelect} />
           <div class="flex justify-between gap-2">
@@ -99,88 +112,51 @@ export default defineNuxtComponent({
               <Save />
             </Button>
           </div>
-          <CueEditArea />
+          <div class="flex grow overflow-hidden">
+            <CueEditArea />
+          </div>
         </div>
         <div class="flex-1">
-          {/* <VideoPlayer /> */}
-        </div>
-      </div>
-      <div class="flex flex-auto w-full">
-        <div class="flex-1">
-          {/* <BarArea>
-            {{
-              canvas: () => (
-                <>
-                  <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
-                  <WaveBar waveHeight={this.waveHeight} />
-                </>
-              ),
-              default: () => (
-                <CueBar />
-              ),
-              cursor: () => (
-                <>
-                  <CurrentTimeCursor />
-                  <CurrentCursor />
-                </>
-              )
-            }}
-          </BarArea> */}
-        </div>
-        <div class="flex-auto">
           <ClientOnly>
-            {/* <Slider
-              v-model={this.pixPerSec}
-              orientation="vertical"
-              step={5}
-              max={1000}
-              min={5}
-            /> */}
+            <VideoPlayer
+              v-model:currentTime={this.currentTime}
+              subscript={this.allCues}
+              src={this.videoFileObjectUrl || undefined}
+            />
           </ClientOnly>
         </div>
       </div>
-      {/**
-       * 
-    // <VContainer class={styles['index-page']} fluid>
-    
-    //   <div class={styles['wave-area']}>
-    //     <VRow class="tw-flex-nowrap">
-    //       <VCol class="tw-overflow-scroll">
-            <BarArea>
-              {{
-                canvas: () => (
-                  <>
-                    <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
-                    <WaveBar waveHeight={this.waveHeight} />
-                  </>
-                ),
-                default: () => (
-                  <CueBar />
-                ),
-                cursor: () => (
-                  <>
-                    <CurrentTimeCursor />
-                    <CurrentCursor />
-                  </>
-                )
-              }}
-            </BarArea>
-    //       </VCol>
-    //       <VCol cols="auto" class={styles['level-slider']}>
-    //         <VSlider
-    //           v-model={this.pixPerSec}
-    //           direction="vertical"
-    //           reverse
-    //           hideDetails
-    //           step={5}
-    //           max={1000}
-    //           min={5}
-    //         />
-    //       </VCol>
-    //     </VRow>
-    //   </div>
-    // </VContainer>
-       */}
+      <div class="flex w-full grow-0 gap-2">
+        <BarArea class="flex grow">
+          {{
+            canvas: () => (
+              <>
+                <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
+                <WaveBar waveHeight={this.waveHeight} />
+              </>
+            ),
+            default: () => (
+              <CueBar />
+            ),
+            cursor: () => (
+              <>
+                <CurrentTimeCursor />
+                <CurrentCursor />
+              </>
+            )
+          }}
+        </BarArea>
+        <div class="grow-0">
+          <ClientOnly>
+            <Slider
+              v-model={this.pixPerSec}
+              orientation="vertical"
+              max={1000}
+              min={5}
+            />
+          </ClientOnly>
+        </div>
+      </div>
     </section>
   }
 })
