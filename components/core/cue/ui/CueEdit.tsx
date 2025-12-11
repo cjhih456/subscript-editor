@@ -129,8 +129,8 @@ export default defineNuxtComponent({
           </div>
           <InputGroup>
             <InputGroupTextarea
-              v-model={this.text.value.value}
-              onChange={this.onTextChange}
+              modelValue={this.text.value.value}
+              onUpdate:modelValue={this.onTextChange}
             />
           </InputGroup>
         </form>
