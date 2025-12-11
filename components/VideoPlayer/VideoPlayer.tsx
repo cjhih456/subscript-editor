@@ -47,6 +47,11 @@ export default defineNuxtComponent({
     function updateStartedState () {
       status.started = videoPlayer.value?.hasStarted_ || false
     }
+
+    function videoPlayerTriggerTextTrackChange () {
+      if (!videoPlayer.value) { return }
+      videoPlayer.value.trigger({ type: 'texttrackchange' })
+    }
     watch(() => props.src, (newValue) => {
       const currentSrc = videoPlayer.value?.currentSrc()
       if (!currentSrc || newValue !== currentSrc || !currentSrc.endsWith(newValue)) {
@@ -69,7 +74,7 @@ export default defineNuxtComponent({
           textTrack.value?.addCue(cue as TextTrackCue)
         })
         textTrack.value.mode = 'showing'
-        videoPlayer.value.trigger({ type: 'texttrackchange' })
+        videoPlayerTriggerTextTrackChange()
       }
     }, { deep: true })
     onMounted(() => {
@@ -130,30 +135,26 @@ export default defineNuxtComponent({
             if (!videoPlayer.value) { return }
             textTrack.value = videoPlayer.value.addTextTrack('subtitles', 'En', 'en')
             videoPlayer.value.trigger({ type: 'loadedmetadata', target: textTrack.value })
-            videoPlayer.value.on(['timeupdate'], () => {
-              videoPlayer.value?.trigger({ type: 'texttrackchange' })
-            })
+            videoPlayer.value.on(['timeupdate'], videoPlayerTriggerTextTrackChange)
             videoPlayer.value.on(['useractive', 'userinactive'], updateUserActiveState)
             videoPlayer.value.on(
               ['play', 'pause', 'ended', 'seeked'],
               updatePlayingState
             )
-            videoPlayer.value.on(['loadstart', 'play'], updateStartedState)
+            videoPlayer.value.on(['loadstart', 'play', 'firstplay'], updateStartedState)
           })
         }
       }, 30)
     })
     onBeforeUnmount(() => {
       if (!videoPlayer.value) { return }
-      videoPlayer.value.off(['timeupdate'], () => {
-        videoPlayer.value?.trigger({ type: 'texttrackchange' })
-      })
+      videoPlayer.value.off(['timeupdate'], videoPlayerTriggerTextTrackChange)
       videoPlayer.value.off(['useractive', 'userinactive'], updateUserActiveState)
       videoPlayer.value.off(
         ['play', 'pause', 'ended', 'seeked'],
         updatePlayingState
       )
-      videoPlayer.value.off(['loadstart', 'firstplay'], updateStartedState)
+      videoPlayer.value.off(['loadstart', 'play', 'firstplay'], updateStartedState)
     })
 
     const currentTime = computed({
