@@ -35,7 +35,9 @@
   --color-sidebar-ring: oklch(0.708 0 0);
 }
 
-@theme dark {
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
   --color-background: oklch(0.145 0 0);
   --color-foreground: oklch(0.985 0 0);
   --color-card: oklch(0.205 0 0);
@@ -69,15 +71,13 @@
   --color-sidebar-ring: oklch(0.556 0 0);
 }
 
-@layer utilities {
-  * {
-    scrollbar-color: theme(colors.primary) theme(colors.primary.foreground);
-  }
-  *::scrollbar-color {
-    background: theme(colors.primary);
-  }
-  *::-webkit-scrollbar-thumb {
-    background: theme(colors.primary);
-    border: 1px solid theme(colors.primary);
-  }
+* {
+  scrollbar-color: var(--color-primary) var(--color-primary-foreground);
+}
+*::scrollbar-color {
+  background: var(--color-primary);
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
 }

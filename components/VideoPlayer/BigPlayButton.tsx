@@ -22,7 +22,7 @@ export default defineNuxtComponent({
   },
   render () {
     return <Button
-      class={['absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-transparent shadow-none text-white', this.started ? 'hidden' : '']}
+      class={['absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-transparent shadow-none text-primary', this.started ? 'hidden' : '']}
       onClick={this.clickEvent}
       variant="ghost"
       size='video-large-btn'
