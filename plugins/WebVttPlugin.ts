@@ -31,7 +31,7 @@ export default defineNuxtPlugin(() => {
   function convertSecondToTime (sec: number) {
     return nuxt.$dayjs.utc(sec * 1000).format(timeFormat)
   }
-  function parseSbv (txt: string) {
+  async function parseSbv (txt: string) {
     const data = { cues: [] as VTTCue[] } as TranslateResult
     txt
       .toString()
@@ -86,7 +86,7 @@ export default defineNuxtPlugin(() => {
     if (result.cues.length) { return result }
     result = await parseSrt(textData)
     if (result.cues.length) { return result }
-    result = parseSbv(textData)
+    result = await parseSbv(textData)
     return result.cues.length ? result : false
   }
   function jsonToString (jsonData: TranslateResult) {
