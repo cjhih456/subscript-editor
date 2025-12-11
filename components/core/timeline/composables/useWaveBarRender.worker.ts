@@ -7,6 +7,7 @@ export interface WaveBarRenderParams {
   waveData: SharedArrayBuffer | null
   waveDataLength: number
   waveScaleValue: number
+  waveColor: string
 }
 
 interface WorkerMessage {
@@ -20,7 +21,7 @@ let ctx: OffscreenCanvasRenderingContext2D | null = null
 function renderWaveBar (params: WaveBarRenderParams) {
   if (!ctx || !params.waveData) { return }
 
-  const { canvasWidth, waveHeight, pixPerSec, audioRate, scrollTime, waveData, waveDataLength, waveScaleValue } = params
+  const { canvasWidth, waveHeight, pixPerSec, audioRate, scrollTime, waveData, waveDataLength, waveScaleValue, waveColor } = params
 
   // SharedArrayBuffer를 Int8Array로 래핑
   const waveDataArray = new Int8Array(waveData)
@@ -30,7 +31,7 @@ function renderWaveBar (params: WaveBarRenderParams) {
 
   ctx.canvas.width = canvasWidth
   ctx.canvas.height = waveHeight
-  ctx.fillStyle = 'black'
+  ctx.fillStyle = waveColor
   ctx.clearRect(0, 0, canvasWidth, waveHeight)
   ctx.beginPath()
 
@@ -51,6 +52,7 @@ function renderWaveBar (params: WaveBarRenderParams) {
     for (let j = start; j < end; j++) {
       if (j >= 0 && j < waveDataLength) {
         const value = waveDataArray[j]
+        if (value === undefined) { break }
         if (value > max) { max = value }
         if (value < min) { min = value }
       }

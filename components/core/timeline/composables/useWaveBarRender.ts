@@ -48,6 +48,7 @@ export default function useWaveBarRender (
 
     const canvasWidth = canvas.value.offsetWidth
     canvas.value.setAttribute('width', canvasWidth.toString())
+    const waveColor = canvas.value.computedStyleMap().get('color')?.toString() || 'black'
     const waveDataRaw = toRaw(waveData.value)
 
     if (!waveDataRaw) { return }
@@ -60,7 +61,8 @@ export default function useWaveBarRender (
       scrollTime: scrollTime.value,
       waveData: waveDataRaw,
       waveDataLength: waveDataRaw.byteLength,
-      waveScaleValue: waveScaleValue.value
+      waveScaleValue: waveScaleValue.value,
+      waveColor: waveColor
     }
 
     worker.postMessage({

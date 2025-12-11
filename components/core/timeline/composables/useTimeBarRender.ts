@@ -96,13 +96,18 @@ export default function useTimeBarRender (
     const canvasWidth = canvas.value.offsetWidth
     canvas.value.setAttribute('width', canvasWidth.toString())
 
+    const timeColor = canvas.value.computedStyleMap().get('color')?.toString() || 'black'
+    const timeBorderColor = canvas.value.computedStyleMap().get('border-color')?.toString() || 'black'
+
     const params: TimeBarRenderParams = {
       canvasWidth,
       timeBarHeight,
       fontSize,
       pixPerSec: pixPerSec.value,
       scrollTime: scrollTime.value,
-      stepLevel: stepLevel.value
+      stepLevel: stepLevel.value,
+      timeColor,
+      timeBorderColor
     }
 
     worker.postMessage({

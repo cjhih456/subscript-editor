@@ -8,6 +8,8 @@ export interface TimeBarRenderParams {
     format: string
     stepTime: number
   }
+  timeColor: string,
+  timeBorderColor: string,
 }
 
 interface WorkerMessage {
@@ -36,11 +38,11 @@ function formatTime (time: number, format: string): string {
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
 }
 
-function drawTimeLabel (time: string, position: number, timeBarHeight: number, fontSize: number) {
+function drawTimeLabel (time: string, position: number, timeBarHeight: number, fontSize: number, timeColor: string, timeBorderColor: string) {
   if (!ctx) { return }
-  ctx.fillStyle = 'black'
+  ctx.fillStyle = timeColor
   ctx.fillText(time, position + 3, (fontSize + timeBarHeight) / 2)
-  ctx.strokeStyle = 'black'
+  ctx.strokeStyle = timeBorderColor
   ctx.beginPath()
   ctx.moveTo(position, 0)
   ctx.lineTo(position, timeBarHeight)
@@ -50,7 +52,7 @@ function drawTimeLabel (time: string, position: number, timeBarHeight: number, f
 function renderTimeBar (params: TimeBarRenderParams) {
   if (!ctx) { return }
 
-  const { canvasWidth, timeBarHeight, fontSize, pixPerSec, scrollTime, stepLevel } = params
+  const { canvasWidth, timeBarHeight, fontSize, pixPerSec, scrollTime, stepLevel, timeColor, timeBorderColor } = params
   ctx.canvas.width = canvasWidth
   ctx.canvas.height = timeBarHeight
   ctx.clearRect(0, 0, canvasWidth, timeBarHeight)
@@ -63,7 +65,7 @@ function renderTimeBar (params: TimeBarRenderParams) {
 
   while (position < canvasWidth) {
     const timeString = formatTime(time, stepLevel.format)
-    drawTimeLabel(timeString, position, timeBarHeight, fontSize)
+    drawTimeLabel(timeString, position, timeBarHeight, fontSize, timeColor, timeBorderColor)
     time += stepLevel.stepTime
     position += stepLevel.stepTime * pixPerSec
   }
