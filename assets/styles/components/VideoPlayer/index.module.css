@@ -1,0 +1,8 @@
+@reference '~/assets/styles/init.css';
+
+.video-player {
+  @apply relative h-full w-full
+}
+.video-player video {
+  @apply absolute h-full w-full top-0 left-0
+}

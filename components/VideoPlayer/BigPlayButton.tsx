@@ -1,7 +1,6 @@
 import type Player from 'video.js/dist/types/player'
-import { VBtn, VIcon } from 'vuetify/lib/components/index.mjs'
-import { mdiPlayCircleOutline } from '@mdi/js'
-import style from '@/assets/styles/components/VideoPlayer/VideoPlayer.module.sass'
+import { Button } from '~/components/ui/button'
+import { PlayCircle } from 'lucide-vue-next'
 export default defineNuxtComponent({
   name: 'BigPlayButton',
   props: {
@@ -22,14 +21,13 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <VBtn
-      ripple={false}
-      class={[style['big-play-btn'], this.started ? style['has-started'] : '']}
+    return <Button
+      class={['absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-transparent shadow-none text-white', this.started ? 'hidden' : '']}
       onClick={this.clickEvent}
-      icon
-      size={80}
+      variant="ghost"
+      size='video-large-btn'
     >
-      <VIcon icon={mdiPlayCircleOutline} size={64}></VIcon>
-    </VBtn>
+      <PlayCircle class="size-16" size={64}  />
+    </Button>
   }
 })

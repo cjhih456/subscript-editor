@@ -1,8 +1,8 @@
-import { VBtn, VIcon, VSlider } from 'vuetify/components'
-import { mdiPlay, mdiPause, mdiStop, mdiVolumeMute, mdiVolumeHigh, mdiVolumeLow, mdiVolumeMedium, mdiVolumeVariantOff, mdiFullscreen, mdiFullscreenExit } from '@mdi/js'
+import { Button } from '~/components/ui/button'
+import { Play, Pause, Square, Volume2, Volume, Maximize, Minimize, VolumeOff, Volume1 } from 'lucide-vue-next'
 import type Player from 'video.js/dist/types/player'
 import type { PropType } from 'vue'
-import style from '@/assets/styles/components/VideoPlayer/VideoPlayer.module.sass'
+import { Slider } from '~/components/ui/slider'
 export default defineNuxtComponent({
   name: 'ControlAreaVue',
   props: {
@@ -32,7 +32,7 @@ export default defineNuxtComponent({
     const nuxt = useNuxtApp()
 
     // Play & Pause
-    const playIcon = computed(() => props.isPlaying ? mdiPause : mdiPlay)
+    const playIcon = computed(() => props.isPlaying ? Pause : Play)
     const togglePlayPause = () => {
       if (props.isPlaying) {
         pauseVideo()
@@ -65,13 +65,13 @@ export default defineNuxtComponent({
     })
     const volumeIcon = computed(() => {
       if (volumeData.value.mute) {
-        return mdiVolumeMute
+        return VolumeOff
       } else if (volumeData.value.value > 0.8) {
-        return mdiVolumeHigh
+        return Volume2
       } else if (volumeData.value.value >= 0.5 && volumeData.value.value <= 0.8) {
-        return mdiVolumeMedium
+        return Volume1
       } else {
-        return volumeData.value.value ? mdiVolumeLow : mdiVolumeVariantOff
+        return volumeData.value.value ? Volume : VolumeOff
       }
     })
     function updateVolumeState () {
@@ -105,7 +105,7 @@ export default defineNuxtComponent({
         }
       }
     }
-    const fullscreenIcon = computed(() => fullscreenData.value ? mdiFullscreenExit : mdiFullscreen)
+    const fullscreenIcon = computed(() => fullscreenData.value ? Minimize : Maximize)
 
     // CurrentTime
     const currentTime = ref(0)
@@ -188,30 +188,32 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <div class={[style['control-bar']]}>
-      <VBtn size="x-small" icon onClick={this.togglePlayPause}>
-        <VIcon icon={this.playIcon}></VIcon>
-      </VBtn>
-      <VBtn size="x-small" icon onClick={this.stopVideo}>
-        <VIcon icon={mdiStop}></VIcon>
-      </VBtn>
-      <span class={style['duration-area']}>{this.durationWithCurrentTime}</span>
-      <VSlider
-        class={style['seekbar-area']}
-        step={0}
-        hideDetails
-        max={this.duration}
-        modelValue={this.currentTime}
-        onUpdate:modelValue={this.seekCurrentTime}
-      ></VSlider>
-      <div class={style['volume-area']}>
-        <VBtn size="x-small" icon onClick={this.toggleMute}>
-          <VIcon icon={this.volumeIcon}></VIcon>
-        </VBtn>
+    return <div class="h-[40px] gap-2 absolute bottom-0 left-0 right-0 flex items-center px-2 text-foreground bg-gray-500 bg-opacity-60">
+      <Button variant="outline" size="icon-sm" onClick={this.togglePlayPause}>
+        <this.playIcon />
+      </Button>
+      <Button variant="outline" size="icon-sm" onClick={this.stopVideo}>
+        <Square />
+      </Button>
+      <span>{this.durationWithCurrentTime}</span>
+      <div class="grow px-2">
+        <Slider
+          max={this.duration}
+          min={0}
+          modelValue={[this.currentTime]}
+          onUpdate:modelValue={(value) => {
+            this.seekCurrentTime(value?.[0] || 0)
+          }}
+        />
       </div>
-      <VBtn size="x-small" icon onClick={this.toggleFullscreen}>
-        <VIcon icon={this.fullscreenIcon}></VIcon>
-      </VBtn>
+      <div class="relative">
+        <Button variant="outline" size="icon-sm" onClick={this.toggleMute}>
+          <this.volumeIcon />
+        </Button>
+      </div>
+      <Button variant="outline" size="icon-sm" onClick={this.toggleFullscreen}>
+        <this.fullscreenIcon />
+      </Button>
     </div>
   }
 })

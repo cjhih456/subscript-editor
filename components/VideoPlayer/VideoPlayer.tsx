@@ -2,12 +2,11 @@ import videojs from 'video.js'
 
 import type Player from 'video.js/dist/types/player'
 import { Teleport, type PropType } from 'vue'
-import type { CueData } from '../mixins/Video/CueArea'
-import ControlAreaVue from './ControlAreaVue'
+import type { CueDataInterface } from '~/components/core/cue/composables/useCueStore'
+import ControlArea from './ControlArea'
 import BigPlayButton from './BigPlayButton'
-import { ClientOnly } from '#components'
-import styles from '@/assets/styles/components/VideoPlayer/VideoPlayer.module.sass'
 import type { TranslateResult } from '~/plugins/WebVttPlugin'
+import style from '~/assets/styles/components/VideoPlayer/index.module.css'
 import 'video.js/dist/video-js.css'
 
 export default defineNuxtComponent({
@@ -22,14 +21,14 @@ export default defineNuxtComponent({
       default: 0
     },
     subscript: {
-      type: Array as PropType<CueData[]>,
+      type: Array as PropType<CueDataInterface[]>,
       default: () => []
     }
   },
   emits: ['update:currentTime'],
   setup (props, { emit }) {
     const nuxt = useNuxtApp()
-    const video = ref<Element | null>()
+    const video = useTemplateRef<HTMLVideoElement>('video')
     const videoPlayerReady = ref<boolean>(false)
     const videoPlayer = ref<Player>()
     const textTrack = ref<TextTrack>()
@@ -62,12 +61,12 @@ export default defineNuxtComponent({
       if (newVal && textTrack.value) {
         if (textTrackCueList.value?.cues.length) {
           textTrackCueList.value?.cues.forEach((cue) => {
-            textTrack.value?.removeCue(cue)
+            textTrack.value?.removeCue(cue as TextTrackCue)
           })
         }
         textTrackCueList.value = await nuxt.$webVtt.makeVttFromJson(newVal)
         textTrackCueList.value.cues.forEach((cue) => {
-          textTrack.value?.addCue(cue)
+          textTrack.value?.addCue(cue as TextTrackCue)
         })
         textTrack.value.mode = 'showing'
         videoPlayer.value.trigger({ type: 'texttrackchange' })
@@ -167,24 +166,22 @@ export default defineNuxtComponent({
         emit('update:currentTime', v)
       }
     })
-    return { video, videoPlayer, videoPlayerReady, status, currentTime }
+    return { videoPlayer, videoPlayerReady, status, currentTime }
   },
   render () {
-    return <div class={styles['video-player']}>
-      <ClientOnly>
-        <video ref={((el) => { this.video = el as Element })}></video>
+    return <div class="relative h-full w-full">
+        <video ref="video" class={style['video-player']}></video>
         {this.videoPlayerReady && <Teleport to={this.videoPlayer && `#${this.videoPlayer.id_}` as string}>
-          <ControlAreaVue
+          <ControlArea
             v-model:currentTime={this.currentTime}
             player={this.videoPlayer}
             isPlaying={this.status.isPlaying}
-          ></ControlAreaVue>
+          ></ControlArea>
           <BigPlayButton
             started={this.status.started}
             player={this.videoPlayer}
           ></BigPlayButton>
         </Teleport>}
-      </ClientOnly>
     </div>
   }
 })
