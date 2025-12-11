@@ -200,6 +200,7 @@ export default defineNuxtComponent({
         <Slider
           max={this.duration}
           min={0}
+          step={0.01}
           modelValue={[this.currentTime]}
           onUpdate:modelValue={(value) => {
             this.seekCurrentTime(value?.[0] || 0)

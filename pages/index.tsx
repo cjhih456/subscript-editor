@@ -153,6 +153,8 @@ export default defineNuxtComponent({
               orientation="vertical"
               max={1000}
               min={5}
+              step={5}
+              inverted
             />
           </ClientOnly>
         </div>
