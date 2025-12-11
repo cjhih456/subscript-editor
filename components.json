@@ -3,7 +3,7 @@
   "style": "default",
   "tailwind": {
     "config": "",
-    "css": "assets/styles/init.sass",
+    "css": "assets/styles/init.css",
     "baseColor": "neutral",
     "cssVariables": true
   },
