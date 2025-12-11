@@ -19,6 +19,8 @@
 - [x] editor history system
 - [x] when rendering timeline & wave, use OffscreenCanvas & Worker
 - [x] use Provide & Inject - done
+- [ ] display long duration convert status
+- [ ] change layout as responsive
 
 ### Whisper endpoint
 [Whisper Setup document](https://ahmetoner.com/whisper-asr-webservice/run/)
