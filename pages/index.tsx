@@ -11,7 +11,7 @@ import CueEditArea from '~/components/core/cue/ui/CueEditArea'
 import CurrentTimeCursor from '~/components/core/timeline/ui/CurrentTimeCursor'
 import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
 import { Button } from '~/components/ui/button'
-import { Icon, Plus, Undo, Redo, Save } from 'lucide-vue-next'
+import { Plus, Undo, Redo, Save } from 'lucide-vue-next'
 import { Slider } from '~/components/ui/slider'
 import { ClientOnly } from '#components'
 
