@@ -14,24 +14,27 @@ export default defineNuxtComponent({
       scrollClientLeft.value = scrollArea.value.getBoundingClientRect().left
     }
 
-    onMounted(() => {
+    function scrollEvent () {
       if (!scrollArea.value) { return }
-      scrollArea.value.addEventListener('scroll', () => {
-        if (!scrollArea.value) { return }
-        scrollValue.value = scrollArea.value.scrollLeft
-      })
+      scrollValue.value = scrollArea.value.scrollLeft
+    }
+
+    onMounted(() => {
+      scrollArea.value?.addEventListener('scroll', scrollEvent)
       window.addEventListener('resize', windowResizeEvent, false)
       windowResizeEvent()
     })
     onBeforeUpdate(() => {
       window.removeEventListener('resize', windowResizeEvent, false)
+      scrollArea.value?.removeEventListener('scroll', scrollEvent)
     })
     onUpdated(() => {
       window.addEventListener('resize', windowResizeEvent, false)
+      scrollArea.value?.addEventListener('scroll', scrollEvent)
     })
-
     onBeforeUnmount(() => {
       window.removeEventListener('resize', windowResizeEvent, false)
+      scrollArea.value?.removeEventListener('scroll', scrollEvent)
     })
   },
   render () {
