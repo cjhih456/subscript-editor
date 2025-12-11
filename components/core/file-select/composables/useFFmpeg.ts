@@ -23,7 +23,7 @@ export default function useFFmpeg () {
     const formData = fetchData('post', {
       audio_file: wavFile
     })
-    return await useCustomFetch('http://localhost:3000/whisper/asr', {
+    return await useCustomFetch<string>('http://localhost:3000/whisper/asr', {
       query: {
         encode: false,
         task: 'transcribe',
@@ -35,7 +35,7 @@ export default function useFFmpeg () {
       duplex: 'half',
       body: formData,
       method: 'post'
-    }).then(async (result: any) => {
+    }).then(async (result: string) => {
       const cueList = await nuxt.$webVtt.parseSubtitle(result)
       if (cueList) {
         return cueList.cues

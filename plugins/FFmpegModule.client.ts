@@ -28,10 +28,10 @@ export default defineNuxtPlugin(() => {
       let watcher: WatchStopHandle
       return new Promise((resolve) => {
         watcher = watch(() => data.loaded, (n) => {
-          n && resolve(true)
+          if (n) { return resolve(true) }
         }, { immediate: true, deep: false })
       }).finally(() => {
-        watcher && watcher()
+        if (watcher) { watcher() }
       })
     }
     setLoading(true)
@@ -104,7 +104,7 @@ export default defineNuxtPlugin(() => {
    * @param options ffmpeg options for wav format file (bitrate, channel, etc)
    * @returns audio file data (Uint8Array)
    */
-  async function transcodeAudio (inputFileName: string, outputFileName: string, options: any = {}) {
+  async function transcodeAudio (inputFileName: string, outputFileName: string, options: Record<string, number | string> = {}) {
     const command = ['-i', inputFileName, '-ar', '16000']
 
     for (const [key, value] of Object.entries(options)) {

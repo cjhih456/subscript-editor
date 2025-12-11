@@ -111,7 +111,7 @@ export default defineNuxtPlugin(() => {
     const stringBlob = jsonToString({ cues: jsonData })
     try {
       return new File([stringBlob], 'webvtt.vtt', { type: 'text/vtt' })
-    } catch (err) {
+    } catch {
       throw new Error('Failed to convert JSON to file')
     }
   }

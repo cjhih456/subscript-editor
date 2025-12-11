@@ -1,4 +1,4 @@
-import { type ShallowRef } from 'vue'
+import type { ShallowRef } from 'vue'
 import { usePixPerSec, useCueStore, useScrollValue } from '../../provider/SubtitleControllerProvider'
 import { useCursorController } from '~/components/core/provider/CursorControllerProvider'
 

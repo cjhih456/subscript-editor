@@ -74,8 +74,6 @@ export default defineNuxtComponent({
     }, { deep: true })
     onMounted(() => {
       setTimeout(() => {
-        // @ts-ignore
-        window.VIDEOJS_NO_DYNAMIC_STYLE = true
         if (video.value) {
           videoPlayer.value = videojs(video.value, {
             controls: true,
@@ -98,7 +96,7 @@ export default defineNuxtComponent({
                 if (!videoPlayer.value) { return }
                 if (e.which === 32) {
                   e.preventDefault()
-                  videoPlayer.value.paused() ? videoPlayer.value.play() : videoPlayer.value.pause()
+                  if (videoPlayer.value.paused()) { videoPlayer.value.play() } else { videoPlayer.value.pause() }
                 } else if (e.which === 77) {
                   e.preventDefault()
                   videoPlayer.value.muted(!videoPlayer.value.muted())

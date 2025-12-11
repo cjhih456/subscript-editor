@@ -1,6 +1,6 @@
 import { ref, provide } from 'vue'
 import useCueStoreOrigin from '~/components/core/cue/composables/useCueStore'
-import { type CueStoreInterface } from '~/components/core/cue/composables/useCueStore'
+import type { CueStoreInterface } from '~/components/core/cue/composables/useCueStore'
 
 export const VIDEO_FILE = Symbol('videoFile')
 export const VIDEO_FILE_OBJECT_URL = Symbol('videoFileObjectUrl')

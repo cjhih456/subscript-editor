@@ -2,13 +2,15 @@ import { ofetch, type FetchOptions } from 'ofetch'
 
 type ApiMethod = 'get' | 'head' | 'patch' | 'post' | 'put' | 'delete' | 'connect' | 'options' | 'trace'
 
+type FormDataValue = Blob | File | string | number | boolean | object | null
+
 export const fetchData = function (
   method: ApiMethod,
-  data: { [key: string]: any }
-): String | FormData | { [key: string]: any } | null {
+  data: Record<string, FormDataValue>
+): string | FormData | Record<string, FormDataValue> | null {
   const values = Object.values(data)
   if (method === 'get') {
-    const dataBuffer = {} as { [key: string]: any }
+    const dataBuffer = {} as Record<string, FormDataValue>
     Object.keys(data).forEach((v) => {
       if (
         typeof data[v] === 'boolean' ||
@@ -27,7 +29,11 @@ export const fetchData = function (
     }
     const formData = new FormData()
     Object.keys(data).forEach((v) => {
-      formData.append(v, data[v])
+      if (data[v] instanceof Blob || data[v] instanceof File) {
+        formData.append(v, data[v])
+      } else {
+        formData.append(v, data[v] as string)
+      }
     })
     return formData
   }
@@ -42,18 +48,17 @@ interface CustomFetch<T> {
 function customFetch<T> (url: string, options?: FetchOptions<'json'> & {method: ApiMethod}) {
   const config = useRuntimeConfig()
   const ctx = {
-    // @ts-ignore
     fetch: ofetch(url, {
       ...options,
       keepalive: options?.keepalive ?? true,
       baseURL: options?.baseURL ?? config.public.BACKEND_API,
       cache: options?.cache ?? 'no-cache'
-      // eslint-disable-next-line require-await
+       
       // async onResponse() {
       //   // { request, response, options }
       //   console.log('[fetch response]')
       // },
-      // eslint-disable-next-line require-await
+       
       // async onRequestError() {
       //   { request, options, error }
       //   console.log('[fetch request error]')
@@ -64,13 +69,13 @@ function customFetch<T> (url: string, options?: FetchOptions<'json'> & {method: 
   return ctx
 }
 
-export const useCustomFetch = (url: string, options?: FetchOptions<'json'> & {method: ApiMethod}) => {
+export const useCustomFetch = <ReturnType>(url: string, options?: FetchOptions<'json'> & {method: ApiMethod}) => {
   // let tokenRefreshNeed = false
   // https://github.com/unjs/ohmyfetch
-  const ctx = customFetch(url, options)
+  const ctx = customFetch<ReturnType>(url, options)
   return ctx.fetch.catch(async () => {
     if (ctx.tokenRefreshNeed) {
-      const ctxRetry = await customFetch(url, options)
+      const ctxRetry = await customFetch<ReturnType>(url, options)
       return ctxRetry.fetch
     }
     return ctx.fetch

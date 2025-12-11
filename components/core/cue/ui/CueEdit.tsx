@@ -1,5 +1,5 @@
 
-import { useForm, useField, type ComponentFieldBindingObject } from 'vee-validate'
+import { useForm, useField } from 'vee-validate'
 import { object, string, number } from 'yup'
 import { toTypedSchema } from '@vee-validate/yup'
 import { useCueStore } from '~/components/core/provider/SubtitleControllerProvider'
