@@ -71,7 +71,9 @@ export default function useWaveBarRender (
     })
   }
 
-  watch(() => [displayWidth.value, waveData.value, pixPerSec.value, scrollTime.value, waveHeight], () => {
+  const colorMode = useColorMode()
+
+  watch(() => [displayWidth.value, waveData.value, pixPerSec.value, scrollTime.value, waveHeight, colorMode.value], () => {
     requestAnimationFrame(() => {
       render()
     })

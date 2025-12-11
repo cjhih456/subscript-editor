@@ -116,7 +116,9 @@ export default function useTimeBarRender (
     })
   }
 
-  watch(() => [displayWidth.value, scrollTime.value, pixPerSec.value, timeBarHeight, fontSize], () => {
+  const colorMode = useColorMode()
+
+  watch(() => [displayWidth.value, scrollTime.value, pixPerSec.value, timeBarHeight, fontSize, colorMode.value], () => {
     requestAnimationFrame(() => {
       render()
     })
