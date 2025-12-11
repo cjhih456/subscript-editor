@@ -8,9 +8,9 @@ export default defineNuxtComponent({
       default: 50
     }
   },
-  setup ({ waveHeight }) {
+  setup (props) {
     const canvas = useTemplateRef<HTMLCanvasElement>('canvas')
-    useWaveBarRender(canvas, waveHeight)
+    useWaveBarRender(canvas, props.waveHeight)
   },
   render () {
     return <canvas

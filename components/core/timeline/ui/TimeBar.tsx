@@ -12,9 +12,9 @@ export default defineNuxtComponent({
       default: 12
     }
   },
-  setup ({ timeBarHeight, fontSize }) {
+  setup (props) {
     const canvas = useTemplateRef<HTMLCanvasElement>('canvas')
-    useTimeBarRender(canvas, timeBarHeight, fontSize)
+    useTimeBarRender(canvas, props.timeBarHeight, props.fontSize)
   },
   render () {
     return <canvas
