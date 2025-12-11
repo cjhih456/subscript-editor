@@ -78,7 +78,9 @@ export default defineNuxtComponent({
       text.value.value = changedValue
       onChange()
     }
-    const deleteCue = () => {
+    const deleteCue = (e: MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
       removeCue(idx)
     }
     return {
