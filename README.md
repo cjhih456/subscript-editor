@@ -7,14 +7,14 @@
 - Nuxt
   - Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
 - Vue
-- Vuetify
+- shadcn/vue
 - Tailwindcss
 - videojs
 - whisper(optional, sub module - nuxt proxy)
   - If you use Whisper, you can generate subtitles automatically.
 
 ### Featured
-- [ ] change UI/UX, Vuetify -> shadcn/vue, @nuxtjs/color-mode 
+- [x] change UI/UX, Vuetify -> shadcn/vue, @nuxtjs/color-mode 
 - [x] clean-up directory, file system.
 - [x] editor history system
 - [x] when rendering timeline & wave, use OffscreenCanvas & Worker
