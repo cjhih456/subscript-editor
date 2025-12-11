@@ -15,17 +15,19 @@ export default function useFileSelect ({ onFileSelect }: {
 
   function fileSelect (file: File | File[] | undefined) {
     if (!file) { return }
+    let fileToSelect: File | undefined = undefined
     if (Array.isArray(file)) {
-      videoFile.value = file[0] ?? undefined
+      fileToSelect = file[0] ?? undefined
     } else {
-      videoFile.value = file
+      fileToSelect = file
     }
-    if (videoFile.value) {
-      const valide = fileSelectRules(videoFile.value)
+    if (fileToSelect) {
+      const valide = fileSelectRules(fileToSelect)
       if (typeof valide === 'string') {
         nuxt.$alert.show(valide)
       } else {
-        onFileSelect(videoFile.value)
+        videoFile.value = fileToSelect
+        onFileSelect(fileToSelect)
       }
     }
   }
