@@ -47,7 +47,9 @@ export default function useCueStore (): CueStoreInterface {
   }
   const storeDeleteAction = (idx: string) => {
     cueStore.value.delete(idx)
-    cueStoreKeys.value.splice(cueStoreKeys.value.indexOf(idx), 1)
+    const idxIndex = cueStoreKeys.value.indexOf(idx)
+    if (idxIndex === -1) { return }
+    cueStoreKeys.value.splice(idxIndex, 1)
   }
 
   const allIds = computed(() => cueStoreKeys.value)
