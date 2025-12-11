@@ -2,12 +2,11 @@ import videojs from 'video.js'
 
 import type Player from 'video.js/dist/types/player'
 import { Teleport, type PropType } from 'vue'
-import type { CueData } from '../mixins/Video/CueArea'
-import ControlAreaVue from './ControlAreaVue'
+import type { CueDataInterface } from '~/components/core/cue/composables/useCueStore'
+import ControlArea from './ControlArea'
 import BigPlayButton from './BigPlayButton'
-import { ClientOnly } from '#components'
-import styles from '@/assets/styles/components/VideoPlayer/VideoPlayer.module.sass'
 import type { TranslateResult } from '~/plugins/WebVttPlugin'
+import style from '~/assets/styles/components/VideoPlayer/index.module.css'
 import 'video.js/dist/video-js.css'
 
 export default defineNuxtComponent({
@@ -22,14 +21,14 @@ export default defineNuxtComponent({
       default: 0
     },
     subscript: {
-      type: Array as PropType<CueData[]>,
+      type: Array as PropType<CueDataInterface[]>,
       default: () => []
     }
   },
   emits: ['update:currentTime'],
   setup (props, { emit }) {
     const nuxt = useNuxtApp()
-    const video = ref<Element | null>()
+    const video = useTemplateRef<HTMLVideoElement>('video')
     const videoPlayerReady = ref<boolean>(false)
     const videoPlayer = ref<Player>()
     const textTrack = ref<TextTrack>()
@@ -48,6 +47,11 @@ export default defineNuxtComponent({
     function updateStartedState () {
       status.started = videoPlayer.value?.hasStarted_ || false
     }
+
+    function videoPlayerTriggerTextTrackChange () {
+      if (!videoPlayer.value) { return }
+      videoPlayer.value.trigger({ type: 'texttrackchange' })
+    }
     watch(() => props.src, (newValue) => {
       const currentSrc = videoPlayer.value?.currentSrc()
       if (!currentSrc || newValue !== currentSrc || !currentSrc.endsWith(newValue)) {
@@ -62,21 +66,19 @@ export default defineNuxtComponent({
       if (newVal && textTrack.value) {
         if (textTrackCueList.value?.cues.length) {
           textTrackCueList.value?.cues.forEach((cue) => {
-            textTrack.value?.removeCue(cue)
+            textTrack.value?.removeCue(cue as TextTrackCue)
           })
         }
         textTrackCueList.value = await nuxt.$webVtt.makeVttFromJson(newVal)
         textTrackCueList.value.cues.forEach((cue) => {
-          textTrack.value?.addCue(cue)
+          textTrack.value?.addCue(cue as TextTrackCue)
         })
         textTrack.value.mode = 'showing'
-        videoPlayer.value.trigger({ type: 'texttrackchange' })
+        videoPlayerTriggerTextTrackChange()
       }
     }, { deep: true })
     onMounted(() => {
       setTimeout(() => {
-        // @ts-ignore
-        window.VIDEOJS_NO_DYNAMIC_STYLE = true
         if (video.value) {
           videoPlayer.value = videojs(video.value, {
             controls: true,
@@ -99,7 +101,7 @@ export default defineNuxtComponent({
                 if (!videoPlayer.value) { return }
                 if (e.which === 32) {
                   e.preventDefault()
-                  videoPlayer.value.paused() ? videoPlayer.value.play() : videoPlayer.value.pause()
+                  if (videoPlayer.value.paused()) { videoPlayer.value.play() } else { videoPlayer.value.pause() }
                 } else if (e.which === 77) {
                   e.preventDefault()
                   videoPlayer.value.muted(!videoPlayer.value.muted())
@@ -133,30 +135,26 @@ export default defineNuxtComponent({
             if (!videoPlayer.value) { return }
             textTrack.value = videoPlayer.value.addTextTrack('subtitles', 'En', 'en')
             videoPlayer.value.trigger({ type: 'loadedmetadata', target: textTrack.value })
-            videoPlayer.value.on(['timeupdate'], () => {
-              videoPlayer.value?.trigger({ type: 'texttrackchange' })
-            })
+            videoPlayer.value.on(['timeupdate'], videoPlayerTriggerTextTrackChange)
             videoPlayer.value.on(['useractive', 'userinactive'], updateUserActiveState)
             videoPlayer.value.on(
               ['play', 'pause', 'ended', 'seeked'],
               updatePlayingState
             )
-            videoPlayer.value.on(['loadstart', 'play'], updateStartedState)
+            videoPlayer.value.on(['loadstart', 'play', 'firstplay'], updateStartedState)
           })
         }
       }, 30)
     })
     onBeforeUnmount(() => {
       if (!videoPlayer.value) { return }
-      videoPlayer.value.off(['timeupdate'], () => {
-        videoPlayer.value?.trigger({ type: 'texttrackchange' })
-      })
+      videoPlayer.value.off(['timeupdate'], videoPlayerTriggerTextTrackChange)
       videoPlayer.value.off(['useractive', 'userinactive'], updateUserActiveState)
       videoPlayer.value.off(
         ['play', 'pause', 'ended', 'seeked'],
         updatePlayingState
       )
-      videoPlayer.value.off(['loadstart', 'firstplay'], updateStartedState)
+      videoPlayer.value.off(['loadstart', 'play', 'firstplay'], updateStartedState)
     })
 
     const currentTime = computed({
@@ -167,24 +165,22 @@ export default defineNuxtComponent({
         emit('update:currentTime', v)
       }
     })
-    return { video, videoPlayer, videoPlayerReady, status, currentTime }
+    return { videoPlayer, videoPlayerReady, status, currentTime }
   },
   render () {
-    return <div class={styles['video-player']}>
-      <ClientOnly>
-        <video ref={((el) => { this.video = el as Element })}></video>
+    return <div class="relative h-full w-full">
+        <video ref="video" class={style['video-player']}></video>
         {this.videoPlayerReady && <Teleport to={this.videoPlayer && `#${this.videoPlayer.id_}` as string}>
-          <ControlAreaVue
+          <ControlArea
             v-model:currentTime={this.currentTime}
             player={this.videoPlayer}
             isPlaying={this.status.isPlaying}
-          ></ControlAreaVue>
+          ></ControlArea>
           <BigPlayButton
             started={this.status.started}
             player={this.videoPlayer}
           ></BigPlayButton>
         </Teleport>}
-      </ClientOnly>
     </div>
   }
 })

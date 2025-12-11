@@ -1,19 +1,16 @@
 <template>
-  <NuxtLayout>
-    <template #header>
-      <component :is="headerStatus" v-if="headerStatus" />
+  <NuxtLayout class="bg-background text-foreground">
+    <template v-if="headerStatus" #header>
+      <component :is="headerStatus" />
     </template>
-    <template #hambuger>
-      <component :is="hambugerStatus" v-if="hambugerStatus" />
+    <template #default>
+      <NuxtPage />
     </template>
-    <NuxtLoadingIndicator :duration="3000" />
-    <NuxtPage />
   </NuxtLayout>
 </template>
 <script setup>
-import { useNuxtApp } from '#app'
 import { computed } from 'vue'
+import { useNuxtApp } from '#app'
 const nuxtApp = useNuxtApp()
 const headerStatus = computed(() => nuxtApp.$header.getHeaderComponent())
-const hambugerStatus = computed(() => nuxtApp.$hambuger.getHambugerComponent())
 </script>

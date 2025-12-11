@@ -1,258 +1,164 @@
-import { VAlert, VBtn, VCol, VContainer, VRow, VScrollYReverseTransition, VSlider, VFileInput } from 'vuetify/components'
-import styles from '~/assets/styles/pages/index.module.sass'
+import AlertDisplay from '~/components/core/alert/ui/AlertDisplay'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
-import AudioWave from '~/components/mixins/Video/AudioWave'
-import CueArea from '~/components/mixins/Video/CueArea'
+import { provideSubtitleController } from '~/components/core/provider/SubtitleControllerProvider'
+import FileSelect from '~/components/core/file-select/ui/FileSelect.vue'
+import useFFmpeg from '~/components/core/file-select/composables/useFFmpeg'
+import TimeBar from '~/components/core/timeline/ui/TimeBar'
+import WaveBar from '~/components/core/timeline/ui/WaveBar'
+import BarArea from '~/components/core/timeline/ui/BarArea'
+import CueBar from '~/components/core/cue/ui/CueBar'
+import CueEditArea from '~/components/core/cue/ui/CueEditArea'
+import CurrentTimeCursor from '~/components/core/timeline/ui/CurrentTimeCursor'
+import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
+import { Button } from '~/components/ui/button'
+import { Plus, Undo, Redo, Save } from 'lucide-vue-next'
+import { Slider } from '~/components/ui/slider'
+import { ClientOnly } from '#components'
 
 export default defineNuxtComponent({
   name: 'IndexPage',
   setup () {
-    const data = reactive<{
-      displayLevel: number
-      videoFile?: File
-      scrollValue: number
-      duration: number
-      currentTime: number
-      displayPx: number
-      videoFileSrc: string
-    }>({
-      displayLevel: 2,
-      videoFile: undefined,
-      scrollValue: 0,
-      duration: 0,
-      currentTime: 0,
-      displayPx: 0,
-      videoFileSrc: ''
-    })
-    const waveHeight = 25
-    const timelineCanvas = ref<HTMLCanvasElement | null>()
-    const waveCanvas = ref<HTMLCanvasElement | null>()
-    const waveArea = ref<HTMLDivElement | null>()
-    const currentCursorArea = ref<HTMLDivElement | null>()
-    const currentCursor = ref<HTMLDivElement | null>()
-    const displayPx = computed(() => {
-      return data.displayPx
-    })
-    const selectedFile = computed(() => data.videoFile)
-    const duration = computed({
-      get () {
-        return data.duration
-      },
-      set (v) {
-        data.duration = v
+    const nuxt = useNuxtApp()
+    const data = provideSubtitleController()
+
+    const pixPerSec = computed<number[]>({
+      get: () => [data.pixPerSec.value],
+      set: (value) => {
+        if (value[0] === undefined) { return }
+        if (value[0] === data.pixPerSec.value) { return }
+        data.pixPerSec.value = value[0]
       }
     })
-    const currentTime = computed({
-      get () {
-        return data.currentTime
-      },
-      set (v) {
-        data.currentTime = v
-      }
-    })
-    const { pixPerSec, levelDatasMax, cueGeneratedData, alertMessage: audioAlertMessage, loadFFmpeg } = AudioWave(
-      selectedFile,
-      computed(() => waveCanvas.value),
-      computed(() => timelineCanvas.value),
-      computed(() => data.scrollValue),
-      computed(() => data.displayLevel),
-      displayPx,
-      duration,
-      waveHeight,
-      480
-    )
-    const {
-      alertMessage: cueAlertMessage,
-      cueList,
-      cueLastEvent,
-      mouseCursor,
-      currentTimePosition,
-      pointerStyle,
-      subtitleArea,
-      addCue,
-      genCueEditArea,
-      genCueArea,
-      saveSubscribe
-    } = CueArea(
-      computed(() => waveArea.value),
-      computed(() => currentCursor.value),
-      computed(() => currentCursorArea.value),
-      computed(() => data.scrollValue),
-      pixPerSec,
-      duration,
-      currentTime
-    )
-    const alertMessages = computed(() => {
-      return cueAlertMessage.value || audioAlertMessage.value
-    })
-    function fileSelect (file: File | File[] | null) {
-      if (!file) { return }
-      if (Array.isArray(file)) {
-        data.videoFile = file[0]
-      } else {
-        data.videoFile = file
-      }
-      data.videoFileSrc = URL.createObjectURL(data.videoFile)
-    }
-    function fileSelectRules (value: File) {
-      if (value && value.type.startsWith('video/')) {
-        return true
-      } else {
-        return 'File must be a video'
-      }
-    }
-    function windowResizeEvent () {
-      data.displayPx = waveCanvas.value?.offsetWidth || 0
-    }
-    watch(() => cueGeneratedData.value, (cues) => {
-      if (cues && cues.length) { cues.forEach(addCue) }
-    })
+
+    const timeBarHeight = ref(20)
+    const fontSize = ref(12)
+    const waveHeight = ref(50)
+
+    const { create: createCue, get: getCue, allIds, undo, redo, undoAble, redoAble } = data.cueStore
+    const cueCount = computed(() => allIds.value.length)
+    const allCues = computed(() => allIds.value.map(id => getCue(id)))
+
+    const { loadFFmpeg, convertWave } = useFFmpeg()
+    const { videoFileObjectUrl, setVideoFileObjectUrl, clearVideoFileObjectUrl } = data
     onMounted(async () => {
-      window.addEventListener('resize', windowResizeEvent, false)
-      windowResizeEvent()
       await loadFFmpeg()
     })
     onBeforeUnmount(() => {
-      window.removeEventListener('resize', windowResizeEvent, false)
-      if (data.videoFileSrc) {
-        URL.revokeObjectURL(data.videoFileSrc)
-      }
+      clearVideoFileObjectUrl()
     })
-    return {
-      levelDatasMax,
-      data,
-      currentTimePosition,
-      fileSelect,
-      fileSelectRules,
-      alertMessages,
 
-      waveArea,
-      waveHeight,
-      waveCanvas,
-      timelineCanvas,
-      displayPx,
-      currentCursorArea,
-      currentCursor,
-
-      cueList,
-      mouseCursor,
-      pointerStyle,
-      cueLastEvent,
-      subtitleArea,
-      addCue,
-      genCueEditArea,
-      genCueArea,
-      saveSubscribe
-    }
-  },
-  render (_ctx: any, cache: unknown[]) {
-    return <VContainer class={styles['index-page']} style={{
-      cursor: this.pointerStyle
-    }} fluid>
-      <VScrollYReverseTransition>
-      {
-        this.alertMessages ? <VAlert class={styles.alert} title={this.alertMessages}/> : undefined
+    async function onFileSelect (file: File | undefined) {
+      if (!file) { return }
+      const { wave, scaleValue, duration: convertedDuration } = await convertWave(file as File, data.audioRate.value)
+      // take duration of file
+      data.waveScaleValue.value = scaleValue
+      data.duration.value = convertedDuration
+      data.waveData.value = wave
+      if (videoFileObjectUrl.value) {
+        clearVideoFileObjectUrl()
       }
-      </VScrollYReverseTransition>
-      <VRow class={styles['input-area']}>
-        <VCol>
-          <VFileInput
-            variant="outlined"
-            density="compact"
-            color="primary"
-            showSize={1024}
-            accept="video/*"
-            onUpdate:modelValue={this.fileSelect}
-            rules={[this.fileSelectRules]}
-          />
-        </VCol>
-        <VCol cols="auto">
-          <VBtn onClick={this.saveSubscribe} disabled={!this.cueList.length} class={styles['cue-save-btn']}>
-            Save Subscribe
-          </VBtn>
-        </VCol>
-      </VRow>
-      <div class={styles['cue-area']}>
-        {this.genCueEditArea()}
-        <VBtn onClick={() => this.addCue()} class={styles['cue-add-btn']}>
-          Add Cue
-        </VBtn>
-      </div>
-      <VideoPlayer
-        class={styles['video-area']}
-        v-model:currentTime={this.data.currentTime}
-        subscript={this.cueList}
-        src={this.data.videoFileSrc}
-      ></VideoPlayer>
-      <div class={styles['wave-area']}>
-        <VRow class="tw-flex-nowrap">
-          <VCol class="tw-overflow-scroll">
-            <div class={styles['wave-display']} ref={(el) => { this.waveArea = el as HTMLDivElement }}>
-              <canvas
-                ref={(el) => { this.timelineCanvas = el as HTMLCanvasElement }}
-                class={styles['time-line-canvas']}
-                height="20"
-                width={this.displayPx}
-                style={{
-                  width: '100%',
-                  height: '20px'
-                }}
-              />
-              <canvas
-                ref={(el) => { this.waveCanvas = el as HTMLCanvasElement }}
-                height={this.waveHeight * 2}
-                width={this.displayPx}
-                style={{
-                  width: '100%',
-                  height: `${this.waveHeight * 2}px`
-                }}
-              />
-              <div
-                class={styles['subtitle-area']}
-                style={{
-                  '--display-width': `${this.subtitleArea.width}px`,
-                  '--scroll-position': `-${this.subtitleArea.position}px`
-                }}
-              >
-                {this.genCueArea(cache, 1)}
-              </div>
-              {withMemo([this.mouseCursor, this.currentTimePosition], () => <div class={styles['wave-area-cursor']}>
-                <div
-                  class={[styles['hover-cursor'], this.mouseCursor.display ? styles.display : '']}
-                  style={{
-                    '--cursor-position': `${this.mouseCursor.position}px`
-                  }}
-                >
-                  <div class={[styles.cursor]}></div>
-                </div>
-                <div
-                  ref={(el) => { this.currentCursorArea = el as HTMLDivElement }}
-                  class={[styles['cursor-area']]}
-                  style={{
-                    '--cursor-position': `${this.currentTimePosition}px`
-                  }}
-                >
-                  <div
-                    ref={(el) => { this.currentCursor = el as HTMLDivElement }}
-                    class={[styles.cursor]}
-                  ></div>
-                </div>
-              </div>, cache, 0)}
-            </div>
-            <VSlider v-model={this.data.scrollValue} hideDetails max={this.data.duration}></VSlider>
-          </VCol>
-          <VCol cols="auto" class={styles['level-slider']}>
-            <VSlider
-              v-model={this.data.displayLevel}
-              direction="vertical"
-              hideDetails
-              step={1}
-              max={this.levelDatasMax}
-              min={0}
+      setVideoFileObjectUrl(file)
+      // const cueList = await whisperTranscribe(fileValue)
+      // if (cueList) {
+      //   data.cueStore.registWhisperCue = cueList
+      // }
+    }
+
+    function saveAsFile () {
+      const allText = nuxt.$webVtt.convertJsonToFile(allCues.value)
+      const url = URL.createObjectURL(allText)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'subtitle.vtt'
+      a.click()
+      URL.revokeObjectURL(url)
+    }
+
+    return {
+      ...data,
+      pixPerSec,
+      redo,
+      undo,
+      undoAble,
+      redoAble,
+      timeBarHeight,
+      fontSize,
+      waveHeight,
+      allCues,
+      cueCount,
+      onFileSelect,
+      createCue,
+      saveAsFile
+    }
+    
+  },
+  render () {
+    return <section class="flex flex-col gap-2 flex-1 p-4">
+      <AlertDisplay />
+      <div class="flex grow gap-2">
+        <div class="flex flex-col">
+          <FileSelect onFileSelect={this.onFileSelect} />
+          <div class="flex justify-between gap-2 pt-2">
+            <Button onClick={this.createCue} class="rounded-full">
+              <Plus />
+            </Button>
+            <Button onClick={this.undo} disabled={!this.undoAble} class="rounded-full">
+              <Undo />
+            </Button>
+            <Button onClick={this.redo} disabled={!this.redoAble} class="rounded-full">
+              <Redo />
+            </Button>
+            <Button onClick={this.saveAsFile} disabled={!this.allCues.length} class="rounded-full">
+              <Save />
+            </Button>
+          </div>
+          <div class="flex grow w-full">
+            <CueEditArea />
+          </div>
+        </div>
+        <div class="flex-1">
+          <ClientOnly>
+            <VideoPlayer
+              v-model:currentTime={this.currentTime}
+              subscript={this.allCues}
+              src={this.videoFileObjectUrl || undefined}
             />
-          </VCol>
-        </VRow>
+          </ClientOnly>
+        </div>
       </div>
-    </VContainer>
+      <div class="flex w-full grow-0 gap-2">
+        <BarArea class="flex grow">
+          {{
+            canvas: () => (
+              <>
+                <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
+                <WaveBar waveHeight={this.waveHeight} />
+              </>
+            ),
+            default: () => (
+              <CueBar />
+            ),
+            cursor: () => (
+              <>
+                <CurrentTimeCursor />
+                <CurrentCursor />
+              </>
+            )
+          }}
+        </BarArea>
+        <div class="grow-0">
+          <ClientOnly>
+            <Slider
+              v-model={this.pixPerSec}
+              orientation="vertical"
+              max={1000}
+              min={5}
+              step={5}
+              inverted
+            />
+          </ClientOnly>
+        </div>
+      </div>
+    </section>
   }
 })

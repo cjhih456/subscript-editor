@@ -1,7 +1,13 @@
 import { WebVTT } from 'videojs-vtt.js'
 
+export interface VTTCueSlim {
+  startTime: number
+  endTime: number
+  text: string
+}
+
 export interface TranslateResult {
-  cues: VTTCue[]
+  cues: (VTTCue | VTTCueSlim)[]
   regions?: VTTRegion[]
 }
 
@@ -16,13 +22,16 @@ export default defineNuxtPlugin(() => {
     return /\d{1,}:\d{1,2}:\d{1,2}\.\d{1,3}/.test(time) ? time : '0:0:0.000'
   }
   function convertTimeToSecond (time: string) {
-    const [hours, minutes, seconds, milliseconds] = timeFormatCheck(time).split(/[:.]/g).map(v => +v)
+    const [hours, minutes, seconds, milliseconds] = timeFormatCheck(time).split(/[:.]/g).map((v, idx) => {
+      if (idx !== 3) { return Number(v) }
+      return Number(v.padEnd(3, '0'))
+    })
     return nuxt.$dayjs.duration({ hours, minutes, seconds, milliseconds }).asMilliseconds() / 1000
   }
   function convertSecondToTime (sec: number) {
     return nuxt.$dayjs.utc(sec * 1000).format(timeFormat)
   }
-  function parseSbv (txt: string) {
+  async function parseSbv (txt: string) {
     const data = { cues: [] as VTTCue[] } as TranslateResult
     txt
       .toString()
@@ -77,7 +86,7 @@ export default defineNuxtPlugin(() => {
     if (result.cues.length) { return result }
     result = await parseSrt(textData)
     if (result.cues.length) { return result }
-    result = parseSbv(textData)
+    result = await parseSbv(textData)
     return result.cues.length ? result : false
   }
   function jsonToString (jsonData: TranslateResult) {
@@ -92,18 +101,18 @@ export default defineNuxtPlugin(() => {
       return acc + `${st} --> ${et}\n${text}\n\n`
     }, 'WEBVTT\n\n')
   }
-  function makeVttFromJson (jsonData: any[]) {
+  async function makeVttFromJson (jsonData: VTTCueSlim[]) {
     if (jsonData) {
-      return parseVtt(jsonToString({ cues: jsonData }))
+      return await parseVtt(jsonToString({ cues: jsonData }))
     }
     return { cues: [] } as TranslateResult
   }
-  function convertJsonToFile (jsonData: any[]) {
+  function convertJsonToFile (jsonData: VTTCueSlim[]) {
     const stringBlob = jsonToString({ cues: jsonData })
     try {
       return new File([stringBlob], 'webvtt.vtt', { type: 'text/vtt' })
-    } catch (err) {
-      return Object.assign(stringBlob, { name: 'webvtt.vtt' })
+    } catch {
+      throw new Error('Failed to convert JSON to file')
     }
   }
   return {

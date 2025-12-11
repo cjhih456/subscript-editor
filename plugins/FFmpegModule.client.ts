@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { toBlobURL } from '@ffmpeg/util'
 import type { WatchStopHandle } from 'vue'
@@ -29,10 +28,10 @@ export default defineNuxtPlugin(() => {
       let watcher: WatchStopHandle
       return new Promise((resolve) => {
         watcher = watch(() => data.loaded, (n) => {
-          n && resolve(true)
+          if (n) { return resolve(true) }
         }, { immediate: true, deep: false })
       }).finally(() => {
-        watcher && watcher()
+        if (watcher) { watcher() }
       })
     }
     setLoading(true)
@@ -68,55 +67,34 @@ export default defineNuxtPlugin(() => {
    * Generate waveform data from the audio channel of the original file
    * @param inputFileName origin input file name
    * @param outputFileName s16le waveform data name
-   * @returns waveform data & min, max object
+   * @param outputAudioRate output audio rate (Hz)
+   * @returns waveform data & scale value
    */
-  async function transcodeWave (inputFileName: string, outputFileName: string, waveBySec: number) {
+  async function transcodeWave (inputFileName: string, outputFileName: string, outputAudioRate: number) {
     await ffmpegRef.value.exec([
       '-v', 'info',
       '-f', 'lavfi',
       '-i', 'anullsrc=channel_layout=stereo:sample_rate=48000:duration=8.86',
       '-i', inputFileName,
       '-filter_complex', 'amix',
-      '-f', 's16le',
+      '-f', 's8',
       '-ac', '1',
-      '-acodec', 'pcm_s16le',
-      '-ar', '48000',
+      '-acodec', 'pcm_s8',
+      '-ar', String(outputAudioRate),
       outputFileName
     ])
     const data = await ffmpegRef.value.readFile(outputFileName) as Uint8Array
     ffmpegRef.value.deleteFile(outputFileName)
-    const wave = [] as number[]
-    const maxMinValue = {
-      max: -32768,
-      min: 32767
-    }
-    const waveBySecValue = 96000 / waveBySec // (48000 * 2) / waveBySec
-    data.reduce((acc, byte, i) => {
-      if (i % 2 === 1) {
-        const value = Buffer.from([acc.tempValue, byte]).readInt16LE()
-        if (value < maxMinValue.min) { maxMinValue.min = value }
-        if (value < acc.min) { acc.min = value }
-        if (value > maxMinValue.max) { maxMinValue.max = value }
-        if (value > acc.max) { acc.max = value }
-        if (++acc.readRound === waveBySecValue) {
-          wave.push(acc.max, acc.min)
-          acc.readRound = 0
-          acc.min = 32767
-          acc.max = -32768
-        }
-      } else {
-        acc.tempValue = byte
-      }
-      return acc
-    }, {
-      tempValue: 0,
-      readRound: 0,
-      min: 32767,
-      max: -32768
-    })
+
+    // SharedArrayBuffer 생성
+    const int8Data = Int8Array.from(data)
+    const sharedBuffer = new SharedArrayBuffer(int8Data.length)
+    const sharedArray = new Int8Array(sharedBuffer)
+    sharedArray.set(int8Data)
+
     return {
-      wave,
-      maxMinValue
+      wave: sharedBuffer,
+      scaleValue: 128
     }
   }
   /**
@@ -126,7 +104,7 @@ export default defineNuxtPlugin(() => {
    * @param options ffmpeg options for wav format file (bitrate, channel, etc)
    * @returns audio file data (Uint8Array)
    */
-  async function transcodeAudio (inputFileName: string, outputFileName: string, options: any = {}) {
+  async function transcodeAudio (inputFileName: string, outputFileName: string, options: Record<string, number | string> = {}) {
     const command = ['-i', inputFileName, '-ar', '16000']
 
     for (const [key, value] of Object.entries(options)) {
