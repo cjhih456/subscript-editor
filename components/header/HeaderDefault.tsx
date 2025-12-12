@@ -1,3 +1,4 @@
+import { ClientOnly } from "#components"
 import { Switch } from "../ui/switch"
 import { Moon, Sun } from 'lucide-vue-next'
 
@@ -24,7 +25,9 @@ export default defineNuxtComponent({
         <Switch v-model={this.theme}>
           {{
             thumb: () => <div class="flex items-center justify-center w-full h-full">
-              {this.theme ? <Sun size={16} /> : <Moon size={16} />}
+              <ClientOnly>
+                {this.theme ? <Sun size={16} /> : <Moon size={16} />}
+              </ClientOnly>
             </div>
           }}
         </Switch>

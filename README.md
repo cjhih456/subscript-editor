@@ -20,7 +20,7 @@
 - [x] when rendering timeline & wave, use OffscreenCanvas & Worker
 - [x] use Provide & Inject - done
 - [x] display long duration convert status
-- [ ] change layout as responsive
+- [x] change layout as responsive
 
 ### Whisper endpoint
 [Whisper Setup document](https://ahmetoner.com/whisper-asr-webservice/run/)
