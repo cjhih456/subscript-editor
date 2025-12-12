@@ -12,6 +12,8 @@ import CurrentTimeCursor from '~/components/core/timeline/ui/CurrentTimeCursor'
 import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
 import { Slider } from '~/components/ui/slider'
 import { ClientOnly } from '#components'
+import type EventEmitter from 'eventemitter3'
+import { Progress } from '~/components/ui/progress'
 
 export default defineNuxtComponent({
   name: 'IndexPage',
@@ -35,6 +37,7 @@ export default defineNuxtComponent({
     const waveHeight = ref(50)
 
     const { loadFFmpeg, convertWave } = useFFmpeg()
+    const emitter = ref<EventEmitter | null>(null)
     const { videoFileObjectUrl, setVideoFileObjectUrl, clearVideoFileObjectUrl } = data
     onMounted(async () => {
       await loadFFmpeg()
@@ -45,11 +48,36 @@ export default defineNuxtComponent({
 
     async function onFileSelect (file: File | undefined) {
       if (!file) { return }
-      const { wave, scaleValue, duration: convertedDuration } = await convertWave(file as File, data.audioRate.value)
-      // take duration of file
+      emitter.value = await convertWave(file as File, data.audioRate.value)
+      emitter.value.on('duration', (duration: number) => {
+        data.duration.value = duration
+      })
+      emitter.value.on('progress', (progress: number) => {
+        if(data.duration.value === 0) { return }
+        data.convertProgress.value = Math.round((progress / data.duration.value) * 100)
+      })
+      emitter.value.on('error', () => {
+        emitter.value?.off('duration')
+        emitter.value?.off('progress')
+        emitter.value?.off('done')
+        emitter.value?.off('error')
+        emitter.value = null
+        nuxt.$alert.show('Failed to convert wave data. Please try again.')
+        data.convertProgress.value = 0
+        data.waveScaleValue.value = 0
+        data.waveData.value = null
+        data.duration.value = 0
+      })
+      emitter.value.on('done', ({ wave, scaleValue }: { wave: SharedArrayBuffer, scaleValue: number }) => {
+        emitter.value?.off('duration')
+        emitter.value?.off('progress')
+        emitter.value?.off('done')
+        emitter.value?.off('error')
+        emitter.value = null
+        data.convertProgress.value = 0
       data.waveScaleValue.value = scaleValue
-      data.duration.value = convertedDuration
       data.waveData.value = wave
+      })
       if (videoFileObjectUrl.value) {
         clearVideoFileObjectUrl()
       }
@@ -129,6 +157,15 @@ export default defineNuxtComponent({
       </div>
       <ClientOnly>
         {this.isMobile ? <CueEditArea class="grow" /> : <></>}
+        {
+          this.convertProgress > 0 ? (<>
+            <div class="fixed top-0 bottom-0 left-0 right-0 bg-gray-500/30 z-10 flex items-center justify-center">
+              <div class="flex-1 p-4">
+                <Progress class="shadow-xl shadow-primary" modelValue={this.convertProgress} max={100} />
+              </div>
+            </div>
+          </>) : (<></>)
+        }
       </ClientOnly>
     </section>
   }
