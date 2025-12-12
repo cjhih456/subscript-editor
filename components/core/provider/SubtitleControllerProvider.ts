@@ -5,6 +5,7 @@ import type { CueStoreInterface } from '~/components/core/cue/composables/useCue
 export const VIDEO_FILE = Symbol('videoFile')
 export const VIDEO_FILE_OBJECT_URL = Symbol('videoFileObjectUrl')
 export const SCROLL_VALUE = Symbol('scrollValue')
+export const CONVERT_PROGRESS = Symbol('convertProgress')
 export const DURATION = Symbol('duration')
 export const CURRENT_TIME = Symbol('currentTime')
 export const PIX_PER_SEC = Symbol('pixPerSec')
@@ -32,6 +33,8 @@ export function provideSubtitleController () {
     }
     videoFileObjectUrl.value = null
   }
+
+  const convertProgress = ref<number>(0)
   const duration = ref<number>(0)
   const currentTime = ref<number>(0)
   const pixPerSec = ref<number>(200)
@@ -56,6 +59,7 @@ export function provideSubtitleController () {
     left: scrollClientLeft,
     value: scrollValue
   })
+  provide(CONVERT_PROGRESS, convertProgress)
   provide(DURATION, duration)
   provide(CURRENT_TIME, currentTime)
   provide(PIX_PER_SEC, pixPerSec)
@@ -84,6 +88,7 @@ export function provideSubtitleController () {
     setVideoFileObjectUrl,
     clearVideoFileObjectUrl,
     scrollValue,
+    convertProgress,
     duration,
     currentTime,
     pixPerSec,
@@ -93,6 +98,14 @@ export function provideSubtitleController () {
     displayWidth,
     audioRate
   }
+}
+
+export function useConvertProgress () {
+  const convertProgress = inject<Ref<number>>(CONVERT_PROGRESS)
+  if (!convertProgress) {
+    throw new Error('CONVERT_PROGRESS is not injected')
+  }
+  return convertProgress
 }
 
 export function useVideoFile () {

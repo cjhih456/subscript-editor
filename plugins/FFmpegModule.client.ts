@@ -1,14 +1,12 @@
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { toBlobURL } from '@ffmpeg/util'
+import EventEmitter from 'eventemitter3'
 import type { WatchStopHandle } from 'vue'
 export default defineNuxtPlugin(() => {
   const nuxt = useNuxtApp()
   const data = reactive({
     loaded: false,
     onLoading: false
-  })
-  const messageRef = reactive({
-    messages: [] as string[]
   })
   const ffmpegRef = shallowRef(new FFmpeg())
   function setLoaded (v: boolean) {
@@ -36,9 +34,6 @@ export default defineNuxtPlugin(() => {
     }
     setLoading(true)
     const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.10/dist/esm'
-    ffmpegRef.value.on('log', ({ message }) => {
-      messageRef.messages.push(message)
-    })
     // toBlobURL is used to bypass CORS issue, urls with the same
     // domain can be used directly.
     const result = await ffmpegRef.value.load({
@@ -53,16 +48,22 @@ export default defineNuxtPlugin(() => {
    * Please use after transcode functions.
    * @returns duration
    */
-  function takeMediaFileDuration () {
-    const durationStr = messageRef.messages.slice(0).reverse().find(v => v.includes('Duration:'))
-    if (durationStr) {
-      const regex = /Duration: ([0-9:.]+),/g
-      const result = regex.exec(durationStr)
-      const time = (result && result[1]) || '00:00:00.00'
-      return nuxt.$webVtt.convertTimeToSecond(time)
-    }
-    return 0
+  function takeMediaFileDuration (message: string) {
+    if (!message.includes('Duration:')) return -1
+    const regex = /Duration: ([0-9:.]+),/g
+    const result = regex.exec(message)
+    const time = (result && result[1]) || '00:00:00.00'
+    return nuxt.$webVtt.convertTimeToSecond(time)
   }
+
+  function progressCheck (message: string) {
+    if (!message.includes('time=')) return -1
+    const regex = /time=([0-9:.]+)/g
+    const result = regex.exec(message)
+    const time = (result && result[1]) || '00:00:00.00'
+    return nuxt.$webVtt.convertTimeToSecond(time)
+  }
+
   /**
    * Generate waveform data from the audio channel of the original file
    * @param inputFileName origin input file name
@@ -70,8 +71,20 @@ export default defineNuxtPlugin(() => {
    * @param outputAudioRate output audio rate (Hz)
    * @returns waveform data & scale value
    */
-  async function transcodeWave (inputFileName: string, outputFileName: string, outputAudioRate: number) {
-    await ffmpegRef.value.exec([
+  function transcodeWave (inputFileName: string, outputFileName: string, outputAudioRate: number) {
+    const eventEmitter = new EventEmitter()
+    const convertMessage = ({ message }: { message: string }) => {
+      const duration = takeMediaFileDuration(message)
+      if (duration !== -1) {
+        eventEmitter.emit('duration', duration)
+      }
+      const progress = progressCheck(message)
+      if (progress !== -1) {
+        eventEmitter.emit('progress', progress)
+      }
+    }
+    ffmpegRef.value.on('log', convertMessage)
+    ffmpegRef.value.exec([
       '-v', 'info',
       '-f', 'lavfi',
       '-i', 'anullsrc=channel_layout=stereo:sample_rate=48000:duration=8.86',
@@ -82,20 +95,24 @@ export default defineNuxtPlugin(() => {
       '-acodec', 'pcm_s8',
       '-ar', String(outputAudioRate),
       outputFileName
-    ])
-    const data = await ffmpegRef.value.readFile(outputFileName) as Uint8Array
-    ffmpegRef.value.deleteFile(outputFileName)
+    ]).then(() => {
+      return ffmpegRef.value.readFile(outputFileName) as Promise<Uint8Array>
+    }).then((data) => {
+      ffmpegRef.value.off('log', convertMessage)
+      ffmpegRef.value.deleteFile(outputFileName)
 
-    // SharedArrayBuffer 생성
-    const int8Data = Int8Array.from(data)
-    const sharedBuffer = new SharedArrayBuffer(int8Data.length)
-    const sharedArray = new Int8Array(sharedBuffer)
-    sharedArray.set(int8Data)
+      // SharedArrayBuffer 생성
+      const int8Data = Int8Array.from(data)
+      const sharedBuffer = new SharedArrayBuffer(int8Data.length)
+      const sharedArray = new Int8Array(sharedBuffer)
+      sharedArray.set(int8Data)
 
-    return {
-      wave: sharedBuffer,
-      scaleValue: 128
-    }
+      eventEmitter.emit('done', {
+        wave: sharedBuffer,
+        scaleValue: 128
+      })
+    })
+    return eventEmitter
   }
   /**
    * Extract the audio stream from the video file to create a WAV file.
@@ -120,12 +137,15 @@ export default defineNuxtPlugin(() => {
   async function writeFile (file: Uint8Array, inputFileName: string) {
     await ffmpegRef.value.writeFile(inputFileName, file)
   }
+  function clearFile (inputFileName: string) {
+    ffmpegRef.value.deleteFile(inputFileName)
+  }
   return {
     provide: {
       ffmpeg: {
         load,
         writeFile,
-        takeMediaFileDuration,
+        clearFile,
         transcodeWave,
         transcodeAudio
       }

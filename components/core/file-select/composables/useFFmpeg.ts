@@ -9,9 +9,9 @@ export default function useFFmpeg () {
     await loadFFmpeg()
     const arrayBuffer = await file.arrayBuffer()
     await nuxt.$ffmpeg.writeFile(new Uint8Array(arrayBuffer), 'video')
-    const obj = await nuxt.$ffmpeg.transcodeWave('video', 'out.data', outputAudioRate)
-    const duration = await nuxt.$ffmpeg.takeMediaFileDuration()
-    return { ...obj, duration }
+    const emitter = nuxt.$ffmpeg.transcodeWave('video', 'out.data', outputAudioRate)
+    await nuxt.$ffmpeg.clearFile('video')
+    return emitter
   }
 
   async function whisperTranscribe (file: File) {
@@ -19,6 +19,7 @@ export default function useFFmpeg () {
     const arrayBuffer = await file.arrayBuffer()
     await nuxt.$ffmpeg.writeFile(new Uint8Array(arrayBuffer), 'video')
     const audioFile = await nuxt.$ffmpeg.transcodeAudio('video', 'out.wav')
+    await nuxt.$ffmpeg.clearFile('video')
     const wavFile = new File([audioFile], 'out.wav', { type: 'audio/wav' })
     const formData = fetchData('post', {
       audio_file: wavFile

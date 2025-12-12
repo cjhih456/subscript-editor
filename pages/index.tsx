@@ -14,6 +14,8 @@ import { Button } from '~/components/ui/button'
 import { Plus, Undo, Redo, Save } from 'lucide-vue-next'
 import { Slider } from '~/components/ui/slider'
 import { ClientOnly } from '#components'
+import type EventEmitter from 'eventemitter3'
+import { Progress } from '~/components/ui/progress'
 
 export default defineNuxtComponent({
   name: 'IndexPage',
@@ -39,6 +41,7 @@ export default defineNuxtComponent({
     const allCues = computed(() => allIds.value.map(id => getCue(id)))
 
     const { loadFFmpeg, convertWave } = useFFmpeg()
+    const emitter = ref<EventEmitter | null>(null)
     const { videoFileObjectUrl, setVideoFileObjectUrl, clearVideoFileObjectUrl } = data
     onMounted(async () => {
       await loadFFmpeg()
@@ -49,11 +52,22 @@ export default defineNuxtComponent({
 
     async function onFileSelect (file: File | undefined) {
       if (!file) { return }
-      const { wave, scaleValue, duration: convertedDuration } = await convertWave(file as File, data.audioRate.value)
-      // take duration of file
+      emitter.value = await convertWave(file as File, data.audioRate.value)
+      emitter.value.on('duration', (duration: number) => {
+        data.duration.value = duration
+      })
+      emitter.value.on('progress', (progress: number) => {
+        data.convertProgress.value = Math.round((progress / data.duration.value) * 100)
+      })
+      emitter.value.on('done', ({ wave, scaleValue }: { wave: SharedArrayBuffer, scaleValue: number }) => {
+        emitter.value?.off('duration')
+        emitter.value?.off('progress')
+        emitter.value?.off('done')
+        emitter.value = null
+        data.convertProgress.value = 0
       data.waveScaleValue.value = scaleValue
-      data.duration.value = convertedDuration
       data.waveData.value = wave
+      })
       if (videoFileObjectUrl.value) {
         clearVideoFileObjectUrl()
       }
@@ -159,6 +173,15 @@ export default defineNuxtComponent({
           </ClientOnly>
         </div>
       </div>
+      {
+        this.convertProgress > 0 ? (<>
+          <div class="fixed top-0 bottom-0 left-0 right-0 bg-gray-500/30 z-10 flex items-center justify-center">
+            <div class="flex-1 p-4">
+              <Progress class="shadow-xl shadow-primary" modelValue={this.convertProgress} max={100} />
+            </div>
+          </div>
+        </>) : (<></>)
+      }
     </section>
   }
 })

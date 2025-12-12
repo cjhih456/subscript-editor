@@ -6914,6 +6914,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eventemitter3@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "eventemitter3@npm:5.0.1"
+  checksum: 10c0/4ba5c00c506e6c786b4d6262cfbce90ddc14c10d4667e5c83ae993c9de88aa856033994dd2b35b83e8dc1170e224e66a319fa80adc4c32adcd2379bbc75da814
+  languageName: node
+  linkType: hard
+
 "events@npm:^3.3.0":
   version: 3.3.0
   resolution: "events@npm:3.3.0"
@@ -11331,6 +11338,7 @@ __metadata:
     core-js: "npm:^3.6"
     dayjs-nuxt: "npm:^2.1.11"
     eslint: "npm:^9.39.1"
+    eventemitter3: "npm:^5.0.1"
     gh-pages: "npm:^6.1.1"
     lodash: "npm:^4.17.21"
     lucide-vue-next: "npm:^0.556.0"
