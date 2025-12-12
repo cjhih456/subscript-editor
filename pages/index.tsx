@@ -76,6 +76,7 @@ export default defineNuxtComponent({
         emitter.value?.off('duration')
         emitter.value?.off('progress')
         emitter.value?.off('done')
+        emitter.value?.off('error')
         emitter.value = null
         data.convertProgress.value = 0
       data.waveScaleValue.value = scaleValue

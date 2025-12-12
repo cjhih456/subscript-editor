@@ -71,7 +71,10 @@ export default defineNuxtPlugin(() => {
    * @param outputAudioRate output audio rate (Hz)
    * @returns waveform data & scale value
    */
-  function transcodeWave (inputFileName: string, outputFileName: string, outputAudioRate: number) {
+  async function transcodeWave (inputFile: File, outputAudioRate: number) {
+    const inputFileName = 'video'
+    const outputFileName = 'out.data'
+    await writeFile(inputFile, inputFileName)
     const eventEmitter = new EventEmitter()
     const convertMessage = ({ message }: { message: string }) => {
       const duration = takeMediaFileDuration(message)
@@ -98,8 +101,6 @@ export default defineNuxtPlugin(() => {
     ]).then(() => {
       return ffmpegRef.value.readFile(outputFileName) as Promise<Uint8Array>
     }).then((data) => {
-      ffmpegRef.value.deleteFile(outputFileName)
-
       // SharedArrayBuffer 생성
       const int8Data = Int8Array.from(data)
       const sharedBuffer = new SharedArrayBuffer(int8Data.length)
@@ -113,7 +114,8 @@ export default defineNuxtPlugin(() => {
     }).catch(() => {
       eventEmitter.emit('error')
     }).finally(() => {
-
+      ffmpegRef.value.deleteFile(outputFileName)
+      ffmpegRef.value.deleteFile(inputFileName)
       ffmpegRef.value.off('log', convertMessage)
     })
     return eventEmitter
@@ -125,31 +127,31 @@ export default defineNuxtPlugin(() => {
    * @param options ffmpeg options for wav format file (bitrate, channel, etc)
    * @returns audio file data (Uint8Array)
    */
-  async function transcodeAudio (inputFileName: string, outputFileName: string, options: Record<string, number | string> = {}) {
+  async function transcodeAudio (inputFile: File, outputFileName: string, options: Record<string, number | string> = {}) {
+    const inputFileName = 'video'
     const command = ['-i', inputFileName, '-ar', '16000']
-
+    
     for (const [key, value] of Object.entries(options)) {
       command.push(key, String(value))
     }
     command.push(outputFileName)
-
+    
+    await writeFile(inputFile, inputFileName)
     await ffmpegRef.value.exec(command)
     const data = await ffmpegRef.value.readFile(outputFileName, 'binary') as Uint8Array
     ffmpegRef.value.deleteFile(outputFileName)
+    ffmpegRef.value.deleteFile(inputFileName)
     return new Uint8Array(data)
   }
-  async function writeFile (file: Uint8Array, inputFileName: string) {
-    await ffmpegRef.value.writeFile(inputFileName, file)
-  }
-  function clearFile (inputFileName: string) {
-    ffmpegRef.value.deleteFile(inputFileName)
+  async function writeFile (file: File, inputFileName: string) {
+    const arrayBuffer = await file.arrayBuffer()
+    await ffmpegRef.value.writeFile(inputFileName, new Uint8Array(arrayBuffer))
   }
   return {
     provide: {
       ffmpeg: {
         load,
         writeFile,
-        clearFile,
         transcodeWave,
         transcodeAudio
       }
