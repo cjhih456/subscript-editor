@@ -57,7 +57,20 @@ export default defineNuxtComponent({
         data.duration.value = duration
       })
       emitter.value.on('progress', (progress: number) => {
+        if(data.duration.value === 0) { return }
         data.convertProgress.value = Math.round((progress / data.duration.value) * 100)
+      })
+      emitter.value.on('error', () => {
+        emitter.value?.off('duration')
+        emitter.value?.off('progress')
+        emitter.value?.off('done')
+        emitter.value?.off('error')
+        emitter.value = null
+        nuxt.$alert.show('Failed to convert wave data. Please try again.')
+        data.convertProgress.value = 0
+        data.waveScaleValue.value = 0
+        data.waveData.value = null
+        data.duration.value = 0
       })
       emitter.value.on('done', ({ wave, scaleValue }: { wave: SharedArrayBuffer, scaleValue: number }) => {
         emitter.value?.off('duration')
@@ -173,6 +186,7 @@ export default defineNuxtComponent({
           </ClientOnly>
         </div>
       </div>
+      <ClientOnly>
       {
         this.convertProgress > 0 ? (<>
           <div class="fixed top-0 bottom-0 left-0 right-0 bg-gray-500/30 z-10 flex items-center justify-center">
@@ -182,6 +196,7 @@ export default defineNuxtComponent({
           </div>
         </>) : (<></>)
       }
+      </ClientOnly>
     </section>
   }
 })

@@ -111,6 +111,8 @@ export default defineNuxtPlugin(() => {
         wave: sharedBuffer,
         scaleValue: 128
       })
+    }).catch(() => {
+      eventEmitter.emit('error')
     })
     return eventEmitter
   }

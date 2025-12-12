@@ -10,7 +10,9 @@ export default function useFFmpeg () {
     const arrayBuffer = await file.arrayBuffer()
     await nuxt.$ffmpeg.writeFile(new Uint8Array(arrayBuffer), 'video')
     const emitter = nuxt.$ffmpeg.transcodeWave('video', 'out.data', outputAudioRate)
-    await nuxt.$ffmpeg.clearFile('video')
+    emitter.on('done', () => {
+      nuxt.$ffmpeg.clearFile('video')
+    })
     return emitter
   }
 
