@@ -10,8 +10,6 @@ import CueBar from '~/components/core/cue/ui/CueBar'
 import CueEditArea from '~/components/core/cue/ui/CueEditArea'
 import CurrentTimeCursor from '~/components/core/timeline/ui/CurrentTimeCursor'
 import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
-import { Button } from '~/components/ui/button'
-import { Plus, Undo, Redo, Save } from 'lucide-vue-next'
 import { Slider } from '~/components/ui/slider'
 import { ClientOnly } from '#components'
 
@@ -20,6 +18,8 @@ export default defineNuxtComponent({
   setup () {
     const nuxt = useNuxtApp()
     const data = provideSubtitleController()
+
+    const isMobile = computed(() => data.displayWidth.value < 768)
 
     const pixPerSec = computed<number[]>({
       get: () => [data.pixPerSec.value],
@@ -33,10 +33,6 @@ export default defineNuxtComponent({
     const timeBarHeight = ref(20)
     const fontSize = ref(12)
     const waveHeight = ref(50)
-
-    const { create: createCue, get: getCue, allIds, undo, redo, undoAble, redoAble } = data.cueStore
-    const cueCount = computed(() => allIds.value.length)
-    const allCues = computed(() => allIds.value.map(id => getCue(id)))
 
     const { loadFFmpeg, convertWave } = useFFmpeg()
     const { videoFileObjectUrl, setVideoFileObjectUrl, clearVideoFileObjectUrl } = data
@@ -64,59 +60,31 @@ export default defineNuxtComponent({
       // }
     }
 
-    function saveAsFile () {
-      const allText = nuxt.$webVtt.convertJsonToFile(allCues.value)
-      const url = URL.createObjectURL(allText)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'subtitle.vtt'
-      a.click()
-      URL.revokeObjectURL(url)
-    }
+    const allCues = computed(() => data.cueStore.allIds.value.map(id => data.cueStore.get(id)))
 
     return {
       ...data,
       pixPerSec,
-      redo,
-      undo,
-      undoAble,
-      redoAble,
       timeBarHeight,
       fontSize,
       waveHeight,
       allCues,
-      cueCount,
+      isMobile,
       onFileSelect,
-      createCue,
-      saveAsFile
     }
     
   },
   render () {
     return <section class="flex flex-col gap-2 flex-1 p-4">
       <AlertDisplay />
-      <div class="flex grow gap-2">
-        <div class="flex flex-col">
+      <div class="flex gap-2 flex-col md:grow md:flex-row">
+        <div class="flex flex-col grow md:grow-0">
           <FileSelect onFileSelect={this.onFileSelect} />
-          <div class="flex justify-between gap-2 pt-2">
-            <Button onClick={this.createCue} class="rounded-full">
-              <Plus />
-            </Button>
-            <Button onClick={this.undo} disabled={!this.undoAble} class="rounded-full">
-              <Undo />
-            </Button>
-            <Button onClick={this.redo} disabled={!this.redoAble} class="rounded-full">
-              <Redo />
-            </Button>
-            <Button onClick={this.saveAsFile} disabled={!this.allCues.length} class="rounded-full">
-              <Save />
-            </Button>
-          </div>
-          <div class="flex grow w-full">
-            <CueEditArea />
-          </div>
+          <ClientOnly>
+            {!this.isMobile ? <CueEditArea class="grow" /> : <></>}
+          </ClientOnly>
         </div>
-        <div class="flex-1">
+        <div class="md:flex-1">
           <ClientOnly>
             <VideoPlayer
               v-model:currentTime={this.currentTime}
@@ -126,7 +94,7 @@ export default defineNuxtComponent({
           </ClientOnly>
         </div>
       </div>
-      <div class="flex w-full grow-0 gap-2">
+      <div class="flex w-full grow-0 gap-4">
         <BarArea class="flex grow">
           {{
             canvas: () => (
@@ -159,6 +127,9 @@ export default defineNuxtComponent({
           </ClientOnly>
         </div>
       </div>
+      <ClientOnly>
+        {this.isMobile ? <CueEditArea class="grow" /> : <></>}
+      </ClientOnly>
     </section>
   }
 })
