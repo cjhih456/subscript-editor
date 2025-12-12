@@ -77,14 +77,14 @@ export default defineNuxtComponent({
   render () {
     return <section class="flex flex-col gap-2 flex-1 p-4">
       <AlertDisplay />
-      <div class="flex grow gap-2">
-        <div class="flex flex-col">
+      <div class="flex gap-2 flex-col md:grow md:flex-row">
+        <div class="flex flex-col grow md:grow-0">
           <FileSelect onFileSelect={this.onFileSelect} />
           <ClientOnly>
             {!this.isMobile ? <CueEditArea class="grow" /> : <></>}
           </ClientOnly>
         </div>
-        <div class="flex-1">
+        <div class="md:flex-1">
           <ClientOnly>
             <VideoPlayer
               v-model:currentTime={this.currentTime}
@@ -94,7 +94,7 @@ export default defineNuxtComponent({
           </ClientOnly>
         </div>
       </div>
-      <div class="flex w-full grow-0 gap-2">
+      <div class="flex w-full grow-0 gap-4">
         <BarArea class="flex grow">
           {{
             canvas: () => (
@@ -127,6 +127,9 @@ export default defineNuxtComponent({
           </ClientOnly>
         </div>
       </div>
+      <ClientOnly>
+        {this.isMobile ? <CueEditArea class="grow" /> : <></>}
+      </ClientOnly>
     </section>
   }
 })

@@ -98,7 +98,7 @@ export default defineNuxtComponent({
   render () {
     return <AccordionItem value={this.idx}>
       <AccordionTrigger>
-        <div class="flex items-center justify-between w-[300px] px-2">
+        <div class="flex items-center justify-between gap-2 px-2">
           <div class="flex items-center gap-2">
             <span>
               {this.startTimeDisplay}
@@ -118,7 +118,7 @@ export default defineNuxtComponent({
         </div>
       </AccordionTrigger>
       <AccordionContent>
-        <form ref="form" onSubmit={this.submit} class="flex flex-col gap-2 p-2 w-[300px]">
+        <form ref="form" onSubmit={this.submit} class="flex flex-col gap-2 p-2">
           <div class="flex gap-2">
               <TimeInput
                 v-model={this.startTime.value.value}
