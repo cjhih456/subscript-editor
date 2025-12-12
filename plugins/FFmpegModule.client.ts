@@ -98,7 +98,6 @@ export default defineNuxtPlugin(() => {
     ]).then(() => {
       return ffmpegRef.value.readFile(outputFileName) as Promise<Uint8Array>
     }).then((data) => {
-      ffmpegRef.value.off('log', convertMessage)
       ffmpegRef.value.deleteFile(outputFileName)
 
       // SharedArrayBuffer 생성
@@ -113,6 +112,9 @@ export default defineNuxtPlugin(() => {
       })
     }).catch(() => {
       eventEmitter.emit('error')
+    }).finally(() => {
+
+      ffmpegRef.value.off('log', convertMessage)
     })
     return eventEmitter
   }
