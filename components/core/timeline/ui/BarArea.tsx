@@ -2,7 +2,7 @@ import { useConvertProgress, useScrollValue } from '../../provider/SubtitleContr
 import { provideCursorController } from '../../provider/CursorControllerProvider'
 import { Progress } from '~/components/ui/progress'
 import { ClientOnly } from '#components'
-import useWaveConverter from '../../file-select/composables/useWaveConverter'
+import useWaveConverter from '../../ffmpeg/composables/useWaveConverter'
 
 export default defineNuxtComponent({
   name: 'BarArea',
