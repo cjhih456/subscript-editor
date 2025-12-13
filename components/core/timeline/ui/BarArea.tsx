@@ -1,7 +1,6 @@
 import { useConvertProgress, useScrollValue } from '../../provider/SubtitleControllerProvider'
 import { provideCursorController } from '../../provider/CursorControllerProvider'
 import { Progress } from '~/components/ui/progress'
-import { ClientOnly } from '#components'
 
 export default defineNuxtComponent({
   name: 'BarArea',
@@ -29,11 +28,9 @@ export default defineNuxtComponent({
     })
     onBeforeUpdate(() => {
       window.removeEventListener('resize', windowResizeEvent, false)
-      scrollArea.value?.removeEventListener('scroll', scrollEvent)
     })
     onUpdated(() => {
       window.addEventListener('resize', windowResizeEvent, false)
-      scrollArea.value?.addEventListener('scroll', scrollEvent)
     })
     onBeforeUnmount(() => {
       window.removeEventListener('resize', windowResizeEvent, false)
@@ -44,25 +41,21 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <ClientOnly>
-      <div class="relative overflow-hidden bg-card text-card-foreground border-card-foreground">
-        <div ref="scrollArea" class="relative w-full overflow-x-scroll pb-2">
-          <div class="sticky top-0 left-0 right-0">
-            {this.$slots.canvas?.()}
-          </div>
-          {this.$slots.cursor?.()}
-          {this.$slots.default?.()}
+    return <div class="relative overflow-hidden bg-card text-card-foreground border-card-foreground">
+      <div ref="scrollArea" class="relative w-full overflow-x-scroll pb-2">
+        <div class="sticky top-0 left-0 right-0">
+          {this.$slots.canvas?.()}
         </div>
-        {
-          this.convertProgress > 0 ? (<>
-            <div class="absolute top-0 bottom-0 left-0 right-0 bg-gray-500/30 z-10 flex items-center justify-center">
-              <div class="flex-1 p-4">
-                <Progress class="shadow-xl shadow-primary" modelValue={this.convertProgress} max={100} />
-              </div>
-            </div>
-          </>) : (<></>)
-        }
+        {this.$slots.cursor?.()}
+        {this.$slots.default?.()}
       </div>
-    </ClientOnly>
+      {
+        this.convertProgress > 0 ? (<div class="absolute top-0 bottom-0 left-0 right-0 bg-gray-500/30 z-10 flex items-center justify-center">
+          <div class="flex-1 p-4">
+            <Progress class="shadow-xl shadow-primary" modelValue={this.convertProgress} max={100} />
+          </div>
+        </div>) : null
+      }
+    </div>
   }
 })
