@@ -1,7 +1,6 @@
 import AlertDisplay from '~/components/core/alert/ui/AlertDisplay'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
-import { provideSubtitleController } from '~/components/core/provider/SubtitleControllerProvider'
-import FileSelect from '~/components/core/file-select/ui/FileSelect.vue'
+import { useDisplayWidth, usePixPerSec, useCueStore, useCurrentTime, useVideoFileObjectUrl } from '~/components/core/provider/SubtitleControllerProvider'
 import TimeBar from '~/components/core/timeline/ui/TimeBar'
 import WaveBar from '~/components/core/timeline/ui/WaveBar'
 import BarArea from '~/components/core/timeline/ui/BarArea'
@@ -15,16 +14,20 @@ import { ClientOnly } from '#components'
 export default defineNuxtComponent({
   name: 'IndexPage',
   setup () {
-    const data = provideSubtitleController()
+    const { get: getCue, allIds } = useCueStore()
+    const displayWidth = useDisplayWidth()
+    const pixPerSecOrigin = usePixPerSec()
+    const currentTime = useCurrentTime()
+    const { videoFileObjectUrl } = useVideoFileObjectUrl()
 
-    const isMobile = computed(() => data.displayWidth.value < 768)
+    const isMobile = computed(() => displayWidth.value < 768)
 
     const pixPerSec = computed<number[]>({
-      get: () => [data.pixPerSec.value],
+      get: () => [pixPerSecOrigin.value],
       set: (value) => {
         if (value[0] === undefined) { return }
-        if (value[0] === data.pixPerSec.value) { return }
-        data.pixPerSec.value = value[0]
+        if (value[0] === pixPerSecOrigin.value) { return }
+        pixPerSecOrigin.value = value[0]
       }
     })
 
@@ -32,10 +35,11 @@ export default defineNuxtComponent({
     const fontSize = ref(12)
     const waveHeight = ref(50)
 
-    const allCues = computed(() => data.cueStore.allIds.value.map(id => data.cueStore.get(id)))
+    const allCues = computed(() => allIds.value.map(id => getCue(id)))
 
     return {
-      ...data,
+      videoFileObjectUrl,
+      currentTime,
       pixPerSec,
       timeBarHeight,
       fontSize,
@@ -49,7 +53,6 @@ export default defineNuxtComponent({
       <AlertDisplay />
       <div class="flex gap-2 flex-col md:grow md:flex-row">
         <div class="flex flex-col grow md:grow-0">
-          <FileSelect />
           <ClientOnly>
             {!this.isMobile ? <CueEditArea class="grow" /> : <></>}
           </ClientOnly>
