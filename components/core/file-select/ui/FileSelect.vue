@@ -1,21 +1,13 @@
 <script setup lang="ts">
-import useFileSelect from '../composables/useFileSelect'
-import { InputGroup, InputGroupVideoInput } from '~/components/ui/input-group'
+import { FileVideoCameraIcon } from 'lucide-vue-next';
+import useVideoFileSelect from '../composables/useVideoFileSelect'
 
-const emit = defineEmits<{
-  (e: 'fileSelect', file: File | undefined): void
-}>()
-
-const { fileChangeEvent } = useFileSelect({
-  onFileSelect: (file: File | undefined) => {
-    emit('fileSelect', file)
-  }
-})
+const { open } = useVideoFileSelect()
 </script>
 <template>
   <ClientOnly>
-    <InputGroup>
-      <InputGroupVideoInput @change="fileChangeEvent"  />
-    </InputGroup>
+    <Button @click="() => open()">
+      <FileVideoCameraIcon />
+    </Button>
   </ClientOnly>
 </template>

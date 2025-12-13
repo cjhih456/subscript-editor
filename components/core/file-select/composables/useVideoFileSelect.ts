@@ -1,17 +1,20 @@
 import { useVideoFile } from '~/components/core/provider/SubtitleControllerProvider'
+import { useFileDialog } from '@vueuse/core'
 
-export default function useFileSelect ({ onFileSelect }: {
-  onFileSelect: (file: File | undefined) => void
-}) {
+export default function useFileSelect () {
   const nuxt = useNuxtApp()
   const videoFile = useVideoFile()
-
-  function fileChangeEvent (e: InputEvent) {
-    const target = e.target as HTMLInputElement
-    if (target.files) {
-      fileSelect(target.files[0])
-    }
-  }
+  const { open, reset, onChange } = useFileDialog({
+    accept: 'video/*',
+    multiple: false,
+  })
+  onChange((files) => {
+    if(!files) { return }
+    const file = files.item(0)
+    if(!file) { return }
+    fileSelect(file)
+    reset()
+  })
 
   function fileSelect (file: File | File[] | undefined) {
     if (!file) { return }
@@ -27,7 +30,6 @@ export default function useFileSelect ({ onFileSelect }: {
         nuxt.$alert.show(valide)
       } else {
         videoFile.value = fileToSelect
-        onFileSelect(fileToSelect)
       }
     }
   }
@@ -40,6 +42,6 @@ export default function useFileSelect ({ onFileSelect }: {
   }
 
   return {
-    fileChangeEvent
+    open
   }
 }
