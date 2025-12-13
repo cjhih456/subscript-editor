@@ -48,7 +48,7 @@ export default defineNuxtComponent({
     return <ClientOnly>
       <Sheet v-model:open={this.sideMenuState}>
         <SheetTrigger asChild>
-          <Button>
+          <Button variant="ghost" size="icon">
             <MenuIcon />
           </Button>
         </SheetTrigger>
