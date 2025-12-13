@@ -10,6 +10,7 @@ import CurrentTimeCursor from '~/components/core/timeline/ui/CurrentTimeCursor'
 import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
 import { Slider } from '~/components/ui/slider'
 import { ClientOnly } from '#components'
+import useWaveConverter from '~/components/core/ffmpeg/composables/useWaveConverter'
 
 export default defineNuxtComponent({
   name: 'IndexPage',
@@ -19,6 +20,8 @@ export default defineNuxtComponent({
     const pixPerSecOrigin = usePixPerSec()
     const currentTime = useCurrentTime()
     const { videoFileObjectUrl } = useVideoFileObjectUrl()
+
+    useWaveConverter()
 
     const isMobile = computed(() => displayWidth.value < 768)
 
