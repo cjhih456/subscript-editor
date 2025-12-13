@@ -21,6 +21,7 @@
 - [x] use Provide & Inject - done
 - [x] display long duration convert status
 - [x] change layout as responsive
+- [x] update ui/ux
 
 ### Whisper endpoint
 [Whisper Setup document](https://ahmetoner.com/whisper-asr-webservice/run/)
