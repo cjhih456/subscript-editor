@@ -26,6 +26,7 @@ https://cjhih456.github.io/subscript-editor/
 - [x] change layout as responsive
 - [x] update ui/ux
 - [x] open vtt, sbv, srt files
+- [ ] add call whisper api action.
 
 ### Whisper endpoint
 [Whisper Setup document](https://ahmetoner.com/whisper-asr-webservice/run/)
