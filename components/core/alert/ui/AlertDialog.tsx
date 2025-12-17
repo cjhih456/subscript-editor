@@ -1,7 +1,7 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogTitle, AlertDialogTrigger } from "~/components/ui/alert-dialog"
 
 export default defineNuxtComponent({
-  name: 'SubtitleFileSelectWarning',
+  name: 'AlertDialog',
   props: {
     title: {
       type: String,

@@ -6,7 +6,7 @@ import useSaveCue from "../composables/useSaveCue"
 import { MenuIcon, Moon, Sun } from "lucide-vue-next"
 import useSubtitleFileSelect from "../composables/useSubtitleFileSelect"
 import { useCueStore } from "../../provider/SubtitleControllerProvider"
-import SubtitleFileSelectWarning from "./SubtitleFileSelectWarning"
+import AlertDialog from "../../alert/ui/AlertDialog"
 
 export default defineNuxtComponent({
   name: 'SideMenu',
@@ -85,7 +85,7 @@ export default defineNuxtComponent({
             <Button onClick={() => this.openVideoFileSelectorAction()}>
               Open Video File
             </Button>
-            {this.saveAble ? (<SubtitleFileSelectWarning
+            {this.saveAble ? (<AlertDialog
               title="Subtitle File Select Warning"
               description="Are you sure you want to select a subtitle file?"
               onConfirm={() => this.openSubtitleFileSelectAction()}
@@ -96,7 +96,7 @@ export default defineNuxtComponent({
                   Open Subtitle File
                 </Button>)
               }}
-            </SubtitleFileSelectWarning>) : <Button onClick={() => this.openSubtitleFileSelectAction()}>
+            </AlertDialog>) : <Button onClick={() => this.openSubtitleFileSelectAction()}>
               Open Subtitle File
             </Button>}
             
