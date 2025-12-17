@@ -8,7 +8,7 @@ import BigPlayButton from './BigPlayButton'
 import type { TranslateResult } from '~/plugins/WebVttPlugin'
 import style from '~/assets/styles/components/VideoPlayer/index.module.css'
 import 'video.js/dist/video-js.css'
-
+import { ClientOnly } from '#components'
 export default defineNuxtComponent({
   name: 'VideoPlayer',
   props: {
@@ -168,7 +168,8 @@ export default defineNuxtComponent({
     return { videoPlayer, videoPlayerReady, status, currentTime }
   },
   render () {
-    return <div class="relative h-full w-full">
+    return <ClientOnly>
+      <div class="relative h-full w-full">
         <video ref="video" class={style['video-player']}></video>
         {this.videoPlayerReady && <Teleport to={this.videoPlayer && `#${this.videoPlayer.id_}` as string}>
           <ControlArea
@@ -181,6 +182,7 @@ export default defineNuxtComponent({
             player={this.videoPlayer}
           ></BigPlayButton>
         </Teleport>}
-    </div>
+      </div>
+    </ClientOnly>
   }
 })

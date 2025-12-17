@@ -61,13 +61,11 @@ export default defineNuxtComponent({
           </ClientOnly>
         </div>
         <div class="md:flex-1">
-          <ClientOnly>
-            <VideoPlayer
-              v-model:currentTime={this.currentTime}
-              subscript={this.allCues}
-              src={this.videoFileObjectUrl || undefined}
-            />
-          </ClientOnly>
+          <VideoPlayer
+            v-model:currentTime={this.currentTime}
+            subscript={this.allCues}
+            src={this.videoFileObjectUrl || undefined}
+          />
         </div>
       </div>
       <div class="flex w-full grow-0 gap-4">

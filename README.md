@@ -1,5 +1,8 @@
 # Subtitles editor
 
+## Playground
+https://cjhih456.github.io/subscript-editor/
+
 ### used tech
 - [FFmpeg wasm](https://ffmpegwasm.netlify.app/docs/overview)
   - Used to extract audio waveform data.
@@ -22,6 +25,8 @@
 - [x] display long duration convert status
 - [x] change layout as responsive
 - [x] update ui/ux
+- [x] open vtt, sbv, srt files
+- [ ] add call whisper api action.
 
 ### Whisper endpoint
 [Whisper Setup document](https://ahmetoner.com/whisper-asr-webservice/run/)
