@@ -8,8 +8,7 @@ export default defineNuxtComponent({
       required: true,
     },
     description: {
-      type: String,
-      required: true,
+      type: String
     },
     onConfirm: {
       type: Function,
@@ -26,7 +25,10 @@ export default defineNuxtComponent({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogTitle>{this.title}</AlertDialogTitle>
-        <AlertDialogDescription>{this.description}</AlertDialogDescription>
+        <AlertDialogDescription>{
+          this.$slots.description?.() ||
+          this.description
+        }</AlertDialogDescription>
         <AlertDialogFooter>
           {
             this.onConfirm && <AlertDialogAction onClick={() => this.onConfirm?.()}>

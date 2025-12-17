@@ -87,11 +87,16 @@ export default defineNuxtComponent({
             </Button>
             {this.saveAble ? (<AlertDialog
               title="Subtitle File Select Warning"
-              description="Are you sure you want to select a subtitle file?"
               onConfirm={() => this.openSubtitleFileSelectAction()}
               onCancel={() => {}}
             >
               {{
+                description: () => (
+                  <p>
+                    This action can be reset, which means what you edited in the subtitle editor will be lost.<br />
+                    Are you sure you want to select a subtitle file?
+                  </p>
+                ),
                 trigger: () => (<Button>
                   Open Subtitle File
                 </Button>)
