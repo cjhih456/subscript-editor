@@ -1,3 +1,4 @@
+import { refThrottled } from '@vueuse/core'
 import { ref, onMounted, onBeforeUnmount, computed, provide, inject, type ComputedRef, type InjectionKey } from 'vue'
 
 // 커서 컨트롤러에서 지원하는 요소 타입
@@ -57,13 +58,14 @@ export function provideCursorController (searchDepth: number = 2) {
   // 현재 드래그 중인 요소의 ID
   const activeDragElementId = ref<WeakRef<HTMLElement> | null>(null)
   // 마우스 위치
-  const mousePosition = ref({ x: 0, y: 0 })
+  const mousePositionOriginal = ref({ x: 0, y: 0 })
+  const mousePosition = refThrottled(mousePositionOriginal, 25)
   // 현재 드래그 중인 요소의 부분 (가장자리 또는 중앙)
   const activeDragElementPart = ref<'start' | 'end' | 'middle' | null>(null)
 
   // 마우스 이벤트 핸들러
   function handleMouseMove (event: MouseEvent) {
-    mousePosition.value = { x: event.clientX, y: event.clientY }
+    mousePositionOriginal.value = { x: event.clientX, y: event.clientY }
 
     // 드래그 중인 요소가 있으면 해당 요소의 핸들러 호출
     if (activeDragElementId.value) {
