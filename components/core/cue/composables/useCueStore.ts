@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-
+import type { VTTCueSlim } from '~/plugins/WebVttPlugin'
 export interface CueDataInterface {
   startTime: number
   endTime: number
@@ -21,6 +21,7 @@ export interface CueStoreInterface {
   allIds: ComputedRef<string[]>
   undoAble: ComputedRef<boolean>
   redoAble: ComputedRef<boolean>
+  loadCues: (cues: (VTTCue | VTTCueSlim)[]) => void
   get: (idx: string) => CueDataInterface
   create: () => void
   update: (idx: string, cueData: CueDataInterface) => void
@@ -37,6 +38,13 @@ export default function useCueStore (): CueStoreInterface {
 
   const undoAble = computed(() => currentIndex.value >= 0)
   const redoAble = computed(() => currentIndex.value < historyStack.value.length - 1)
+
+  const storeCleanAction = () => {
+    cueStore.value.clear()
+    cueStoreKeys.value = []
+    historyStack.value = []
+    currentIndex.value = -1
+  }
 
   const storeCreateAction = (idx: string, cueData: CueDataInterface) => {
     cueStore.value.set(idx, cueData)
@@ -141,10 +149,24 @@ export default function useCueStore (): CueStoreInterface {
     }
   }
 
+  function loadCues (cues: VTTCue[]) {
+    storeCleanAction()
+    cues.forEach(cue => {
+      const idx = uuid()
+      storeCreateAction(idx, {
+        startTime: cue.startTime,
+        endTime: cue.endTime,
+        text: cue.text
+      })
+    })
+  }
+
+
   return {
     allIds,
     undoAble,
     redoAble,
+    loadCues,
     get,
     create,
     update,
