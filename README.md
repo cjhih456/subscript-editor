@@ -1,5 +1,8 @@
 # Subtitles editor
 
+## Playground
+https://cjhih456.github.io/subscript-editor/
+
 ### used tech
 - [FFmpeg wasm](https://ffmpegwasm.netlify.app/docs/overview)
   - Used to extract audio waveform data.
