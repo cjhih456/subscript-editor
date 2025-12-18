@@ -18,6 +18,7 @@ interface HistoryData {
 }
 
 export interface CueStoreInterface {
+  store: Ref<Map<string, CueDataInterface>>
   allIds: ComputedRef<string[]>
   undoAble: ComputedRef<boolean>
   redoAble: ComputedRef<boolean>
@@ -149,7 +150,7 @@ export default function useCueStore (): CueStoreInterface {
     }
   }
 
-  function loadCues (cues: VTTCue[]) {
+  function loadCues (cues: (VTTCue | VTTCueSlim)[]) {
     storeCleanAction()
     cues.forEach(cue => {
       const idx = uuid()
@@ -163,6 +164,7 @@ export default function useCueStore (): CueStoreInterface {
 
 
   return {
+    store: cueStore,
     allIds,
     undoAble,
     redoAble,

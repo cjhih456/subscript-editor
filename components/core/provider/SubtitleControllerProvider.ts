@@ -46,6 +46,7 @@ export function provideSubtitleController () {
 
   const scrollValue = ref<number>(0)
   const scrollClientLeft = ref<number>(0)
+  const scrollWidth = ref<number>(0)
   const scrollTime = computed(() => scrollValue.value / pixPerSec.value)
 
   provide(VIDEO_FILE, videoFile)
@@ -57,6 +58,7 @@ export function provideSubtitleController () {
   provide(SCROLL_VALUE, {
     time: scrollTime,
     left: scrollClientLeft,
+    width: scrollWidth,
     value: scrollValue
   })
   provide(CONVERT_PROGRESS, convertProgress)
@@ -128,7 +130,8 @@ export function useScrollValue () {
   const scrollValue = inject<{
     time: ComputedRef<number>,
     left: Ref<number>,
-    value: Ref<number>
+    value: Ref<number>,
+    width: Ref<number>
   }>(SCROLL_VALUE)
   if (!scrollValue) {
     throw new Error('SCROLL_VALUE is not injected')

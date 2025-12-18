@@ -6,14 +6,16 @@ export default defineNuxtComponent({
   name: 'BarArea',
   setup () {
     const scrollArea = useTemplateRef<HTMLDivElement>('scrollArea')
-    const { value: scrollValue, left: scrollClientLeft } = useScrollValue()
+    const { value: scrollValue, left: scrollClientLeft, width: scrollWidth } = useScrollValue()
     const convertProgress = useConvertProgress()
 
     provideCursorController(3)
 
     function windowResizeEvent () {
       if (!scrollArea.value) { return }
-      scrollClientLeft.value = scrollArea.value.getBoundingClientRect().left
+      const { left, width } = scrollArea.value.getBoundingClientRect()
+      scrollClientLeft.value = left
+      scrollWidth.value = width
     }
 
     function scrollEvent () {
