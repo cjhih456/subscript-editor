@@ -48,7 +48,12 @@ export default defineNuxtConfig({
     },
     plugins: [
       tailwindcss()
-    ]
+    ],
+    server: {
+      headers: {
+        'Cross-Origin-Embedder-Policy': 'require-corp',
+      }
+    }
   },
   css: ['@/assets/styles/init.css'],
   runtimeConfig: {
