@@ -29,7 +29,15 @@ export function provideWhisperProvider () {
   const willUseWhisper = ref<boolean>(false)
   const selectedLanguage = ref<string>('en')
   const supportedLanguages = readonly(!import.meta.client ? [] : [
-    'am', 'ar', 'as', 'az', 'be', 'bg', 'bn', 'bo', 'br', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'en', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'gl', 'gu', 'he', 'hi', 'hr', 'ht', 'hu', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'km', 'kn', 'ko', 'la', 'lb', 'lo', 'lt', 'lv', 'mg', 'mi', 'mk', 'ml', 'mn', 'mr', 'ms', 'mt', 'my', 'ne', 'nl', 'nn', 'no', 'oc', 'pa', 'pl', 'ps', 'pt', 'ro', 'ru', 'sa', 'sd', 'si', 'sk', 'sl', 'sn', 'so', 'sq', 'sr', 'sv', 'sw', 'ta', 'te', 'tg', 'th', 'tk', 'tl', 'tr', 'uk', 'ur', 'uz', 'vi', 'yi', 'yo', 'zh'
+    'am', 'ar', 'as', 'az', 'be', 'bg', 'bn', 'bo', 'br', 'bs',
+    'ca', 'cs', 'cy', 'da', 'de', 'el', 'en', 'es', 'et', 'eu',
+    'fa', 'fi', 'fo', 'fr', 'gl', 'gu', 'he', 'hi', 'hr', 'ht',
+    'hu', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'km', 'kn', 'ko',
+    'la', 'lb', 'lo', 'lt', 'lv', 'mg', 'mi', 'mk', 'ml', 'mn',
+    'mr', 'ms', 'mt', 'my', 'ne', 'nl', 'nn', 'no', 'oc', 'pa',
+    'pl', 'ps', 'pt', 'ro', 'ru', 'sa', 'sd', 'si', 'sk', 'sl',
+    'sn', 'so', 'sq', 'sr', 'sv', 'sw', 'ta', 'te', 'tg', 'th',
+    'tk', 'tl', 'tr', 'uk', 'ur', 'uz', 'vi', 'yi', 'yo', 'zh'
   ].map((code: string) => {
     return {
       code,
