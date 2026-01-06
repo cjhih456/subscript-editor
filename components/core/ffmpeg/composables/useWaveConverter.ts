@@ -1,4 +1,5 @@
-import { useAudioRate, useConvertProgress, useDuration, useVideoFile, useVideoFileObjectUrl, useWaveData, useWaveScaleValue } from "../../provider/SubtitleControllerProvider"
+import { useAudioRate, useConvertProgress, useCueStore, useDuration, useVideoFile, useVideoFileObjectUrl, useWaveData, useWaveScaleValue } from "../../provider/SubtitleControllerProvider"
+import { useWhisperProvider } from "../../whisper"
 import useFFmpeg from "./useFFmpeg"
 import type EventEmitter from "eventemitter3"
 
@@ -12,7 +13,11 @@ export default function useWaveConverter () {
   const waveData = useWaveData()
   const convertProgress = useConvertProgress()
   const emitter = ref<EventEmitter | null>(null)
-  const { loadFFmpeg, convertWave } = useFFmpeg()
+  const { loadFFmpeg, convertWave, convertAsAudio } = useFFmpeg()
+
+  const { willUseWhisper, transcribe, selectedLanguage } = useWhisperProvider()
+  const { loadCues } = useCueStore()
+
   watch(() => file.value, async (newFile) => {
     if (!newFile) { return }
     await loadFFmpeg()
@@ -47,6 +52,19 @@ export default function useWaveConverter () {
       convertProgress.value = 0
       waveScaleValue.value = scaleValue
       waveData.value = wave
+
+      if (!willUseWhisper.value) { return }
+      (async () => {
+        console.log('whisper process start')
+        const audioFile = await convertAsAudio(newFile)
+        const audioFileObjectUrl = URL.createObjectURL(audioFile)
+        const cues = await transcribe(audioFileObjectUrl, selectedLanguage.value)
+        if (cues) {
+          loadCues(cues)
+        }
+        console.log('whisper process done')
+
+      })()
     })
   })
 

@@ -13,8 +13,7 @@ https://cjhih456.github.io/subscript-editor/
 - shadcn/vue
 - Tailwindcss
 - videojs
-- whisper(optional, sub module - nuxt proxy)
-  - If you use Whisper, you can generate subtitles automatically.
+- whisper
 
 ### Featured
 - [x] change UI/UX, Vuetify -> shadcn/vue, @nuxtjs/color-mode 
@@ -26,16 +25,9 @@ https://cjhih456.github.io/subscript-editor/
 - [x] change layout as responsive
 - [x] update ui/ux
 - [x] open vtt, sbv, srt files
-- [ ] add call whisper api action.
-
-### Whisper endpoint
-[Whisper Setup document](https://ahmetoner.com/whisper-asr-webservice/run/)
-On Mac os, not support gpu yet.
-```bash
-## CPU only
-docker pull onerahmet/openai-whisper-asr-webservice
-docker run -d -p 9000:9000 -e ASR_MODEL=base -e ASR_ENGINE=openai_whisper onerahmet/openai-whisper-asr-webservice:latest
-```
+- [x] add call whisper api action. 
+  - https://huggingface.co/docs/transformers.js/pipelines
+  - https://www.webai-js.com/models/whisper-tiny/
 
 ## Setup
 

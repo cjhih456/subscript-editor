@@ -1,12 +1,14 @@
 import { ClientOnly, Switch } from "#components"
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "~/components/ui/sheet"
 import { Button } from "~/components/ui/button"
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "~/components/ui/select"
 import useVideoFileSelect from "../composables/useVideoFileSelect"
 import useSaveCue from "../composables/useSaveCue"
 import { MenuIcon, Moon, Sun } from "lucide-vue-next"
 import useSubtitleFileSelect from "../composables/useSubtitleFileSelect"
 import { useCueStore } from "../../provider/SubtitleControllerProvider"
 import AlertDialog from "../../alert/ui/AlertDialog"
+import { useWhisperProvider } from "../../whisper"
 
 export default defineNuxtComponent({
   name: 'SideMenu',
@@ -47,10 +49,15 @@ export default defineNuxtComponent({
       sideMenuState.value = false
     }
 
+    const { willUseWhisper, selectedLanguage, supportedLanguages } = useWhisperProvider()
+
     return {
       openVideoFileSelectorAction,
       openSubtitleFileSelectAction,
       sideMenuState,
+      willUseWhisper,
+      selectedLanguage,
+      supportedLanguages,
       saveAble,
       saveCueAction,
       toggleTheme,
@@ -108,6 +115,27 @@ export default defineNuxtComponent({
             <Button onClick={() => this.saveCueAction()} disabled={!this.saveAble}>
               Export Cues as VTT
             </Button>
+            <div class="flex items-center justify-between text-foreground">
+              <p>Whisper AI</p>
+              <Switch v-model={this.willUseWhisper} />
+            </div>
+            {this.willUseWhisper ? (
+              <div class="flex items-center justify-between text-foreground gap-4">
+                <p>Language</p>
+                <Select v-model={this.selectedLanguage}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {this.supportedLanguages.map((language) => (
+                      <SelectItem value={language.code}>
+                        {language.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : null}
           </div>
         </SheetContent>
       </Sheet>

@@ -39,8 +39,10 @@ if (typeof window === 'undefined') {
             return response
           }
           const newHeaders = new Headers(response.headers)
+          newHeaders.set('Cross-Origin-Resource-Policy', 'cross-origin')
           newHeaders.set('Cross-Origin-Embedder-Policy', coepCredentialless ? 'credentialless' : 'require-corp')
           newHeaders.set('Cross-Origin-Opener-Policy', 'same-origin')
+          newHeaders.set('Cross-Security-Policy', "base-uri 'none'; font-src 'self' https: data:; form-action 'self'; frame-ancestors 'self'; img-src 'self' data:; object-src 'none'; script-src-attr 'none'; style-src 'self' https: 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-inline'; upgrade-insecure-requests; worker-src 'self' blob: https://cdn.jsdelivr.net/npm/; script-src-elem 'self' 'unsafe-inline' blob:;")
 
           return new Response(response.body, {
             status: response.status,

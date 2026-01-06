@@ -1,9 +1,11 @@
 import { provideSubtitleController } from "~/components/core/provider/SubtitleControllerProvider"
+import { provideWhisperProvider } from "~/components/core/whisper"
 
 export default defineNuxtComponent({
   name: 'DefaultLayout',
   setup () {
     provideSubtitleController()
+    provideWhisperProvider()
   },
   render () {
     return <section class="h-full min-h-screen flex flex-col relative">
