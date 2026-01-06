@@ -120,7 +120,7 @@ export default defineNuxtComponent({
               <Switch v-model={this.willUseWhisper} />
             </div>
             {this.willUseWhisper ? (
-              <div class="flex items-center justify-between text-foreground">
+              <div class="flex items-center justify-between text-foreground gap-4">
                 <p>Language</p>
                 <Select v-model={this.selectedLanguage}>
                   <SelectTrigger>
