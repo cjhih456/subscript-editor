@@ -51,6 +51,10 @@ export function provideWhisperProvider () {
 
   watch(willUseWhisper, async (value) => {
     if (!import.meta.client || !value || whisper.value) {
+      whisper.value?.clearQueue()
+      whisper.value?.clearMemory()
+      whisper.value?.terminate()
+      whisper.value = null
       return
     }
     whisper.value = await WebAI.create({
@@ -69,10 +73,14 @@ export function provideWhisperProvider () {
         device: 'wasm',
       }],
       onDownloadProgress: (progress) => {
-        modelProgress.value = Math.round(progress.progress * 100)
+        modelProgress.value = progress.progress
+        sessionStorage.setItem('whisper-model-progress', modelProgress.value.toString())
       },
       callbackThrottle: 100,
     })
+    if (whisper.value.isInitialized) {
+      sessionStorage.setItem('whisper-model-progress', '100')
+    }
   })
 
   function convertResultAsVtt (result: WhisperResult) {
@@ -131,7 +139,7 @@ export function provideWhisperProvider () {
     }, [])
   }
 
-  async function transcribe (fileBlobUrl: string, language: string = 'en') {
+  async function transcribeProcess (fileBlobUrl: string, language: string = 'en') {
     const result = await whisper.value?.generate({
       userInput: {
         audio_blob_url: fileBlobUrl
@@ -150,6 +158,22 @@ export function provideWhisperProvider () {
     }) as WhisperResult
 
     return convertResultAsVtt(result)
+  }
+
+  async function transcribe(fileBlobUrl: string, language: string = 'en') {
+    if(sessionStorage.getItem('whisper-model-progress') === '100') {
+      return transcribeProcess(fileBlobUrl, language)
+    }
+    return new Promise(resolve => {
+      const interval = setInterval(() => {
+        if (sessionStorage.getItem('whisper-model-progress') === '100' && whisper.value?.isInitialized) {
+          resolve(true)
+          clearInterval(interval)
+        }
+      }, 100)
+    }).then(() => {
+      return transcribeProcess(fileBlobUrl, language)
+    })
   }
 
   provide<WhisperProvider>(WHISPER_PROVIDER, {
