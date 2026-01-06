@@ -50,9 +50,16 @@ export function provideWhisperProvider () {
       dev: import.meta.env.DEV,
     })
     await whisper.value?.init({
-      mode: 'webai',
-      precision: 'fp16',
-      device: 'webgpu',
+      mode: 'auto',
+      priorities: [{
+        mode: 'webai',
+        precision: 'fp16',
+        device: 'webgpu',
+      }, {
+        mode: 'webai',
+        precision: 'uint8',
+        device: 'wasm',
+      }],
       onDownloadProgress: (progress) => {
         modelProgress.value = Math.round(progress.progress * 100)
       },
