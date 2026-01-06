@@ -99,16 +99,6 @@ export default defineNuxtConfig({
           crossOriginResourcePolicy: 'cross-origin',
           crossOriginOpenerPolicy: 'same-origin'
         }
-      },
-      '/whisper/**': {
-        proxy: {
-          to: 'http://localhost:9000/**',
-          streamRequest: true,
-          sendStream: true,
-          fetchOptions: {
-            mode: 'cors'
-          }
-        }
       }
     }
   },
