@@ -15,7 +15,7 @@ export interface WhisperProvider {
 
 interface WhisperResult {
   result: string
-  timestamps?: {
+  chunks?: {
     timestamp: [number, number]
     text: string
   }[]
@@ -68,7 +68,7 @@ export function provideWhisperProvider () {
   })
 
   function convertResultAsVtt (result: WhisperResult) {
-    return result.timestamps?.map((timestamp) => {
+    return result.chunks?.map((timestamp) => {
       return {
         startTime: timestamp.timestamp[0],
         endTime: timestamp.timestamp[1],
@@ -89,8 +89,8 @@ export function provideWhisperProvider () {
       modelConfig: {
         language,
         task: 'transcribe',
-        return_timestamps: true,
         condition_on_prev_tokens: true,
+        return_timestamps: 'word',
         num_beams: 4,
       }
     }) as WhisperResult
