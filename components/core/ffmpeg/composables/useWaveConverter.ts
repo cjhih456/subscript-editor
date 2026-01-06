@@ -43,7 +43,7 @@ export default function useWaveConverter () {
       waveData.value = null
       duration.value = 0
     })
-    emitter.value.on('done', ({ wave, scaleValue }: { wave: SharedArrayBuffer, scaleValue: number }) => {
+    emitter.value.on('done', async ({ wave, scaleValue }: { wave: SharedArrayBuffer, scaleValue: number }) => {
       emitter.value?.off('duration')
       emitter.value?.off('progress')
       emitter.value?.off('done')
@@ -54,17 +54,14 @@ export default function useWaveConverter () {
       waveData.value = wave
 
       if (!willUseWhisper.value) { return }
-      (async () => {
-        console.log('whisper process start')
-        const audioFile = await convertAsAudio(newFile)
-        const audioFileObjectUrl = URL.createObjectURL(audioFile)
-        const cues = await transcribe(audioFileObjectUrl, selectedLanguage.value)
-        if (cues) {
-          loadCues(cues)
-        }
-        console.log('whisper process done')
-
-      })()
+      console.debug('whisper process start')
+      const audioFile = await convertAsAudio(newFile)
+      const audioFileObjectUrl = URL.createObjectURL(audioFile)
+      const cues = await transcribe(audioFileObjectUrl, selectedLanguage.value)
+      if (cues) {
+        loadCues(cues)
+      }
+      console.debug('whisper process done')
     })
   })
 
