@@ -25,7 +25,7 @@ https://cjhih456.github.io/subscript-editor/
 - [x] change layout as responsive
 - [x] update ui/ux
 - [x] open vtt, sbv, srt files
-- [ ] add call whisper api action. 
+- [x] add call whisper api action. 
   - https://huggingface.co/docs/transformers.js/pipelines
   - https://www.webai-js.com/models/whisper-tiny/
 
