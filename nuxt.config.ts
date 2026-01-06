@@ -9,7 +9,13 @@ export default defineNuxtConfig({
   app: {
     head: import.meta.env.DEV
       ? {
-          charset: 'utf-8'
+          charset: 'utf-8',
+          meta: [
+            {
+              'http-equiv': 'Cross-Security-Policy',
+              content: 'unsafe-eval'
+            }
+          ]
         }
       : {
           charset: 'utf-8',
@@ -19,10 +25,10 @@ export default defineNuxtConfig({
               rel: 'preload',
               href: './worker.js',
               crossorigin: 'use-credentials',
-              integrity: 'sha384-rQEcC031XfytcqUuCLKA3ijYnmFEz247ZPEv1Abi7USpTphR8b6kyepOyI55QKv9'
+              integrity: 'sha384-tA5I4nRCst+/8GlgPEWF5KUEZ1hXD739JJrMr++7oGtz8enYsOz821pP/a/rToEy'
             }
           ],
-          script: [{ src: './worker.js', crossorigin: 'use-credentials', integrity: 'sha384-rQEcC031XfytcqUuCLKA3ijYnmFEz247ZPEv1Abi7USpTphR8b6kyepOyI55QKv9' }]
+          script: [{ src: './worker.js', crossorigin: 'use-credentials', integrity: 'sha384-tA5I4nRCst+/8GlgPEWF5KUEZ1hXD739JJrMr++7oGtz8enYsOz821pP/a/rToEy' }]
         }
   },
   colorMode: {
@@ -42,14 +48,7 @@ export default defineNuxtConfig({
     },
     plugins: [
       tailwindcss()
-    ],
-    server: {
-      headers: {
-        permissionsPolicy: 'fullscreen=self',
-        'Cross-Origin-Opener-Policy': 'same-origin',
-        'Cross-Origin-Embedder-Policy': 'require-corp'
-      }
-    }
+    ]
   },
   css: ['@/assets/styles/init.css'],
   runtimeConfig: {
@@ -66,13 +65,20 @@ export default defineNuxtConfig({
   },
   security: {
     sri: true,
+    enabled: true,
     removeLoggers: false,
     headers: {
       crossOriginResourcePolicy: 'cross-origin',
       crossOriginOpenerPolicy: 'same-origin',
       crossOriginEmbedderPolicy: 'require-corp',
+      contentSecurityPolicy: {
+        'script-src': ["'self'", "'wasm-unsafe-eval'", "'unsafe-inline'"],
+        'worker-src': ["'self'", "blob:", "https://cdn.jsdelivr.net/npm/"],
+        'script-src-elem': ["'self'", "'unsafe-inline'", 'blob:'],
+      },
       permissionsPolicy: {
-        fullscreen: 'self'
+        fullscreen: 'self',
+        
       }
     },
     corsHandler: {
