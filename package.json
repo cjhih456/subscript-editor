@@ -46,6 +46,7 @@
     "gh-pages": "^6.1.1",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.556.0",
+    "motion-v": "^1.7.5",
     "nuxt-security": "^2.2.0",
     "postcss": "^8.4.35",
     "reka-ui": "^2.7.0",

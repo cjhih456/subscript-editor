@@ -159,15 +159,13 @@ export function provideWhisperProvider () {
         audio_blob_url: fileBlobUrl
       },
       generateConfig: {
-        chunk_length_s: 5,
+        chunk_length_s: 30,
         target_sample_rate: 16000,
       },
       modelConfig: {
         language,
-        task: 'transcribe',
         condition_on_prev_tokens: true,
         return_timestamps: 'word',
-        num_beams: 4,
       }
     }) as WhisperResult
     processStatus.value = WhisperProcessStatus.IDLE

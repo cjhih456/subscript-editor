@@ -8300,6 +8300,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hey-listen@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "hey-listen@npm:1.0.8"
+  checksum: 10c0/38db3028b4756f3d536c0f6a92da53bad577ab649b06dddfd0a4d953f9a46bbc6a7f693c8c5b466a538d6d23dbc469260c848427f0de14198a2bbecbac37b39e
+  languageName: node
+  linkType: hard
+
 "hookable@npm:^5.5.3":
   version: 5.5.3
   resolution: "hookable@npm:5.5.3"
@@ -9795,6 +9802,35 @@ __metadata:
   version: 0.1.1
   resolution: "mocked-exports@npm:0.1.1"
   checksum: 10c0/14b0a424f20ad64f49bb36f3068640fb2dbe2f702e9d775ab278636381c09db62bc7ba88ff3874edb8eefb4c1b40c38a6aade5afe80bd34009cc563a0a573c60
+  languageName: node
+  linkType: hard
+
+"motion-dom@npm:^12.23.23":
+  version: 12.24.0
+  resolution: "motion-dom@npm:12.24.0"
+  dependencies:
+    motion-utils: "npm:^12.23.28"
+  checksum: 10c0/5acb91432d6f4e30ba501eb18c09f5ce3d02e3e0b3bda577ab640e4390ccd7b5d1b8f78acb2a9529b2b1c642161c75b61895cd65c3d82472809bf6b68a768f01
+  languageName: node
+  linkType: hard
+
+"motion-utils@npm:^12.23.28":
+  version: 12.23.28
+  resolution: "motion-utils@npm:12.23.28"
+  checksum: 10c0/3cfd3a25c83322c8d6454dd65ec17ad30a69518577166f0e6bdeefc6cafa3a7a73e29d4804b547b15a5c5c41cd1f5ca2d99c0e61d036a64a00ff33796bc286e1
+  languageName: node
+  linkType: hard
+
+"motion-v@npm:^1.7.5":
+  version: 1.7.5
+  resolution: "motion-v@npm:1.7.5"
+  dependencies:
+    hey-listen: "npm:^1.0.8"
+    motion-dom: "npm:^12.23.23"
+  peerDependencies:
+    "@vueuse/core": ">=10.0.0"
+    vue: ">=3.0.0"
+  checksum: 10c0/6a7f64879e29b6d477d57b0688b30d029ec2da2a043e745fe887b0107c16b81644172bf56789316044a66e10ecd967aa98eb7d4c35fd50b9e379c7756fc98066
   languageName: node
   linkType: hard
 
@@ -12193,6 +12229,7 @@ __metadata:
     gh-pages: "npm:^6.1.1"
     lodash: "npm:^4.17.21"
     lucide-vue-next: "npm:^0.556.0"
+    motion-v: "npm:^1.7.5"
     nuxt: "npm:^4.2.1"
     nuxt-security: "npm:^2.2.0"
     postcss: "npm:^8.4.35"
