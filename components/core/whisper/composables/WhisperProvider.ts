@@ -159,7 +159,7 @@ export function provideWhisperProvider () {
         audio_blob_url: fileBlobUrl
       },
       generateConfig: {
-        chunk_length_s: 30,
+        chunk_length_s: 10,
         target_sample_rate: 16000,
       },
       modelConfig: {
