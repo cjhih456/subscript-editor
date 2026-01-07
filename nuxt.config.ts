@@ -93,11 +93,12 @@ export default defineNuxtConfig({
     }
   },
   nitro: {
-    routeRules: {
-      '/_nuxt/**': {
+    runtimeConfig: {
+      security: {
         headers: {
           crossOriginResourcePolicy: 'cross-origin',
-          crossOriginOpenerPolicy: 'same-origin'
+          crossOriginOpenerPolicy: 'same-origin',
+          crossOriginEmbedderPolicy: 'require-corp'
         }
       }
     }
