@@ -4,6 +4,13 @@ import type { CueDataInterface } from '~/components/core/cue/composables/useCueS
 
 export const WHISPER_PROVIDER = Symbol('WhisperProvider')
 
+export enum WhisperProcessStatus {
+  NOT_READY = 'not_ready',
+  DOWNLOADING = 'downloading',
+  IDLE = 'idle',
+  PROCESSING = 'processing',
+}
+
 export interface WhisperProvider {
   transcribe: (fileBlobUrl: string, language?: string) => Promise<CueDataInterface[] | undefined>
   modelProgress: Ref<number>
@@ -11,6 +18,7 @@ export interface WhisperProvider {
   willUseWhisper: Ref<boolean>
   selectedLanguage: Ref<string>
   supportedLanguages: DeepReadonly<{ code: string, name: string | undefined }[]>
+  processStatus: Ref<WhisperProcessStatus>
 }
 
 interface WhisperResult {
@@ -28,6 +36,7 @@ export function provideWhisperProvider () {
   const modelProgress = ref<number>(0)
   const willUseWhisper = ref<boolean>(false)
   const selectedLanguage = ref<string>('en')
+  const processStatus = ref<WhisperProcessStatus>(WhisperProcessStatus.NOT_READY)
   const supportedLanguages = readonly(!import.meta.client ? [] : [
     'am', 'ar', 'as', 'az', 'be', 'bg', 'bn', 'bo', 'br', 'bs',
     'ca', 'cs', 'cy', 'da', 'de', 'el', 'en', 'es', 'et', 'eu',
@@ -50,12 +59,11 @@ export function provideWhisperProvider () {
   })
 
   watch(willUseWhisper, async (value) => {
-    if (!import.meta.client || !value || whisper.value) {
-      whisper.value?.clearQueue()
-      whisper.value?.interrupt()
-      whisper.value?.clearMemory()
+    if (!import.meta.client) { return }
+    if (!value) {
       whisper.value?.terminate()
       whisper.value = null
+      processStatus.value = WhisperProcessStatus.NOT_READY
       return
     }
     whisper.value = await WebAI.create({
@@ -74,6 +82,7 @@ export function provideWhisperProvider () {
         device: 'wasm',
       }],
       onDownloadProgress: (progress) => {
+        processStatus.value = WhisperProcessStatus.DOWNLOADING
         modelProgress.value = progress.progress
         sessionStorage.setItem('whisper-model-progress', modelProgress.value.toString())
       },
@@ -81,6 +90,7 @@ export function provideWhisperProvider () {
     })
     if (whisper.value.isInitialized) {
       sessionStorage.setItem('whisper-model-progress', '100')
+      processStatus.value = WhisperProcessStatus.IDLE
     }
   })
 
@@ -141,23 +151,22 @@ export function provideWhisperProvider () {
   }
 
   async function transcribeProcess (fileBlobUrl: string, language: string = 'en') {
+    processStatus.value = WhisperProcessStatus.PROCESSING
     const result = await whisper.value?.generate({
       userInput: {
         audio_blob_url: fileBlobUrl
       },
       generateConfig: {
-        chunk_length_s: 5,
+        chunk_length_s: 10,
         target_sample_rate: 16000,
       },
       modelConfig: {
         language,
-        task: 'transcribe',
         condition_on_prev_tokens: true,
         return_timestamps: 'word',
-        num_beams: 4,
       }
     }) as WhisperResult
-
+    processStatus.value = WhisperProcessStatus.IDLE
     return convertResultAsVtt(result)
   }
 
@@ -183,7 +192,8 @@ export function provideWhisperProvider () {
     isReady,
     willUseWhisper,
     selectedLanguage,
-    supportedLanguages
+    supportedLanguages,
+    processStatus
   })
 }
 

@@ -61,7 +61,7 @@ export default defineNuxtConfig({
       BACKEND_API: 'http://localhost:3000'
     }
   },
-  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'shadcn-nuxt', '@nuxtjs/color-mode', '@nuxt/eslint'],
+  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'shadcn-nuxt', '@nuxtjs/color-mode', '@nuxt/eslint', 'motion-v/nuxt'],
   features: {
     inlineStyles: false
   },
@@ -93,11 +93,12 @@ export default defineNuxtConfig({
     }
   },
   nitro: {
-    routeRules: {
-      '/_nuxt/**': {
+    runtimeConfig: {
+      security: {
         headers: {
           crossOriginResourcePolicy: 'cross-origin',
-          crossOriginOpenerPolicy: 'same-origin'
+          crossOriginOpenerPolicy: 'same-origin',
+          crossOriginEmbedderPolicy: 'require-corp'
         }
       }
     }
