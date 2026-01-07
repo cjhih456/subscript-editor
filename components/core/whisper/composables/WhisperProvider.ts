@@ -59,10 +59,8 @@ export function provideWhisperProvider () {
   })
 
   watch(willUseWhisper, async (value) => {
-    if (!import.meta.client || !value || whisper.value) {
-      whisper.value?.clearQueue()
-      whisper.value?.interrupt()
-      whisper.value?.clearMemory()
+    if (!import.meta.client) { return }
+    if (!value) {
       whisper.value?.terminate()
       whisper.value = null
       processStatus.value = WhisperProcessStatus.NOT_READY
