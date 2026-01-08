@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     componentDir: '@/components/ui'
   },
   app: {
-    head: import.meta.env.DEV
+    head: process.env.NODE_ENV === 'development'
       ? {
           charset: 'utf-8',
           meta: [
@@ -25,10 +25,10 @@ export default defineNuxtConfig({
               rel: 'preload',
               href: './worker.js',
               crossorigin: 'use-credentials',
-              integrity: 'sha384-tA5I4nRCst+/8GlgPEWF5KUEZ1hXD739JJrMr++7oGtz8enYsOz821pP/a/rToEy'
+              integrity: 'sha384-046adxJc2ue3emaMBEbrcjJqV/2PUo1/t23DmsIdjVKlcbEo3fXqc1MazLRPipni'
             }
           ],
-          script: [{ src: './worker.js', crossorigin: 'use-credentials', integrity: 'sha384-tA5I4nRCst+/8GlgPEWF5KUEZ1hXD739JJrMr++7oGtz8enYsOz821pP/a/rToEy' }]
+          script: [{ src: './worker.js', crossorigin: 'use-credentials', integrity: 'sha384-046adxJc2ue3emaMBEbrcjJqV/2PUo1/t23DmsIdjVKlcbEo3fXqc1MazLRPipni' }]
         }
   },
   colorMode: {
@@ -83,7 +83,6 @@ export default defineNuxtConfig({
       },
       permissionsPolicy: {
         fullscreen: 'self',
-        
       }
     },
     corsHandler: {
@@ -98,7 +97,21 @@ export default defineNuxtConfig({
         headers: {
           crossOriginResourcePolicy: 'cross-origin',
           crossOriginOpenerPolicy: 'same-origin',
-          crossOriginEmbedderPolicy: 'require-corp'
+          crossOriginEmbedderPolicy: 'require-corp',
+          contentSecurityPolicy: {
+            'script-src': ["'self'", "'wasm-unsafe-eval'", "'unsafe-inline'"],
+            'worker-src': ["'self'", "blob:", "https://cdn.jsdelivr.net/npm/"],
+            'script-src-elem': ["'self'", "'unsafe-inline'", 'blob:'],
+          },
+        }
+      }
+    },
+    routeRules: {
+      '/_nuxt/**': {
+        headers: {
+          crossOriginResourcePolicy: 'cross-origin',
+          crossOriginOpenerPolicy: 'same-origin',
+          crossOriginEmbedderPolicy: 'require-corp',
         }
       }
     }

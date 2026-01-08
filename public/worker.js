@@ -103,7 +103,6 @@ if (typeof window === 'undefined') {
             !coi.quiet && console.log('Reloading page to make use of COOP/COEP Service Worker.')
             coi.doReload()
           }
-          location.reload()
         },
         (err) => {
           !coi.quiet && console.error('COOP/COEP Service Worker failed to register:', err)

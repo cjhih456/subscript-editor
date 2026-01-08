@@ -129,7 +129,7 @@ export default defineNuxtPlugin(() => {
    */
   async function transcodeAudio (inputFile: File, outputFileName: string, options: Record<string, number | string> = {}) {
     const inputFileName = 'video'
-    const command = ['-i', inputFileName, '-ar', '16000']
+    const command = ['-i', inputFileName, '-ar', '16000', '-ac', '1']
     
     for (const [key, value] of Object.entries(options)) {
       command.push(key, String(value))

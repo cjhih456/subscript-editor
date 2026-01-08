@@ -1,21 +1,23 @@
-import { useWhisperProvider, WhisperProcessStatus } from "../composables/WhisperProvider"
+import { HuggingFaceWhisperStatus } from "../composables/useHuggingFaceWhisper"
+
+import { useWhisperProvider } from "../composables/WhisperProvider"
 import { motion, AnimatePresence } from 'motion-v'
 import { Loader, Download, Fan } from 'lucide-vue-next'
 
 export default defineNuxtComponent({
   name: 'WhisperStatus',
   setup () {
-    const { processStatus, modelProgress } = useWhisperProvider()
+    const { status } = useWhisperProvider()
 
     const statusColor = computed(() => {
-      switch (processStatus.value) {
-        case WhisperProcessStatus.NOT_READY:
+      switch (status.value) {
+        case HuggingFaceWhisperStatus.BEFORE_INIT:
           return 'bg-slate-100 text-slate-500'
-        case WhisperProcessStatus.DOWNLOADING:
+        case HuggingFaceWhisperStatus.DOWNLOADING:
           return 'bg-blue-50 text-blue-600'
-        case WhisperProcessStatus.IDLE:
+        case HuggingFaceWhisperStatus.IDLE:
           return 'bg-emerald-50 text-emerald-600'
-        case WhisperProcessStatus.PROCESSING:
+        case HuggingFaceWhisperStatus.PROCESSING:
           return 'bg-purple-50 text-purple-600'
         default: return ''
       }
@@ -23,8 +25,7 @@ export default defineNuxtComponent({
 
     return {
       statusColor,
-      processStatus,
-      modelProgress
+      processStatus: status
     }
   },
   render () {
@@ -39,7 +40,7 @@ export default defineNuxtComponent({
           class={`w-8 h-8 rounded-full flex items-center justify-center ${this.statusColor} shadow-inner`}
         >
           {/* 각 상태별 특화 애니메이션 */}
-          {this.processStatus === WhisperProcessStatus.NOT_READY && (
+          {this.processStatus === HuggingFaceWhisperStatus.BEFORE_INIT && (
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
@@ -48,7 +49,7 @@ export default defineNuxtComponent({
             </motion.div>
           )}
 
-          {this.processStatus === WhisperProcessStatus.DOWNLOADING && (
+          {this.processStatus === HuggingFaceWhisperStatus.DOWNLOADING && (
             <motion.div
               animate={{ y: [0, 5, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
@@ -57,7 +58,7 @@ export default defineNuxtComponent({
             </motion.div>
           )}
 
-          {this.processStatus === WhisperProcessStatus.IDLE && (
+          {this.processStatus === HuggingFaceWhisperStatus.IDLE && (
             <motion.div
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ repeat: Infinity, duration: 2 }}
@@ -66,7 +67,7 @@ export default defineNuxtComponent({
             </motion.div>
           )}
 
-          {this.processStatus === WhisperProcessStatus.PROCESSING && (
+          {this.processStatus === HuggingFaceWhisperStatus.PROCESSING && (
             <div class="relative">
               <motion.div
                 animate={{
