@@ -1,42 +1,33 @@
-import { WebAI } from "@axols/webai-js"
 import type { DeepReadonly } from "vue"
 import type { CueDataInterface } from '~/components/core/cue/composables/useCueStore'
+import { useHuggingFaceWhisper, type HuggingFaceWhisperStatus } from "./useHuggingFaceWhisper"
+import type { Chunk } from '@huggingface/transformers'
 
 export const WHISPER_PROVIDER = Symbol('WhisperProvider')
 
-export enum WhisperProcessStatus {
-  NOT_READY = 'not_ready',
-  DOWNLOADING = 'downloading',
-  IDLE = 'idle',
-  PROCESSING = 'processing',
-}
-
 export interface WhisperProvider {
   transcribe: (fileBlobUrl: string, language?: string) => Promise<CueDataInterface[] | undefined>
-  modelProgress: Ref<number>
-  isReady: ComputedRef<boolean>
   willUseWhisper: Ref<boolean>
   selectedLanguage: Ref<string>
   supportedLanguages: DeepReadonly<{ code: string, name: string | undefined }[]>
-  processStatus: Ref<WhisperProcessStatus>
-}
-
-interface WhisperResult {
-  result: string
-  chunks?: {
-    timestamp: [number, number]
-    text: string
-  }[]
+  status: Ref<HuggingFaceWhisperStatus>
+  downloadProgress: Ref<number>
 }
 
 const languageIntl = new Intl.DisplayNames('en', { type: 'language' })
 
 export function provideWhisperProvider () {
-  const whisper = shallowRef<WebAI | null>(null)
-  const modelProgress = ref<number>(0)
   const willUseWhisper = ref<boolean>(false)
   const selectedLanguage = ref<string>('en')
-  const processStatus = ref<WhisperProcessStatus>(WhisperProcessStatus.NOT_READY)
+  const {
+    init,
+    status,
+    downloadProgress,
+    transcribe: transcribeHuggingFace,
+    dispose
+   } = useHuggingFaceWhisper()
+
+  // const whisper = shallowRef<WebAI | null>(null)
   const supportedLanguages = readonly(!import.meta.client ? [] : [
     'am', 'ar', 'as', 'az', 'be', 'bg', 'bn', 'bo', 'br', 'bs',
     'ca', 'cs', 'cy', 'da', 'de', 'el', 'en', 'es', 'et', 'eu',
@@ -54,55 +45,15 @@ export function provideWhisperProvider () {
     }
   }))
 
-  const isReady = computed(() => {
-    return modelProgress.value === 100
-  })
-
-  watch(willUseWhisper, async (value) => {
-    if (!import.meta.client) { return }
-    if (!value) {
-      whisper.value?.terminate()
-      whisper.value = null
-      processStatus.value = WhisperProcessStatus.NOT_READY
-      return
-    }
-    whisper.value = await WebAI.create({
-      modelId: 'whisper-tiny',
-      dev: import.meta.env.DEV,
-    })
-    await whisper.value?.init({
-      mode: 'auto',
-      priorities: [{
-        mode: 'webai',
-        precision: 'fp16',
-        device: 'webgpu',
-      }, {
-        mode: 'webai',
-        precision: 'uint8',
-        device: 'wasm',
-      }],
-      onDownloadProgress: (progress) => {
-        processStatus.value = WhisperProcessStatus.DOWNLOADING
-        modelProgress.value = progress.progress
-        sessionStorage.setItem('whisper-model-progress', modelProgress.value.toString())
-      },
-      callbackThrottle: 100,
-    })
-    if (whisper.value.isInitialized) {
-      sessionStorage.setItem('whisper-model-progress', '100')
-      processStatus.value = WhisperProcessStatus.IDLE
-    }
-  })
-
-  function convertResultAsVtt (result: WhisperResult) {
-    if (!result.chunks || result.chunks.length === 0) {
+  function convertResultAsVtt(result: Chunk[]) {
+    if (!result || result.length === 0) {
       return []
     }
 
     const MAX_GAP_SECONDS = 1.0 // 단어 간 간격이 1초 이상이면 새 문장으로 구분
     const SENTENCE_ENDINGS = /[.!?。！？]\s*$/
 
-    return result.chunks.reduce<CueDataInterface[]>((acc, chunk, index) => {
+    return result.reduce<CueDataInterface[]>((acc, chunk, index) => {
       const currentStartTime = chunk.timestamp[0]
       const currentEndTime = chunk.timestamp[1]
       const currentText = chunk.text.trim()
@@ -150,50 +101,20 @@ export function provideWhisperProvider () {
     }, [])
   }
 
-  async function transcribeProcess (fileBlobUrl: string, language: string = 'en') {
-    processStatus.value = WhisperProcessStatus.PROCESSING
-    const result = await whisper.value?.generate({
-      userInput: {
-        audio_blob_url: fileBlobUrl
-      },
-      generateConfig: {
-        chunk_length_s: 10,
-        target_sample_rate: 16000,
-      },
-      modelConfig: {
-        language,
-        condition_on_prev_tokens: true,
-        return_timestamps: 'word',
-      }
-    }) as WhisperResult
-    processStatus.value = WhisperProcessStatus.IDLE
-    return convertResultAsVtt(result)
-  }
-
   async function transcribe(fileBlobUrl: string, language: string = 'en') {
-    if(sessionStorage.getItem('whisper-model-progress') === '100') {
-      return transcribeProcess(fileBlobUrl, language)
-    }
-    return new Promise(resolve => {
-      const interval = setInterval(() => {
-        if (sessionStorage.getItem('whisper-model-progress') === '100' && whisper.value?.isInitialized) {
-          resolve(true)
-          clearInterval(interval)
-        }
-      }, 100)
-    }).then(() => {
-      return transcribeProcess(fileBlobUrl, language)
-    })
+    await init()
+    const chunks: Chunk[] = await transcribeHuggingFace(fileBlobUrl, language)
+    dispose()
+    return convertResultAsVtt(chunks)
   }
 
   provide<WhisperProvider>(WHISPER_PROVIDER, {
     transcribe,
-    modelProgress,
-    isReady,
+    status,
+    downloadProgress,
     willUseWhisper,
     selectedLanguage,
     supportedLanguages,
-    processStatus
   })
 }
 
