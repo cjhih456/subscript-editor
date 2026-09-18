@@ -1,14 +1,16 @@
 import videojs from 'video.js'
-
 import type Player from 'video.js/dist/types/player'
 import { Teleport, type PropType } from 'vue'
 import type { CueDataInterface } from '~/components/core/cue/composables/useCueStore'
 import ControlArea from './ControlArea'
 import BigPlayButton from './BigPlayButton'
 import type { TranslateResult } from '~/plugins/WebVttPlugin'
+import { cn } from '~/lib/utils'
 import style from '~/assets/styles/components/VideoPlayer/index.module.css'
 import 'video.js/dist/video-js.css'
 import { ClientOnly } from '#components'
+import StageIdleScene from '~/components/core/stage/StageIdleScene.vue'
+
 export default defineNuxtComponent({
   name: 'VideoPlayer',
   props: {
@@ -33,6 +35,7 @@ export default defineNuxtComponent({
     const videoPlayer = ref<Player>()
     const textTrack = ref<TextTrack>()
     const textTrackCueList = ref<TranslateResult>()
+    const hasVideo = computed(() => Boolean(props.src))
     const status = reactive({
       started: false,
       isPlaying: false,
@@ -58,7 +61,9 @@ export default defineNuxtComponent({
         status.started = false
         status.isPlaying = false
         status.userActive = false
-        videoPlayer.value?.src({ type: 'video/mp4', src: newValue })
+        if (newValue) {
+          videoPlayer.value?.src({ type: 'video/mp4', src: newValue })
+        }
       }
     })
     watch(() => props.subscript, async (newVal) => {
@@ -73,7 +78,7 @@ export default defineNuxtComponent({
         textTrackCueList.value.cues.forEach((cue) => {
           textTrack.value?.addCue(cue as TextTrackCue)
         })
-        textTrack.value.mode = 'showing'
+        textTrack.value.mode = 'hidden'
         videoPlayerTriggerTextTrackChange()
       }
     }, { deep: true })
@@ -88,13 +93,13 @@ export default defineNuxtComponent({
             playEffect: false,
             replay: true,
             bigPlayButton: false,
-            aspectRatio: '16:9',
+            fill: true,
             autoplay: false,
             preload: 'metadata',
             playsinline: true,
             inactivityTimeout: 1000,
-            tech: {
-              featuresNativeTextTracks: true
+            html5: {
+              nativeTextTracks: false
             },
             userActions: {
               hotkeys (e: KeyboardEvent) {
@@ -134,6 +139,9 @@ export default defineNuxtComponent({
             videoPlayerReady.value = true
             if (!videoPlayer.value) { return }
             textTrack.value = videoPlayer.value.addTextTrack('subtitles', 'En', 'en')
+            if (textTrack.value) {
+              textTrack.value.mode = 'hidden'
+            }
             videoPlayer.value.trigger({ type: 'loadedmetadata', target: textTrack.value })
             videoPlayer.value.on(['timeupdate'], videoPlayerTriggerTextTrackChange)
             videoPlayer.value.on(['useractive', 'userinactive'], updateUserActiveState)
@@ -155,6 +163,7 @@ export default defineNuxtComponent({
         updatePlayingState
       )
       videoPlayer.value.off(['loadstart', 'play', 'firstplay'], updateStartedState)
+      videoPlayer.value.dispose()
     })
 
     const currentTime = computed({
@@ -165,24 +174,66 @@ export default defineNuxtComponent({
         emit('update:currentTime', v)
       }
     })
-    return { videoPlayer, videoPlayerReady, status, currentTime }
+
+    const activeCaptions = computed(() => {
+      const t = currentTime.value
+      const top = props.subscript.find(cue => cue.linePosition === 'top' && t >= cue.startTime && t < cue.endTime)
+      const bottom = props.subscript.find(cue => cue.linePosition !== 'top' && t >= cue.startTime && t < cue.endTime)
+      return { top, bottom }
+    })
+
+    return { videoPlayer, videoPlayerReady, status, currentTime, hasVideo, activeCaptions }
   },
   render () {
-    return <ClientOnly>
-      <div class="relative h-full w-full">
-        <video ref="video" class={style['video-player']}></video>
-        {this.videoPlayerReady && <Teleport to={this.videoPlayer && `#${this.videoPlayer.id_}` as string}>
-          <ControlArea
-            v-model:currentTime={this.currentTime}
-            player={this.videoPlayer}
-            isPlaying={this.status.isPlaying}
-          ></ControlArea>
-          <BigPlayButton
-            started={this.status.started}
-            player={this.videoPlayer}
-          ></BigPlayButton>
-        </Teleport>}
-      </div>
-    </ClientOnly>
+    return <div class="h-full min-h-0 w-full">
+      <ClientOnly>
+      <div class="relative h-full w-full overflow-hidden rounded-[20px] border border-white/8 bg-[#07090F]">
+        <div class="pointer-events-none absolute inset-0 z-1">
+          <StageIdleScene />
+        </div>
+        <div
+          class={cn(
+            'absolute inset-0 transition-opacity',
+            this.hasVideo ? 'z-20 opacity-100' : 'z-0 opacity-0 pointer-events-none'
+          )}
+        >
+          <video ref="video" class={cn('video-js vjs-fill', style['video-player'])}></video>
+          {this.videoPlayerReady && <Teleport to={this.videoPlayer && `#${this.videoPlayer.id_}` as string}>
+            {this.hasVideo
+              ? <ControlArea
+                v-model:currentTime={this.currentTime}
+                player={this.videoPlayer}
+                isPlaying={this.status.isPlaying}
+              ></ControlArea>
+              : null}
+            {this.hasVideo
+              ? <BigPlayButton
+                started={this.status.started}
+                player={this.videoPlayer}
+              ></BigPlayButton>
+              : null}
+          </Teleport>}
+        </div>
+        <div class="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-between px-6 py-4">
+          {this.activeCaptions.top
+            ? <div class="rounded-lg bg-black/60 px-3.5 py-2 text-center text-xl font-semibold text-white backdrop-blur-md">
+              {this.activeCaptions.top.text}
+            </div>
+            : <div />}
+          {this.activeCaptions.bottom
+            ? <div class="mb-14 rounded-lg bg-black/60 px-3.5 py-2 text-center text-xl font-semibold text-white backdrop-blur-md">
+              {this.activeCaptions.bottom.text}
+            </div>
+            : <div class="mb-14" />}
+        </div>
+        {!this.hasVideo
+          ? <div class="pointer-events-none absolute inset-0 z-4 flex flex-col items-center justify-center gap-2 text-center">
+            <p class="font-mono text-[11px] font-semibold tracking-wide text-muted-foreground">TresJS canvas · idle effects</p>
+            <p class="text-sm text-foreground">Video not selected — canvas stays in front</p>
+          </div>
+          : null}
+        </div>
+      </ClientOnly>
+    </div>
   }
 })

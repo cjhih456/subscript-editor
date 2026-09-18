@@ -3,6 +3,9 @@
 .video-player {
   @apply relative h-full w-full
 }
-.video-player video {
-  @apply absolute h-full w-full top-0 left-0
+.video-js,
+.video-js.vjs-fill {
+  width: 100% !important;
+  height: 100% !important;
+  padding-top: 0 !important;
 }
