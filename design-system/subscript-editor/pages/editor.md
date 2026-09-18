@@ -49,17 +49,17 @@ Icons: Phosphor for Lumen Stage. As-is screens keep Lucide to match current code
 
 ---
 
-## Three.js (this page only)
+## Stage rendering (this page only)
 
-Three.js is the **body** of the stage and timeline, not a background gimmick.
+The stage is a **stacked compositor**. Three.js never draws the source video.
 
-1. **VideoTexture stage** — `Plane` + `VideoTexture(videoEl)` + `ACESFilmicToneMapping`. Keep the existing video.js element as the media source; Three only samples it.
-2. **3D caption (top / bottom)** — `troika-three-text` for the active cue in each lane. Snap to the video plane’s **top** or **bottom** only — never the middle. At a given time, at most one top cue and one bottom cue are visible on the player. Timeline uses two lanes (TOP = `#2563EB`, BOTTOM = `#EC4899`). Inactive cues stay in the rail.
-3. **InstancedMesh waveform** — one geometry, N instances, amplitude = Y scale. Peaks get `UnrealBloomPass`. HUD/chrome uses `MeshBasicMaterial` (no lights). Physical glass slabs use `MeshStandardMaterial` / `MeshPhysicalMaterial` + **AmbientLight + DirectionalLight**.
-4. **Glass cue slabs** — `MeshPhysicalMaterial` with `transmission` for selected/nearby cues only.
-5. **Playhead** — additive-blended plane + optional point light. If `prefers-reduced-motion: reduce`, render a static 2px line (current cursor behavior).
+1. **Idle effects (TresJS / vue-three-fiber)** — a canvas (`TresCanvas`) fills the stage and draws atmosphere (shader wash, grain, lights) **until a video is selected**. This canvas stays at a low z-index.
+2. **video.js source** — the actual picture is a video.js player, not `VideoTexture`. When a file is selected the player’s z-index rises above the effect canvas so the video is what the user sees.
+3. **WTT captions** — cues are WebVTT (`WEBVTT` / `.vtt` / `.wtt`). video.js owns a text track for timing; visible chips are HTML overlays snapped **top** or **bottom** only (`line:0` vs `line:90%`). Never center captions. Timeline uses two lanes (TOP = `#2563EB`, BOTTOM = `#EC4899`).
+4. **Timeline canvas** — waveform / time ticks stay on 2D canvas workers. Glass cue slabs overlay the wave host.
+5. **Playhead** — if `prefers-reduced-motion: reduce`, render a static 2px line.
 
-State: existing `CueStore` / `currentTime` / `pixPerSec` remain the single source of truth. TresJS (or vue-three-fiber) mounts inside `BarArea` and the player frame. Do not duplicate cue state in the scene graph.
+State: existing `CueStore` / `currentTime` / `pixPerSec` remain the single source of truth. Do not duplicate cue state in the Three scene graph.
 
 Nuxt: put public Three theme tokens in `app.config`, never in `runtimeConfig`.
 
