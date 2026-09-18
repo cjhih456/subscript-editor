@@ -30,7 +30,7 @@ export default defineNuxtComponent({
   },
   render () {
     return <div
-      class="absolute top-0 bottom-0 z-10 w-[2px] bg-[#EC4899]"
+      class="absolute top-0 bottom-0 z-10 w-[2px] bg-primary"
       style={this.style}
       aria-hidden="true"
     />

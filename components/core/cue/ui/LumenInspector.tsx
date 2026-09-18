@@ -37,7 +37,7 @@ export default defineNuxtComponent({
   },
   render () {
     return <ClientOnly>
-      <aside class="flex h-full w-full flex-col gap-3.5 rounded-2xl border border-white/8 bg-[#0B0F19] p-4">
+      <aside class="flex h-full w-full flex-col gap-3.5 rounded-2xl border border-border bg-sidebar p-4">
         <p class="text-[11px] font-semibold tracking-wide text-primary">+  SELECTED CUE</p>
         <h2 class="text-xl font-bold">{this.title}</h2>
         {this.cue
@@ -58,7 +58,7 @@ export default defineNuxtComponent({
                 />
               </div>
             </div>
-            <InputGroup class="min-h-[120px] rounded-xl border border-white/8 bg-card">
+            <InputGroup class="min-h-[120px] rounded-xl border border-border bg-card">
               <InputGroupTextarea
                 modelValue={this.cue.text}
                 onUpdate:modelValue={(value: string) => this.patch({ text: value })}
@@ -66,7 +66,7 @@ export default defineNuxtComponent({
             </InputGroup>
             <div class="flex flex-col gap-1.5">
               <span class="text-[10px] font-semibold text-muted-foreground">PLAYER POSITION</span>
-              <div class="flex h-9 gap-1 rounded-[10px] border border-white/8 bg-card p-0.5">
+              <div class="flex h-9 gap-1 rounded-[10px] border border-border bg-card p-0.5">
                 <Button
                   variant="ghost"
                   class={cn('h-full flex-1 rounded-lg', this.cue.linePosition === 'top' && 'bg-primary/20 text-primary')}

@@ -187,7 +187,7 @@ export default defineNuxtComponent({
   render () {
     return <div class="h-full min-h-0 w-full">
       <ClientOnly>
-      <div class="relative h-full w-full overflow-hidden rounded-[20px] border border-white/8 bg-[#07090F]">
+        <div class="relative h-full w-full overflow-hidden rounded-[20px] border border-border bg-background sm:aspect-video sm:w-full">
         <div class="pointer-events-none absolute inset-0 z-1">
           <StageIdleScene />
         </div>
@@ -197,21 +197,17 @@ export default defineNuxtComponent({
             this.hasVideo ? 'z-20 opacity-100' : 'z-0 opacity-0 pointer-events-none'
           )}
         >
-          <video ref="video" class={cn('video-js vjs-fill', style['video-player'])}></video>
+        <video ref="video" class={cn('video-js vjs-fill bg-transparent!', style['video-player'])}></video>
           {this.videoPlayerReady && <Teleport to={this.videoPlayer && `#${this.videoPlayer.id_}` as string}>
-            {this.hasVideo
-              ? <ControlArea
+              <ControlArea
                 v-model:currentTime={this.currentTime}
                 player={this.videoPlayer}
                 isPlaying={this.status.isPlaying}
               ></ControlArea>
-              : null}
-            {this.hasVideo
-              ? <BigPlayButton
+              <BigPlayButton
                 started={this.status.started}
                 player={this.videoPlayer}
               ></BigPlayButton>
-              : null}
           </Teleport>}
         </div>
         <div class="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-between px-6 py-4">

@@ -7,8 +7,6 @@ import BarArea from '~/components/core/timeline/ui/BarArea'
 import CueBar from '~/components/core/cue/ui/CueBar'
 import CueEditArea from '~/components/core/cue/ui/CueEditArea'
 import LumenInspector from '~/components/core/cue/ui/LumenInspector'
-import CurrentTimeCursor from '~/components/core/timeline/ui/CurrentTimeCursor'
-import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
 import { Slider } from '~/components/ui/slider'
 import { ClientOnly } from '#components'
 import useWaveConverter from '~/components/core/ffmpeg/composables/useWaveConverter'
@@ -53,7 +51,7 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <section class="flex h-full min-h-0 flex-1 flex-col bg-[#07090F] text-foreground">
+    return <section class="flex h-full min-h-0 flex-1 flex-col bg-background text-foreground">
       <AlertDisplay />
       <div class="flex min-h-0 flex-1 flex-col gap-3 p-3 md:flex-row">
         <div class={this.isMobile ? 'order-3 h-64' : 'w-[280px] shrink-0'}>
@@ -74,7 +72,7 @@ export default defineNuxtComponent({
           </div>
           : null}
       </div>
-      <div class="flex h-[168px] w-full shrink-0 gap-4 border-t border-white/8 bg-[#0B0F19] px-4 py-3">
+      <div class="flex h-[168px] w-full shrink-0 gap-4 border-t border-border bg-sidebar px-4 py-3">
         <div class="flex min-w-0 flex-1 flex-col gap-2">
           <div class="flex items-center justify-between font-mono text-[11px] text-muted-foreground">
             <span>WAVEFORM</span>
@@ -99,12 +97,6 @@ export default defineNuxtComponent({
                 >
                   <CueBar />
                 </div>
-              ),
-              cursor: () => (
-                <>
-                  <CurrentTimeCursor />
-                  <CurrentCursor />
-                </>
               )
             }}
           </BarArea>

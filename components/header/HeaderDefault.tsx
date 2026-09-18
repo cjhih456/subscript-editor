@@ -34,7 +34,7 @@ export default defineNuxtComponent({
     return { willUseWhisper, openVideoFileSelect, openSubtitleFileSelect, saveCue, saveAble, fileLabel, timecode }
   },
   render () {
-    return <div class="flex h-14 items-center gap-4 border-b border-white/8 bg-[#0B0F19] px-4">
+    return <div class="flex h-14 items-center gap-4 border-b border-border bg-sidebar px-4">
       <div class="flex items-center gap-2.5">
         <div class="flex size-[22px] items-center justify-center rounded-md bg-primary text-xs font-bold text-primary-foreground">+</div>
         <h3 class="text-base font-bold tracking-wide">LUMEN</h3>
@@ -45,16 +45,16 @@ export default defineNuxtComponent({
       </div>
       <div class="flex items-center gap-2">
         {this.willUseWhisper && (
-          <div class="flex h-7 items-center gap-1.5 rounded-full bg-white/6 px-2.5">
+          <div class="flex h-7 items-center gap-1.5 rounded-full bg-muted px-2.5">
             <WhisperStatus />
             <p class="text-xs text-muted-foreground">Whisper</p>
           </div>
         )}
-        <Button variant="outline" class="h-9 rounded-xl border-white/10 bg-white/6" onClick={() => this.openVideoFileSelect()}>
+        <Button variant="outline" class="h-9 rounded-xl border-border bg-muted" onClick={() => this.openVideoFileSelect()}>
           <FolderOpen class="size-3.5" />
           Open Video
         </Button>
-        <Button variant="outline" class="h-9 rounded-xl border-white/10 bg-white/6" onClick={() => this.openSubtitleFileSelect()}>
+        <Button variant="outline" class="h-9 rounded-xl border-border bg-muted" onClick={() => this.openSubtitleFileSelect()}>
           Open VTT
         </Button>
         <Button class="h-9 rounded-xl bg-primary text-primary-foreground" disabled={!this.saveAble} onClick={() => this.saveCue()}>

@@ -56,7 +56,7 @@ export default defineNuxtComponent({
   },
   render () {
     return <ClientOnly>
-      <div class={cn('flex h-full flex-col gap-2.5 rounded-2xl border border-white/8 bg-[#0B0F19] p-3', this.class)}>
+      <div class={cn('flex h-full flex-col gap-2.5 rounded-2xl border border-border bg-sidebar p-3', this.class)}>
         <div class="flex items-center justify-between">
           <p class="text-[11px] font-semibold tracking-wide text-muted-foreground">CUES</p>
           <ButtonGroup>
@@ -80,7 +80,7 @@ export default defineNuxtComponent({
                 key={id}
                 class={cn(
                   'flex w-full items-center gap-2.5 rounded-xl border px-3 py-2',
-                  selected ? 'border-primary bg-card' : 'border-white/8 bg-card/80'
+                  selected ? 'border-primary bg-card' : 'border-border bg-card/80'
                 )}
               >
                 <button
