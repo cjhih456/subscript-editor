@@ -8,7 +8,8 @@
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",
     "cleanup": "nuxt cleanup",
-    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix"
+    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
+    "lint:check": "eslint . --ext .vue,.js,.ts,.jsx,.tsx"
   },
   "devDependencies": {
     "@mdi/font": "^7.4.47",
@@ -21,6 +22,8 @@
     "@types/uuid": "^9.0.8",
     "@types/videojs-vtt.js": "^0.15.3",
     "@vitejs/plugin-vue-jsx": "^5.1.2",
+    "@vue/tsconfig": "^0.9.1",
+    "@webgpu/types": "^0.1.72",
     "dayjs-nuxt": "^2.1.11",
     "eslint": "^9.39.1",
     "nuxt": "^4.2.1",
@@ -30,7 +33,8 @@
     "shadcn-nuxt": "2.3.3",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.8.3",
-    "vite": "^7.2.7"
+    "vite": "^7.2.7",
+    "vue-tsc": "^3.3.11"
   },
   "dependencies": {
     "@ffmpeg/ffmpeg": "^0.12.15",

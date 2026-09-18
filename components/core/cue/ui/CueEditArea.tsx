@@ -58,7 +58,9 @@ export default defineNuxtComponent({
     return <ClientOnly>
       <div class={cn('flex h-full flex-col gap-2.5 rounded-2xl border border-border bg-sidebar p-3', this.class)}>
         <div class="flex items-center justify-between">
-          <p class="text-[11px] font-semibold tracking-wide text-muted-foreground">CUES</p>
+          <p class="text-[11px] font-semibold tracking-wide text-muted-foreground">
+            CUES{this.sortedKeys.length ? `  ·  ${this.sortedKeys.length}` : ''}
+          </p>
           <ButtonGroup>
             <Button onClick={this.addCue} size="icon-sm" variant="ghost">
               <Plus />

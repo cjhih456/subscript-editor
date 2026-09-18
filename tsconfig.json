@@ -9,6 +9,7 @@
   "compilerOptions": {
     "strict": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "types": ["@webgpu/types"]
   }
 }

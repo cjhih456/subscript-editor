@@ -1,40 +1,56 @@
-name: Deploy to GitHub Pages
+name: CI
+
 on:
   workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches:
       - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
+  validate:
+    name: validate
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: corepack enable
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      # Pick your own package manager and build script
-      - run: yarn install
-      - run: NUXT_APP_BASE_URL=/subscript-editor/ yarn build --preset 'github-pages'
+          cache: yarn
+      - run: yarn install --immutable
+      - name: Typecheck
+        run: yarn typecheck
+      - name: Lint
+        run: yarn lint:check
+      - name: Build
+        run: NUXT_APP_BASE_URL=/subscript-editor/ yarn build --preset 'github-pages'
       - name: Upload artifact
+        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./.output/public
-  # Deployment job
+
   deploy:
-    # Add a dependency to the build job
-    needs: build
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    name: deploy
+    needs: validate
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
-    # Deploy to the github_pages environment
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    # Specify runner + deployment step
     runs-on: ubuntu-latest
-    steps:  
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

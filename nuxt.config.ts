@@ -37,7 +37,8 @@ export default defineNuxtConfig({
   },
   typescript: {
     shim: true,
-    strict: true
+    strict: true,
+    typeCheck: true
   },
   build: {
     transpile: ['@ffmpeg/ffmpeg', '@ffmpeg/util']
@@ -89,31 +90,6 @@ export default defineNuxtConfig({
       origin: '*',
       methods: '*',
       allowHeaders: '*'
-    }
-  },
-  nitro: {
-    runtimeConfig: {
-      security: {
-        headers: {
-          crossOriginResourcePolicy: 'cross-origin',
-          crossOriginOpenerPolicy: 'same-origin',
-          crossOriginEmbedderPolicy: 'require-corp',
-          contentSecurityPolicy: {
-            'script-src': ["'self'", "'wasm-unsafe-eval'", "'unsafe-inline'"],
-            'worker-src': ["'self'", "blob:", "https://cdn.jsdelivr.net/npm/"],
-            'script-src-elem': ["'self'", "'unsafe-inline'", 'blob:'],
-          },
-        }
-      }
-    },
-    routeRules: {
-      '/_nuxt/**': {
-        headers: {
-          crossOriginResourcePolicy: 'cross-origin',
-          crossOriginOpenerPolicy: 'same-origin',
-          crossOriginEmbedderPolicy: 'require-corp',
-        }
-      }
     }
   },
   devtools: {
