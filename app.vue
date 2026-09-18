@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout class="bg-background text-foreground">
+  <NuxtLayout class="h-screen bg-background text-foreground">
     <template v-if="headerStatus" #header>
       <component :is="headerStatus" />
     </template>

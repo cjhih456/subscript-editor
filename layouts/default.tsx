@@ -8,11 +8,11 @@ export default defineNuxtComponent({
     provideWhisperProvider()
   },
   render () {
-    return <section class="h-full min-h-screen flex flex-col relative">
-      <header class="sticky top-0 z-10">
+    return <section class="relative flex h-screen min-h-screen flex-col overflow-hidden">
+      <header class="z-10 shrink-0">
         {this.$slots.header?.()}
       </header>
-      <main class="flex-1 flex flex-col">
+      <main class="flex min-h-0 flex-1 flex-col">
         {this.$slots.default?.()}
       </main>
     </section>
