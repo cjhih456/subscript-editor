@@ -32,4 +32,4 @@ jobs:
       - name: Lint
         run: yarn lint:check
       - name: Build
-        run: yarn build
+        run: NUXT_APP_BASE_URL=/subscript-editor/ yarn build --preset 'github-pages'
