@@ -187,7 +187,7 @@ export default defineNuxtComponent({
   render () {
     return <div class="h-full min-h-0 w-full">
       <ClientOnly>
-        <div class="relative h-full w-full overflow-hidden rounded-[20px] border border-border bg-background sm:aspect-video sm:w-full">
+        <div class="relative h-full w-full overflow-hidden rounded-[20px] border border-border bg-background">
         <div class="pointer-events-none absolute inset-0 z-1">
           <StageIdleScene />
         </div>
@@ -212,12 +212,12 @@ export default defineNuxtComponent({
         </div>
         <div class="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-between px-6 py-4">
           {this.activeCaptions.top
-            ? <div class="rounded-lg bg-black/60 px-3.5 py-2 text-center text-xl font-semibold text-white backdrop-blur-md">
+            ? <div class="rounded-lg bg-black/60 px-3.5 py-2 text-center text-sm font-semibold text-white backdrop-blur-md md:text-xl">
               {this.activeCaptions.top.text}
             </div>
             : <div />}
           {this.activeCaptions.bottom
-            ? <div class="mb-14 rounded-lg bg-black/60 px-3.5 py-2 text-center text-xl font-semibold text-white backdrop-blur-md">
+            ? <div class="mb-14 rounded-lg bg-black/60 px-3.5 py-2 text-center text-sm font-semibold text-white backdrop-blur-md md:text-xl">
               {this.activeCaptions.bottom.text}
             </div>
             : <div class="mb-14" />}

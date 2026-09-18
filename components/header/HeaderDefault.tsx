@@ -28,7 +28,7 @@ export default defineNuxtComponent({
       </div>
       <div class="flex min-w-0 flex-1 items-center gap-3 font-mono text-[13px]">
         <span class="truncate text-muted-foreground">{this.fileLabel}</span>
-        <span class="text-foreground">{this.timecode}</span>
+        <span class="hidden text-foreground md:inline">{this.timecode}</span>
       </div>
       <div class="flex items-center gap-2">
         {this.willUseWhisper && (

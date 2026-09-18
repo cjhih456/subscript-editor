@@ -184,7 +184,7 @@ export default defineNuxtComponent({
         <SkipForward />
       </Button>
       <span class="font-mono text-xs">{this.durationWithCurrentTime}</span>
-      <div class="w-24">
+      <div class="hidden w-24 md:block">
         <Slider
           max={this.duration}
           min={0}
@@ -195,10 +195,10 @@ export default defineNuxtComponent({
           }}
         />
       </div>
-      <Button variant="ghost" size="icon-sm" onClick={this.toggleMute}>
+      <Button class="hidden md:inline-flex" variant="ghost" size="icon-sm" onClick={this.toggleMute}>
         <this.volumeIcon />
       </Button>
-      <Button variant="ghost" size="icon-sm" onClick={this.toggleFullscreen}>
+      <Button class="hidden md:inline-flex" variant="ghost" size="icon-sm" onClick={this.toggleFullscreen}>
         <this.fullscreenIcon />
       </Button>
     </div>

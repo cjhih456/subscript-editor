@@ -9,6 +9,12 @@ import { cn } from '~/lib/utils'
 
 export default defineNuxtComponent({
   name: 'LumenInspector',
+  props: {
+    chrome: {
+      type: Boolean,
+      default: true
+    }
+  },
   setup () {
     const selectedCueId = useSelectedCueId()
     const { get: getCue, update: updateCue } = useCueStore()
@@ -37,11 +43,14 @@ export default defineNuxtComponent({
   },
   render () {
     return <ClientOnly>
-      <aside class="flex h-full w-full flex-col gap-3.5 rounded-2xl border border-border bg-sidebar p-4">
+      <aside class={cn(
+        'flex h-full w-full flex-col gap-3.5',
+        this.chrome && 'rounded-2xl border border-border bg-sidebar p-4'
+      )}>
         <p class="text-[11px] font-semibold tracking-wide text-primary">+  SELECTED CUE</p>
         <h2 class="text-xl font-bold">{this.title}</h2>
         {this.cue
-          ? <div class="overflow-y-scroll flex h-full flex-col gap-3.5 -mx-3 px-3">
+          ? <div class="flex h-full flex-col gap-3.5 overflow-y-auto">
             <div class="flex gap-2">
               <div class="flex min-w-0 flex-1 flex-col gap-1">
                 <span class="text-[10px] font-semibold text-muted-foreground">IN</span>
@@ -58,7 +67,7 @@ export default defineNuxtComponent({
                 />
               </div>
             </div>
-            <InputGroup class="min-h-[120px] rounded-xl border border-border bg-card">
+            <InputGroup class="min-h-12 rounded-xl border border-border bg-card md:min-h-[120px]">
               <InputGroupTextarea
                 modelValue={this.cue.text}
                 onUpdate:modelValue={(value: string) => this.patch({ text: value })}
@@ -85,7 +94,7 @@ export default defineNuxtComponent({
                 </Button>
               </div>
             </div>
-            <p class="text-xs text-muted-foreground">
+            <p class="hidden text-xs text-muted-foreground md:block">
               Top / Bottom only. Caption snaps to the video plane; bottom sits above the control dock.
             </p>
           </div>
