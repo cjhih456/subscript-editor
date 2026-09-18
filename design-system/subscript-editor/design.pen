@@ -2599,6 +2599,7 @@
                   "id": "lmnStage",
                   "name": "3D Stage",
                   "clip": true,
+                  "width": "fill_container",
                   "height": "fill_container",
                   "fill": {
                     "type": "shader",
@@ -2632,9 +2633,6 @@
                       "height": 48,
                       "fill": "#00000099",
                       "cornerRadius": 8,
-                      "stroke": "$lumen.accent",
-                      "strokeWidth": 1,
-                      "strokeAlignment": "inner",
                       "effect": {
                         "type": "background_blur",
                         "radius": 16
@@ -2674,9 +2672,6 @@
                       "height": 48,
                       "fill": "#00000099",
                       "cornerRadius": 8,
-                      "stroke": "$lumen.primary",
-                      "strokeWidth": 1,
-                      "strokeAlignment": "inner",
                       "effect": {
                         "type": "background_blur",
                         "radius": 16
