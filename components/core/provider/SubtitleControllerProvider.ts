@@ -14,6 +14,7 @@ export const CUE_STORE = Symbol('cueStore')
 export const WAVE_SCALE_VALUE = Symbol('waveScaleValue')
 export const DISPLAY_WIDTH = Symbol('displayWidth')
 export const AUDIO_RATE = Symbol('audioRate')
+export const SELECTED_CUE_ID = Symbol('selectedCueId')
 
 interface VideoFileObjectUrl {
   videoFileObjectUrl: Ref<string | null>,
@@ -43,6 +44,7 @@ export function provideSubtitleController () {
   const cueStore = useCueStoreOrigin()
   const displayWidth = ref<number>(0)
   const audioRate = ref<number>(1000)
+  const selectedCueId = ref<string | null>(null)
 
   const scrollValue = ref<number>(0)
   const scrollClientLeft = ref<number>(0)
@@ -68,6 +70,7 @@ export function provideSubtitleController () {
   provide(CUE_STORE, cueStore)
   provide(DISPLAY_WIDTH, displayWidth)
   provide(AUDIO_RATE, audioRate)
+  provide(SELECTED_CUE_ID, selectedCueId)
 
   function windowResizeEvent () {
     displayWidth.value = document.documentElement.offsetWidth
@@ -96,7 +99,8 @@ export function provideSubtitleController () {
     cueStore,
     waveScaleValue,
     displayWidth,
-    audioRate
+    audioRate,
+    selectedCueId
   }
 }
 
@@ -198,4 +202,12 @@ export function useAudioRate () {
     throw new Error('AUDIO_RATE is not injected')
   }
   return audioRate
+}
+
+export function useSelectedCueId () {
+  const selectedCueId = inject<Ref<string | null>>(SELECTED_CUE_ID)
+  if (!selectedCueId) {
+    throw new Error('SELECTED_CUE_ID is not injected')
+  }
+  return selectedCueId
 }
