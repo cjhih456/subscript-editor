@@ -13,7 +13,7 @@ import { useWhisperProvider } from "../../whisper"
 export default defineNuxtComponent({
   name: 'SideMenu',
   setup () {
-    const sideMenuState = ref<boolean>(true)
+    const sideMenuState = ref<boolean>(false)
     const { loadCues } = useCueStore()
     const { open: openVideoFileSelect } = useVideoFileSelect()
     const { open: openSubtitleFileSelect } = useSubtitleFileSelect({ onSuccess: (cues) => {
