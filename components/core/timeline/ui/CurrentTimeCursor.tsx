@@ -5,16 +5,34 @@ export default defineNuxtComponent({
   setup () {
     const currentTime = useCurrentTime()
     const pixPerSec = usePixPerSec()
+    const prefersReducedMotion = ref(false)
+
+    onMounted(() => {
+      const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+      prefersReducedMotion.value = media.matches
+      const onChange = () => {
+        prefersReducedMotion.value = media.matches
+      }
+      media.addEventListener('change', onChange)
+      onBeforeUnmount(() => {
+        media.removeEventListener('change', onChange)
+      })
+    })
 
     const style = computed(() => {
       return {
-        left: currentTime.value * pixPerSec.value + 'px'
+        left: currentTime.value * pixPerSec.value + 'px',
+        opacity: prefersReducedMotion.value ? 1 : 0.85
       }
     })
 
-    return { style }
+    return { style, prefersReducedMotion }
   },
   render () {
-    return <div class="absolute top-0 bottom-0 w-[2px] bg-red-500/70 z-10" style={this.style}></div>
+    return <div
+      class="absolute top-0 bottom-0 z-10 w-[2px] bg-primary"
+      style={this.style}
+      aria-hidden="true"
+    />
   }
 })

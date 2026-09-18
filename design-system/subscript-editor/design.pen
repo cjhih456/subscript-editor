@@ -1,0 +1,4085 @@
+{
+  "version": "2.17",
+  "children": [
+    {
+      "type": "frame",
+      "id": "mastersAsIs",
+      "x": 0,
+      "y": -2580,
+      "name": "Component Masters / As-Is",
+      "width": 1600,
+      "height": 780,
+      "fill": "#F4F4F5",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": 24,
+      "children": [
+        {
+          "type": "text",
+          "id": "mastersAsIsH",
+          "name": "Title",
+          "fill": "$as.mutedFg",
+          "content": "Masters · As-Is",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "mastersAsIsRow",
+          "name": "Row",
+          "width": "fill_container",
+          "gap": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "cmpIconBtn",
+              "name": "Icon Button",
+              "reusable": true,
+              "width": 36,
+              "height": 36,
+              "fill": "$as.primary",
+              "cornerRadius": 999,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "cmpIconBtnIcon",
+                  "name": "Glyph",
+                  "width": 16,
+                  "height": 16,
+                  "icon": "plus",
+                  "library": "lucide",
+                  "fill": "$as.primaryFg"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cmpOutlineIconBtn",
+              "name": "Outline Icon Button",
+              "reusable": true,
+              "width": 32,
+              "height": 32,
+              "fill": "$as.bg",
+              "cornerRadius": 999,
+              "stroke": "$as.border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "cmpOutlineIconBtnIcon",
+                  "name": "Glyph",
+                  "width": 14,
+                  "height": 14,
+                  "icon": "play",
+                  "library": "lucide",
+                  "fill": "$as.fg"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cmpGhostIconBtn",
+              "name": "Ghost Icon Button",
+              "reusable": true,
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "cmpGhostIconBtnIcon",
+                  "name": "Glyph",
+                  "width": 20,
+                  "height": 20,
+                  "icon": "menu",
+                  "library": "lucide",
+                  "fill": "$as.fg"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cmpPrimaryBtn",
+              "name": "Primary Button",
+              "reusable": true,
+              "height": 36,
+              "fill": "$as.primary",
+              "cornerRadius": 8,
+              "padding": [
+                8,
+                16
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "cmpPrimaryBtnLabel",
+                  "name": "Label",
+                  "fill": "$as.primaryFg",
+                  "content": "Open Video File",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cmpZoomSlider",
+              "name": "Vertical Zoom Slider",
+              "reusable": true,
+              "width": 20,
+              "height": 90,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 999,
+                  "id": "cmpZoomTrack",
+                  "x": 6,
+                  "y": 0,
+                  "name": "Track",
+                  "fill": "$as.muted",
+                  "width": 8,
+                  "height": 90
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 999,
+                  "id": "cmpZoomRange",
+                  "x": 6,
+                  "y": 28,
+                  "name": "Range",
+                  "fill": "$as.primary",
+                  "width": 8,
+                  "height": 62
+                },
+                {
+                  "type": "ellipse",
+                  "id": "cmpZoomThumb",
+                  "x": 0,
+                  "y": 24,
+                  "name": "Thumb",
+                  "fill": "$as.bg",
+                  "width": 20,
+                  "height": 20,
+                  "stroke": "$as.primary",
+                  "strokeWidth": 2
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cmpCueBlock",
+              "name": "Timeline Cue Block",
+              "reusable": true,
+              "clip": true,
+              "width": 180,
+              "height": 20,
+              "fill": "$as.cue",
+              "stroke": "#030712",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "padding": [
+                0,
+                4
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "cmpCueBlockText",
+                  "name": "Cue Text",
+                  "fill": "$as.fg",
+                  "content": "Welcome to the stage.",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "cmpHeader",
+          "name": "Header",
+          "reusable": true,
+          "width": 1440,
+          "height": 48,
+          "fill": "$as.sidebar",
+          "padding": [
+            8,
+            16
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "cmpHeaderTitle",
+              "name": "Title",
+              "fill": "$as.fg",
+              "content": "Subtitle Editor",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "700"
+            },
+            {
+              "type": "frame",
+              "id": "cmpHeaderRight",
+              "name": "Right",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "cmpHeaderWhisperLabel",
+                  "name": "Whisper Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Whisper",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "cmpWhisper",
+                  "name": "Whisper Status",
+                  "reusable": true,
+                  "width": 32,
+                  "height": 32,
+                  "fill": "$as.whisperIdle",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "cmpWhisperIcon",
+                      "name": "Status Icon",
+                      "width": 20,
+                      "height": 20,
+                      "icon": "fan",
+                      "library": "lucide",
+                      "fill": "$as.whisperIdleFg"
+                    }
+                  ]
+                },
+                {
+                  "id": "cmpHeaderMenu",
+                  "type": "ref",
+                  "ref": "cmpGhostIconBtn",
+                  "name": "Menu"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "mastersAsIsRow2",
+          "name": "Row 2",
+          "width": "fill_container",
+          "gap": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "cmpCueCollapsed",
+              "name": "Cue Accordion / Collapsed",
+              "reusable": true,
+              "width": 330,
+              "fill": "$as.card",
+              "stroke": "$as.border",
+              "strokeWidth": {
+                "bottom": 1
+              },
+              "strokeAlignment": "inner",
+              "padding": [
+                16,
+                8
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "cmpCueCollapsedTimes",
+                  "name": "Times",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "cmpCueCollapsedStart",
+                      "name": "Start",
+                      "fill": "$as.fg",
+                      "content": "00:00:01.000",
+                      "fontFamily": "$font.mono",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "cmpCueCollapsedSep",
+                      "name": "Sep",
+                      "fill": "$as.mutedFg",
+                      "content": "~",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "cmpCueCollapsedEnd",
+                      "name": "End",
+                      "fill": "$as.fg",
+                      "content": "00:00:04.200",
+                      "fontFamily": "$font.mono",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "cmpCueCollapsedActions",
+                  "name": "Actions",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "id": "cmpCueCollapsedTrash",
+                      "type": "ref",
+                      "ref": "cmpIconBtn",
+                      "name": "Delete",
+                      "descendants": {
+                        "cmpIconBtnIcon": {
+                          "icon": "trash-2"
+                        }
+                      }
+                    },
+                    {
+                      "type": "icon",
+                      "id": "cmpCueCollapsedChevron",
+                      "name": "Chevron",
+                      "width": 16,
+                      "height": 16,
+                      "icon": "chevron-down",
+                      "library": "lucide",
+                      "fill": "$as.fg"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cmpCueExpanded",
+              "name": "Cue Accordion / Expanded",
+              "reusable": true,
+              "width": 330,
+              "fill": "$as.card",
+              "stroke": "$as.border",
+              "strokeWidth": {
+                "bottom": 1
+              },
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "children": [
+                {
+                  "id": "cmpCueExpandedHead",
+                  "type": "ref",
+                  "ref": "cmpCueCollapsed",
+                  "name": "Head",
+                  "width": "fill_container",
+                  "descendants": {
+                    "cmpCueCollapsedStart": {
+                      "content": "00:00:04.200"
+                    },
+                    "cmpCueCollapsedEnd": {
+                      "content": "00:00:08.050"
+                    },
+                    "cmpCueCollapsedChevron": {
+                      "icon": "chevron-up"
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "cmpCueExpandedBody",
+                  "name": "Body",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "cmpCueExpandedTimes",
+                      "name": "Time Inputs",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "cmpTimeIn",
+                          "name": "Time Input",
+                          "reusable": true,
+                          "width": "fill_container",
+                          "height": 36,
+                          "fill": "$as.bg",
+                          "cornerRadius": 8,
+                          "stroke": "$as.border",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "cmpTimeInValue",
+                              "name": "Value",
+                              "fill": "$as.fg",
+                              "content": "00:00:04.200",
+                              "fontFamily": "$font.mono",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "cmpTimeOut",
+                          "type": "ref",
+                          "ref": "cmpTimeIn",
+                          "name": "End Input",
+                          "width": "fill_container",
+                          "descendants": {
+                            "cmpTimeInValue": {
+                              "content": "00:00:08.050"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "cmpCueTextarea",
+                      "name": "Cue Textarea",
+                      "reusable": true,
+                      "width": "fill_container",
+                      "height": 88,
+                      "fill": "$as.bg",
+                      "cornerRadius": 8,
+                      "stroke": "$as.border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "layout": "vertical",
+                      "padding": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "cmpCueTextareaValue",
+                          "name": "Text",
+                          "fill": "$as.fg",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Welcome to the stage.",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cmpControlArea",
+              "name": "Video Control Area",
+              "reusable": true,
+              "width": "fill_container",
+              "height": 40,
+              "fill": "$as.control",
+              "gap": 8,
+              "padding": [
+                0,
+                8
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "ctrlPlay",
+                  "type": "ref",
+                  "ref": "cmpOutlineIconBtn",
+                  "name": "Play"
+                },
+                {
+                  "id": "ctrlStop",
+                  "type": "ref",
+                  "ref": "cmpOutlineIconBtn",
+                  "name": "Stop",
+                  "descendants": {
+                    "cmpOutlineIconBtnIcon": {
+                      "icon": "square"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "ctrlTime",
+                  "name": "Timecode",
+                  "fill": "$as.fg",
+                  "content": "0:14 / 1:22",
+                  "fontFamily": "$font.mono",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "ctrlSeek",
+                  "name": "Seek",
+                  "width": "fill_container",
+                  "height": 8,
+                  "fill": "$as.muted",
+                  "cornerRadius": 999,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 999,
+                      "id": "ctrlSeekRange",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Played",
+                      "fill": "$as.primary",
+                      "width": 140,
+                      "height": 8
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "ctrlSeekThumb",
+                      "x": 128,
+                      "y": -6,
+                      "name": "Thumb",
+                      "fill": "$as.bg",
+                      "width": 20,
+                      "height": 20,
+                      "stroke": "$as.primary",
+                      "strokeWidth": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "ctrlVol",
+                  "type": "ref",
+                  "ref": "cmpOutlineIconBtn",
+                  "name": "Volume",
+                  "descendants": {
+                    "cmpOutlineIconBtnIcon": {
+                      "icon": "volume-2"
+                    }
+                  }
+                },
+                {
+                  "id": "ctrlFs",
+                  "type": "ref",
+                  "ref": "cmpOutlineIconBtn",
+                  "name": "Fullscreen",
+                  "descendants": {
+                    "cmpOutlineIconBtnIcon": {
+                      "icon": "maximize"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "mastersAsIsRow3",
+          "name": "Row 3",
+          "width": "fill_container",
+          "height": 420,
+          "gap": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "cmpVideoPlayer",
+              "name": "Video Player",
+              "reusable": true,
+              "clip": true,
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "$as.video",
+              "layout": "vertical",
+              "justifyContent": "end",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "vidPlayWrap",
+                  "name": "Big Play",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "vidPlay",
+                      "name": "Play Circle",
+                      "width": 64,
+                      "height": 64,
+                      "icon": "circle-play",
+                      "library": "lucide",
+                      "fill": "$as.primaryFg"
+                    }
+                  ]
+                },
+                {
+                  "id": "vidControls",
+                  "type": "ref",
+                  "ref": "cmpControlArea",
+                  "name": "Controls",
+                  "width": "fill_container"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cmpTimeline",
+              "name": "Timeline / BarArea",
+              "reusable": true,
+              "clip": true,
+              "width": "fill_container",
+              "height": 94,
+              "fill": "$as.card",
+              "stroke": "$as.fg",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "tlInner",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Scroll Surface",
+                  "width": 1040,
+                  "height": 94,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "tlruler",
+                      "name": "Time Bar",
+                      "width": 1040,
+                      "height": 20,
+                      "justifyContent": "space_between",
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tlt0",
+                          "name": "0:00",
+                          "fill": "$as.mutedFg",
+                          "content": "0:00",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tlt1",
+                          "name": "0:05",
+                          "fill": "$as.mutedFg",
+                          "content": "0:05",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tlt2",
+                          "name": "0:10",
+                          "fill": "$as.mutedFg",
+                          "content": "0:10",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tlt3",
+                          "name": "0:15",
+                          "fill": "$as.mutedFg",
+                          "content": "0:15",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tlt4",
+                          "name": "0:20",
+                          "fill": "$as.mutedFg",
+                          "content": "0:20",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tlt5",
+                          "name": "0:25",
+                          "fill": "$as.mutedFg",
+                          "content": "0:25",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tlt6",
+                          "name": "0:30",
+                          "fill": "$as.mutedFg",
+                          "content": "0:30",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tlt7",
+                          "name": "0:35",
+                          "fill": "$as.mutedFg",
+                          "content": "0:35",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tlt8",
+                          "name": "0:40",
+                          "fill": "$as.mutedFg",
+                          "content": "0:40",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "script",
+                      "id": "tlwave",
+                      "name": "Waveform",
+                      "clip": true,
+                      "width": 1040,
+                      "height": 50,
+                      "scriptUri": "scripts/natural-waveform.js",
+                      "inputs": {
+                        "color": "#A3A3A3",
+                        "density": 2,
+                        "seed": 7
+                      }
+                    },
+                    {
+                      "type": "frame",
+                      "id": "tlCues",
+                      "name": "Cue Track",
+                      "width": 1040,
+                      "height": 20,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "id": "tlCue1",
+                          "type": "ref",
+                          "ref": "cmpCueBlock",
+                          "name": "Cue 1",
+                          "x": 40,
+                          "y": 0,
+                          "width": 160
+                        },
+                        {
+                          "id": "tlCue2",
+                          "type": "ref",
+                          "ref": "cmpCueBlock",
+                          "name": "Cue 2",
+                          "x": 220,
+                          "y": 0,
+                          "width": 210,
+                          "descendants": {
+                            "cmpCueBlockText": {
+                              "content": "Keep the beat with me."
+                            }
+                          }
+                        },
+                        {
+                          "id": "tlCue3",
+                          "type": "ref",
+                          "ref": "cmpCueBlock",
+                          "name": "Cue 3",
+                          "x": 470,
+                          "y": 0,
+                          "width": 150,
+                          "descendants": {
+                            "cmpCueBlockText": {
+                              "content": "Cut."
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "tlPlayhead",
+                  "x": 268,
+                  "y": 0,
+                  "name": "Current Time Cursor",
+                  "fill": "$as.playhead",
+                  "width": 2,
+                  "height": 94
+                },
+                {
+                  "type": "rectangle",
+                  "id": "tlHover",
+                  "x": 512,
+                  "y": 0,
+                  "name": "Hover Cursor",
+                  "fill": "$as.hoverline",
+                  "width": 2,
+                  "height": 94
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cmpCueEditArea",
+              "name": "Cue Edit Area",
+              "reusable": true,
+              "width": 330,
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ceaToolbar",
+                  "name": "Toolbar",
+                  "width": "fill_container",
+                  "padding": [
+                    8,
+                    0,
+                    0,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "id": "ceaAdd",
+                      "type": "ref",
+                      "ref": "cmpIconBtn",
+                      "name": "Add Cue"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ceaUndoGroup",
+                      "name": "Undo Group",
+                      "clip": true,
+                      "cornerRadius": 999,
+                      "children": [
+                        {
+                          "id": "ceaUndo",
+                          "type": "ref",
+                          "ref": "cmpIconBtn",
+                          "name": "Undo",
+                          "descendants": {
+                            "cmpIconBtnIcon": {
+                              "icon": "undo-2"
+                            }
+                          }
+                        },
+                        {
+                          "id": "ceaRedo",
+                          "type": "ref",
+                          "ref": "cmpIconBtn",
+                          "name": "Redo",
+                          "fill": "$as.muted",
+                          "descendants": {
+                            "cmpIconBtnIcon": {
+                              "icon": "redo-2",
+                              "fill": "$as.mutedFg"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ceaList",
+                  "name": "Cue List",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "id": "ceaCue1",
+                      "type": "ref",
+                      "ref": "cmpCueCollapsed",
+                      "name": "Cue 1",
+                      "width": "fill_container"
+                    },
+                    {
+                      "id": "ceaCue2",
+                      "type": "ref",
+                      "ref": "cmpCueExpanded",
+                      "name": "Cue 2",
+                      "width": "fill_container"
+                    },
+                    {
+                      "id": "ceaCue3",
+                      "type": "ref",
+                      "ref": "cmpCueCollapsed",
+                      "name": "Cue 3",
+                      "width": "fill_container",
+                      "descendants": {
+                        "cmpCueCollapsedStart": {
+                          "content": "00:00:08.100"
+                        },
+                        "cmpCueCollapsedEnd": {
+                          "content": "00:00:12.000"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "mastersLumen",
+      "x": 1680,
+      "y": -2580,
+      "name": "Component Masters / Lumen",
+      "width": 900,
+      "height": 420,
+      "fill": "$lumen.bg",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": 24,
+      "children": [
+        {
+          "type": "text",
+          "id": "mastersLumenH",
+          "name": "Title",
+          "fill": "$lumen.mutedFg",
+          "content": "Masters · Lumen",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "mastersLumenRow",
+          "name": "Row",
+          "width": "fill_container",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "lmnIconBtn",
+              "name": "Lumen / Icon Button",
+              "reusable": true,
+              "width": 36,
+              "height": 36,
+              "fill": "$lumen.card",
+              "cornerRadius": 12,
+              "stroke": "$lumen.border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "lmnIconBtnGlyph",
+                  "name": "Glyph",
+                  "width": 16,
+                  "height": 16,
+                  "icon": "plus",
+                  "library": "phosphor",
+                  "fill": "$lumen.fg"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lmnGhostBtn",
+              "name": "Lumen / Ghost Button",
+              "reusable": true,
+              "height": 36,
+              "fill": "$lumen.glass",
+              "cornerRadius": 12,
+              "stroke": "$lumen.border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "gap": 8,
+              "padding": [
+                8,
+                14
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "lmnGhostBtnIcon",
+                  "name": "Icon",
+                  "width": 14,
+                  "height": 14,
+                  "icon": "folder-open",
+                  "library": "phosphor",
+                  "fill": "$lumen.fg"
+                },
+                {
+                  "type": "text",
+                  "id": "lmnGhostBtnLabel",
+                  "name": "Label",
+                  "fill": "$lumen.fg",
+                  "content": "Open Video",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lmnPrimaryBtn",
+              "name": "Lumen / Primary Button",
+              "reusable": true,
+              "height": 36,
+              "fill": "$lumen.primary",
+              "cornerRadius": 12,
+              "gap": 8,
+              "padding": [
+                8,
+                16
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "lmnPrimaryBtnIcon",
+                  "name": "Icon",
+                  "width": 14,
+                  "height": 14,
+                  "icon": "export",
+                  "library": "phosphor",
+                  "fill": "$lumen.onPrimary"
+                },
+                {
+                  "type": "text",
+                  "id": "lmnPrimaryBtnLabel",
+                  "name": "Label",
+                  "fill": "$lumen.onPrimary",
+                  "content": "Export VTT",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lmnGlassCue",
+              "name": "Lumen / Glass Cue Slab",
+              "reusable": true,
+              "width": 220,
+              "height": 44,
+              "fill": "$lumen.glass",
+              "cornerRadius": 10,
+              "stroke": "$lumen.primary",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "effect": [
+                {
+                  "type": "background_blur",
+                  "radius": 12
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#EC489955",
+                  "blur": 18
+                }
+              ],
+              "layout": "vertical",
+              "padding": [
+                6,
+                10
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lmnGlassCueText",
+                  "name": "Text",
+                  "fill": "$lumen.fg",
+                  "content": "Welcome to the stage.",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "lmnGlassCueTime",
+                  "name": "Time",
+                  "fill": "$lumen.mutedFg",
+                  "content": "04.2 – 08.0",
+                  "fontFamily": "$font.mono",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lmnCueRow",
+          "name": "Lumen / Cue Row",
+          "reusable": true,
+          "width": "fill_container",
+          "height": 56,
+          "fill": "$lumen.card",
+          "cornerRadius": 12,
+          "stroke": "$lumen.border",
+          "strokeWidth": 1,
+          "strokeAlignment": "inner",
+          "gap": 10,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "lmnCueRowMark",
+              "name": "Active Mark",
+              "width": 4,
+              "height": 32,
+              "fill": "$lumen.primary",
+              "cornerRadius": 999
+            },
+            {
+              "type": "frame",
+              "id": "lmnCueRowCopy",
+              "name": "Copy",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lmnCueRowTime",
+                  "name": "Time",
+                  "fill": "$lumen.mutedFg",
+                  "content": "00:04.2 — 00:08.0",
+                  "fontFamily": "$font.mono",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "lmnCueRowText",
+                  "name": "Text",
+                  "fill": "$lumen.fg",
+                  "content": "Welcome to the stage.",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "id": "xpzrt",
+              "type": "ref",
+              "ref": "lmnIconBtn",
+              "name": "Delete",
+              "width": 28,
+              "height": 28,
+              "descendants": {
+                "lmnIconBtnGlyph": {
+                  "icon": "trash",
+                  "fill": "$lumen.destructive"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "cmpEditorDesktop",
+      "x": 0,
+      "y": -3720,
+      "name": "Editor Desktop Chrome",
+      "reusable": true,
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$as.bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "curHead",
+          "type": "ref",
+          "ref": "cmpHeader",
+          "name": "Header",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "curMain",
+          "name": "Index Page",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "curWorkspace",
+              "name": "Workspace",
+              "width": "fill_container",
+              "height": "fill_container",
+              "gap": 8,
+              "children": [
+                {
+                  "id": "curCues",
+                  "type": "ref",
+                  "ref": "cmpCueEditArea",
+                  "name": "Cue Edit",
+                  "height": "fill_container"
+                },
+                {
+                  "id": "curVideo",
+                  "type": "ref",
+                  "ref": "cmpVideoPlayer",
+                  "name": "Player"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "curBottom",
+              "name": "Timeline Row",
+              "width": "fill_container",
+              "height": 94,
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "curTl",
+                  "type": "ref",
+                  "ref": "cmpTimeline",
+                  "name": "Timeline",
+                  "width": "fill_container",
+                  "height": 94
+                },
+                {
+                  "id": "curZoom",
+                  "type": "ref",
+                  "ref": "cmpZoomSlider",
+                  "name": "Zoom",
+                  "height": 94
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "boardAsIs",
+      "x": 0,
+      "y": -1680,
+      "name": "01 Components / As-Is",
+      "clip": true,
+      "width": 1480,
+      "height": 1520,
+      "fill": "#FAFAFA",
+      "layout": "vertical",
+      "gap": 28,
+      "padding": 40,
+      "children": [
+        {
+          "type": "text",
+          "id": "boardAsIsTitle",
+          "name": "Title",
+          "fill": "$as.fg",
+          "content": "As-Is Design System",
+          "fontFamily": "Inter",
+          "fontSize": 32,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "boardAsIsSub",
+          "name": "Subtitle",
+          "fill": "$as.mutedFg",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "pages/index.tsx 레이아웃을 구성하는 현재 shadcn 컴포넌트. Light / Neutral / 10px radius.",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "boardAsIsRow1",
+          "name": "Buttons Row",
+          "width": "fill_container",
+          "gap": 24,
+          "alignItems": "end",
+          "children": [
+            {
+              "type": "frame",
+              "id": "labIcon",
+              "name": "Icon Button / Plus",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "labIconL",
+                  "name": "Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Icon Button / Plus",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "showIcon",
+                  "type": "ref",
+                  "ref": "cmpIconBtn",
+                  "name": "Icon"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "labGhost",
+              "name": "Ghost / Menu",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "labGhostL",
+                  "name": "Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Ghost / Menu",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "showGhost",
+                  "type": "ref",
+                  "ref": "cmpGhostIconBtn",
+                  "name": "Ghost"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "labOutline",
+              "name": "Outline / Video",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "labOutlineL",
+                  "name": "Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Outline / Video",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "showOutline",
+                  "type": "ref",
+                  "ref": "cmpOutlineIconBtn",
+                  "name": "Outline"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "labPrimary",
+              "name": "Primary",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "labPrimaryL",
+                  "name": "Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Primary",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "showPrimary",
+                  "type": "ref",
+                  "ref": "cmpPrimaryBtn",
+                  "name": "Primary"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "labWhisper",
+              "name": "Whisper Idle",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "labWhisperL",
+                  "name": "Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Whisper Idle",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "showWhisper",
+                  "type": "ref",
+                  "ref": "cmpWhisper",
+                  "name": "Whisper"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "labZoom",
+              "name": "Zoom Slider",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "labZoomL",
+                  "name": "Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Zoom Slider",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "showZoom",
+                  "type": "ref",
+                  "ref": "cmpZoomSlider",
+                  "name": "Zoom",
+                  "height": 90
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "boardAsIsRow2",
+          "name": "Cues Row",
+          "width": "fill_container",
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "labCueC",
+              "name": "Cue Accordion Collapsed",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "labCueCL",
+                  "name": "Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Cue Accordion Collapsed",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "showCueC",
+                  "type": "ref",
+                  "ref": "cmpCueCollapsed",
+                  "name": "Collapsed"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "labCueE",
+              "name": "Cue Accordion Expanded",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "labCueEL",
+                  "name": "Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Cue Accordion Expanded",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "showCueE",
+                  "type": "ref",
+                  "ref": "cmpCueExpanded",
+                  "name": "Expanded"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "labCueB",
+              "name": "Timeline Cue",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "labCueBL",
+                  "name": "Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Timeline Cue",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "showCueB",
+                  "type": "ref",
+                  "ref": "cmpCueBlock",
+                  "name": "Block"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "labTime",
+              "name": "Time Input",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "labTimeL",
+                  "name": "Label",
+                  "fill": "$as.mutedFg",
+                  "content": "Time Input",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "showTime",
+                  "type": "ref",
+                  "ref": "cmpTimeIn",
+                  "name": "Time",
+                  "width": 160
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "labHeader",
+          "name": "Header",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "labHeaderL",
+              "name": "Label",
+              "fill": "$as.mutedFg",
+              "content": "Header",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "600"
+            },
+            {
+              "id": "showHeader",
+              "type": "ref",
+              "ref": "cmpHeader",
+              "name": "Header",
+              "width": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "labControls",
+          "name": "Video Control Area",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "labControlsL",
+              "name": "Label",
+              "fill": "$as.mutedFg",
+              "content": "Video Control Area",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "600"
+            },
+            {
+              "id": "showControls",
+              "type": "ref",
+              "ref": "cmpControlArea",
+              "name": "Controls",
+              "width": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "labTl",
+          "name": "Timeline BarArea",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "labTlL",
+              "name": "Label",
+              "fill": "$as.mutedFg",
+              "content": "Timeline BarArea",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "600"
+            },
+            {
+              "id": "showTl",
+              "type": "ref",
+              "ref": "cmpTimeline",
+              "name": "Timeline",
+              "width": "fill_container",
+              "height": 94
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "boardIssues",
+      "x": 1560,
+      "y": -1680,
+      "name": "00 Audit / Current Problems",
+      "clip": true,
+      "width": 720,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "gap": 14,
+      "padding": 32,
+      "children": [
+        {
+          "type": "text",
+          "id": "issTitle",
+          "name": "Title",
+          "fill": "$as.fg",
+          "content": "현 디자인 진단",
+          "fontFamily": "Inter",
+          "fontSize": 28,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "issSub",
+          "name": "Sub",
+          "fill": "$as.mutedFg",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "index.tsx 기준. 기능은 살아 있으나 영상 에디터로서의 시각 언어가 없음.",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "i1",
+          "name": "Identity 부재",
+          "width": "fill_container",
+          "fill": "$as.muted",
+          "cornerRadius": 10,
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "i1t",
+              "name": "Title",
+              "fill": "$as.fg",
+              "content": "Identity 부재",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "i1b",
+              "name": "Body",
+              "fill": "$as.mutedFg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "shadcn 기본 Light Neutral. 어떤 자막 에디터인지 한 화면에 드러나지 않음.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "i2",
+          "name": "비디오가 비지배",
+          "width": "fill_container",
+          "fill": "$as.muted",
+          "cornerRadius": 10,
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "i2t",
+              "name": "Title",
+              "fill": "$as.fg",
+              "content": "비디오가 비지배",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "i2b",
+              "name": "Body",
+              "fill": "$as.mutedFg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "왼쪽 큐 아코디언 330px이 히어로인 영상을 밀어냄. Dominant region 규칙 위반.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "i3",
+          "name": "타임라인이 빈약",
+          "width": "fill_container",
+          "fill": "$as.muted",
+          "cornerRadius": 10,
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "i3t",
+              "name": "Title",
+              "fill": "$as.fg",
+              "content": "타임라인이 빈약",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "i3b",
+              "name": "Body",
+              "fill": "$as.mutedFg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Time 20 + Wave 50 + Cue 20. 파형은 2D 캔버스, 큐는 gray-300 박스.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "i4",
+          "name": "핵심 액션 은닉",
+          "width": "fill_container",
+          "fill": "$as.muted",
+          "cornerRadius": 10,
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "i4t",
+              "name": "Title",
+              "fill": "$as.fg",
+              "content": "핵심 액션 은닉",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "i4b",
+              "name": "Body",
+              "fill": "$as.mutedFg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Open Video / Export가 햄버거 Sheet 안. 빈 화면에서 다음 행동이 안 보임.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "i5",
+          "name": "라이트 테마",
+          "width": "fill_container",
+          "fill": "$as.muted",
+          "cornerRadius": 10,
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "i5t",
+              "name": "Title",
+              "fill": "$as.fg",
+              "content": "라이트 테마",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "i5b",
+              "name": "Body",
+              "fill": "$as.mutedFg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "영상 작업 도구의 관례(OLED/다크)와 반대. 화이트 배경은 안티패턴.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "i6",
+          "name": "포커스/키보드",
+          "width": "fill_container",
+          "fill": "$as.muted",
+          "cornerRadius": 10,
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "i6t",
+              "name": "Title",
+              "fill": "$as.fg",
+              "content": "포커스/키보드",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "i6b",
+              "name": "Body",
+              "fill": "$as.mutedFg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "에디터인데 포커스 링·단축키 힌트가 UI에 없음. 재생헤드는 색만으로 구분.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "screenCurrentDesktop",
+      "x": 0,
+      "y": 0,
+      "name": "Current / Desktop 1440",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "curChrome",
+          "type": "ref",
+          "ref": "cmpEditorDesktop",
+          "name": "Chrome",
+          "width": "fill_container",
+          "height": "fill_container"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "screenCurrentMobile",
+      "x": 1560,
+      "y": 0,
+      "name": "Current / Mobile 375",
+      "clip": true,
+      "width": 375,
+      "height": 812,
+      "fill": "$as.bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "mobHead",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 48,
+          "fill": "$as.sidebar",
+          "padding": [
+            8,
+            16
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "mobTitle",
+              "name": "Title",
+              "fill": "$as.fg",
+              "content": "Subtitle Editor",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "700"
+            },
+            {
+              "id": "mobMenu",
+              "type": "ref",
+              "ref": "cmpGhostIconBtn",
+              "name": "Menu"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "mobMain",
+          "name": "Page",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "mobVideoWrap",
+              "name": "Video Wrap",
+              "width": "fill_container",
+              "height": 192,
+              "children": [
+                {
+                  "id": "mobVideo",
+                  "type": "ref",
+                  "ref": "cmpVideoPlayer",
+                  "name": "Player",
+                  "width": "fill_container",
+                  "height": 192
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mobTlRow",
+              "name": "Timeline Row",
+              "width": "fill_container",
+              "height": 94,
+              "gap": 8,
+              "children": [
+                {
+                  "id": "mobTl",
+                  "type": "ref",
+                  "ref": "cmpTimeline",
+                  "name": "Timeline",
+                  "width": "fill_container",
+                  "height": 94
+                },
+                {
+                  "id": "mobZoom",
+                  "type": "ref",
+                  "ref": "cmpZoomSlider",
+                  "name": "Zoom",
+                  "height": 94
+                }
+              ]
+            },
+            {
+              "id": "mobCues",
+              "type": "ref",
+              "ref": "cmpCueEditArea",
+              "name": "Cue Edit",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "screenSideMenu",
+      "x": 2055,
+      "y": 0,
+      "name": "Current / Side Menu",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$as.bg",
+      "layout": "none",
+      "children": [
+        {
+          "id": "smDesktop",
+          "type": "ref",
+          "ref": "cmpEditorDesktop",
+          "name": "Desktop Base",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "rectangle",
+          "id": "smDim",
+          "x": 0,
+          "y": 0,
+          "name": "Scrim",
+          "fill": "#00000066",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "type": "frame",
+          "id": "smSheet",
+          "x": 1040,
+          "y": 0,
+          "name": "Sheet",
+          "width": 400,
+          "height": 900,
+          "fill": "$as.bg",
+          "layout": "vertical",
+          "gap": 16,
+          "padding": 24,
+          "children": [
+            {
+              "type": "text",
+              "id": "smTitle",
+              "name": "Title",
+              "fill": "$as.fg",
+              "content": "Menu",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "smTheme",
+              "name": "Theme Row",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "smThemeL",
+                  "name": "Label",
+                  "fill": "$as.fg",
+                  "content": "Theme",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "smSwitch",
+                  "name": "Switch",
+                  "width": 44,
+                  "height": 24,
+                  "fill": "$as.primary",
+                  "cornerRadius": 999,
+                  "padding": 2,
+                  "justifyContent": "end",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "smThumb",
+                      "name": "Thumb",
+                      "width": 20,
+                      "height": 20,
+                      "fill": "$as.bg",
+                      "cornerRadius": 999,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "smSun",
+                          "name": "Sun",
+                          "width": 12,
+                          "height": 12,
+                          "icon": "sun",
+                          "library": "lucide",
+                          "fill": "$as.fg"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "smOpenV",
+              "type": "ref",
+              "ref": "cmpPrimaryBtn",
+              "name": "Open Video",
+              "width": "fill_container"
+            },
+            {
+              "id": "smOpenS",
+              "type": "ref",
+              "ref": "cmpPrimaryBtn",
+              "name": "Open Subtitle",
+              "width": "fill_container",
+              "descendants": {
+                "cmpPrimaryBtnLabel": {
+                  "content": "Open Subtitle File"
+                }
+              }
+            },
+            {
+              "id": "smExport",
+              "type": "ref",
+              "ref": "cmpPrimaryBtn",
+              "name": "Export",
+              "width": "fill_container",
+              "descendants": {
+                "cmpPrimaryBtnLabel": {
+                  "content": "Export Cues as VTT"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "smWhisperRow",
+              "name": "Whisper Row",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "smWhisperL",
+                  "name": "Label",
+                  "fill": "$as.fg",
+                  "content": "Whisper AI",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "smWhisperSw",
+                  "name": "Switch On",
+                  "width": 44,
+                  "height": 24,
+                  "fill": "$as.primary",
+                  "cornerRadius": 999,
+                  "padding": 2,
+                  "justifyContent": "end",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "smWhisperThumb",
+                      "name": "Thumb",
+                      "fill": "$as.bg",
+                      "width": 20,
+                      "height": 20
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "smLang",
+              "name": "Language",
+              "width": "fill_container",
+              "gap": 16,
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "smLangL",
+                  "name": "Label",
+                  "fill": "$as.fg",
+                  "content": "Language",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "smSelect",
+                  "name": "Select",
+                  "width": 180,
+                  "height": 36,
+                  "fill": "$as.bg",
+                  "cornerRadius": 8,
+                  "stroke": "$as.border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "padding": [
+                    8,
+                    12
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "smSelectV",
+                      "name": "Value",
+                      "fill": "$as.fg",
+                      "content": "English",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "icon",
+                      "id": "smSelectC",
+                      "name": "Chevron",
+                      "width": 16,
+                      "height": 16,
+                      "icon": "chevron-down",
+                      "library": "lucide",
+                      "fill": "$as.mutedFg"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "screenLumenDesktop",
+      "x": 0,
+      "y": 1020,
+      "name": "Proposed / Lumen Stage 1440",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$lumen.bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "lmnHead",
+          "name": "Top Bar",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "$lumen.surface",
+          "stroke": "$lumen.border",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "strokeAlignment": "inner",
+          "gap": 16,
+          "padding": [
+            0,
+            16
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "lmnBrand",
+              "name": "Brand",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "lmnMark",
+                  "name": "Mark",
+                  "width": 22,
+                  "height": 22,
+                  "fill": "$lumen.primary",
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lmnMarkX",
+                      "name": "Plus",
+                      "fill": "$lumen.onPrimary",
+                      "content": "+",
+                      "fontFamily": "$font.display",
+                      "fontSize": 16,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "lmnBrandName",
+                  "name": "Name",
+                  "fill": "$lumen.fg",
+                  "content": "LUMEN",
+                  "fontFamily": "$font.display",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lmnFileMeta",
+              "name": "File Meta",
+              "width": "fill_container",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lmnFile",
+                  "name": "File",
+                  "fill": "$lumen.mutedFg",
+                  "content": "clip.mp4",
+                  "fontFamily": "$font.mono",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "lmnTc",
+                  "name": "Timecode",
+                  "fill": "$lumen.fg",
+                  "content": "00:14.20  /  01:22.00",
+                  "fontFamily": "$font.mono",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lmnHeadActions",
+              "name": "Actions",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "lmnWhisperChip",
+                  "name": "Whisper Chip",
+                  "height": 28,
+                  "fill": "$lumen.muted",
+                  "cornerRadius": 999,
+                  "gap": 6,
+                  "padding": [
+                    4,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "lmnWhisperDot",
+                      "name": "Dot",
+                      "fill": "#34D399",
+                      "width": 8,
+                      "height": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "lmnWhisperTxt",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "Whisper idle",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "id": "lmnOpen",
+                  "type": "ref",
+                  "ref": "lmnGhostBtn",
+                  "name": "Open"
+                },
+                {
+                  "id": "lmnExport",
+                  "type": "ref",
+                  "ref": "lmnPrimaryBtn",
+                  "name": "Export"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lmnBody",
+          "name": "Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 12,
+          "padding": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "lmnCueRail",
+              "name": "Cue Rail",
+              "width": 280,
+              "height": "fill_container",
+              "fill": "$lumen.surface",
+              "cornerRadius": 16,
+              "stroke": "$lumen.border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "gap": 10,
+              "padding": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "lmnCueRailHead",
+                  "name": "Rail Head",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lmnCueRailTitle",
+                      "name": "Title",
+                      "fill": "$lumen.mutedFg",
+                      "content": "CUES",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "id": "lmnCueAdd",
+                      "type": "ref",
+                      "ref": "lmnIconBtn",
+                      "name": "Add",
+                      "width": 28,
+                      "height": 28
+                    }
+                  ]
+                },
+                {
+                  "id": "lmnRow1",
+                  "type": "ref",
+                  "ref": "lmnCueRow",
+                  "name": "Row 1",
+                  "width": "fill_container",
+                  "descendants": {
+                    "lmnCueRowMark": {
+                      "fill": "$lumen.muted"
+                    },
+                    "lmnCueRowTime": {
+                      "content": "00:01.0 — 00:04.2"
+                    },
+                    "lmnCueRowText": {
+                      "content": "Hello from the dark."
+                    }
+                  }
+                },
+                {
+                  "id": "lmnRow2",
+                  "type": "ref",
+                  "ref": "lmnCueRow",
+                  "name": "Row 2",
+                  "width": "fill_container"
+                },
+                {
+                  "id": "lmnRow3",
+                  "type": "ref",
+                  "ref": "lmnCueRow",
+                  "name": "Row 3",
+                  "width": "fill_container",
+                  "descendants": {
+                    "lmnCueRowMark": {
+                      "fill": "$lumen.muted"
+                    },
+                    "lmnCueRowTime": {
+                      "content": "00:08.1 — 00:12.0"
+                    },
+                    "lmnCueRowText": {
+                      "content": "Cut."
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lmnStageCol",
+              "name": "Stage Column",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "lmnStage",
+                  "name": "Stage / Canvas + video.js",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "#07090F",
+                  "cornerRadius": 20,
+                  "stroke": "$lumen.border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "padding": [
+                    18,
+                    24,
+                    14,
+                    24
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "oRFc8",
+                      "layoutPosition": "absolute",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Render Stack",
+                      "clip": true,
+                      "width": 832,
+                      "height": 652,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "GzlPO",
+                          "x": 0,
+                          "y": 0,
+                          "name": "TresJS Effect Canvas",
+                          "width": 832,
+                          "height": 652,
+                          "fill": {
+                            "type": "shader",
+                            "enabled": true,
+                            "url": "shaders/lumen-stage.glsl",
+                            "uniforms": {
+                              "u_magenta": "$lumen.primary",
+                              "u_blue": "$lumen.accent"
+                            }
+                          },
+                          "layout": "vertical",
+                          "gap": 8,
+                          "padding": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "bigXr",
+                              "name": "Effect Label",
+                              "fill": "$lumen.mutedFg",
+                              "content": "TresJS canvas  ·  idle effects",
+                              "fontFamily": "$font.mono",
+                              "fontSize": 11,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "jgYps",
+                              "name": "Effect Hint",
+                              "fill": "$lumen.fg",
+                              "content": "Video not selected — canvas stays in front",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "DQSfa",
+                          "x": 0,
+                          "y": 0,
+                          "name": "video.js Player (z-index 20 when selected)",
+                          "opacity": 0.08,
+                          "width": 832,
+                          "height": 652,
+                          "fill": "#000000CC",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "padding": 24,
+                          "justifyContent": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "qnZTK",
+                              "name": "Video Tech",
+                              "fill": "$lumen.primary",
+                              "content": "video.js  ·  z-index 0 → 20",
+                              "fontFamily": "$font.mono",
+                              "fontSize": 11,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "V9lFM",
+                              "name": "Video Hint",
+                              "fill": "$lumen.mutedFg",
+                              "content": "Renders the source. WTT cues overlay as HTML, not VideoTexture.",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lmnCaptionTop",
+                      "name": "Caption Top",
+                      "width": 560,
+                      "height": 48,
+                      "fill": "#00000099",
+                      "cornerRadius": 8,
+                      "effect": {
+                        "type": "background_blur",
+                        "radius": 16
+                      },
+                      "gap": 10,
+                      "padding": [
+                        8,
+                        14
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "lmnCaptionTopTxt",
+                          "name": "Caption",
+                          "fill": "$lumen.fg",
+                          "content": "Hello from the dark.",
+                          "fontFamily": "$font.display",
+                          "fontSize": 20,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lmnStageSpacer",
+                      "name": "Spacer",
+                      "width": "fill_container",
+                      "height": "fill_container"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lmnCaption",
+                      "name": "Caption Bottom",
+                      "width": 560,
+                      "height": 48,
+                      "fill": "#00000099",
+                      "cornerRadius": 8,
+                      "effect": {
+                        "type": "background_blur",
+                        "radius": 16
+                      },
+                      "gap": 10,
+                      "padding": [
+                        8,
+                        14
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "lmnCaptionTxt",
+                          "name": "Caption",
+                          "fill": "$lumen.fg",
+                          "content": "Welcome to the stage.",
+                          "fontFamily": "$font.display",
+                          "fontSize": 20,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lmnDock",
+                      "name": "Glass Dock",
+                      "width": 480,
+                      "height": 48,
+                      "fill": "$lumen.glass",
+                      "cornerRadius": 16,
+                      "stroke": "$lumen.border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "effect": {
+                        "type": "background_blur",
+                        "radius": 18
+                      },
+                      "gap": 10,
+                      "padding": [
+                        8,
+                        12
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "dockPrev",
+                          "name": "Prev",
+                          "width": 18,
+                          "height": 18,
+                          "icon": "skip-back",
+                          "library": "phosphor",
+                          "fill": "$lumen.fg"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "dockPlay",
+                          "name": "Play",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "$lumen.primary",
+                          "cornerRadius": 999,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "dockPlayI",
+                              "name": "Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "play",
+                              "library": "phosphor",
+                              "fill": "$lumen.onPrimary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "icon",
+                          "id": "dockNext",
+                          "name": "Next",
+                          "width": 18,
+                          "height": 18,
+                          "icon": "skip-forward",
+                          "library": "phosphor",
+                          "fill": "$lumen.fg"
+                        },
+                        {
+                          "type": "text",
+                          "id": "dockTc",
+                          "name": "TC",
+                          "fill": "$lumen.fg",
+                          "content": "00:14.20",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "dockVol",
+                          "name": "Vol",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "speaker-high",
+                          "library": "phosphor",
+                          "fill": "$lumen.fg"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "dockFs",
+                          "name": "FS",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "corners-out",
+                          "library": "phosphor",
+                          "fill": "$lumen.fg"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lmnInspector",
+              "name": "Inspector",
+              "width": 280,
+              "height": "fill_container",
+              "fill": "$lumen.surface",
+              "cornerRadius": 16,
+              "stroke": "$lumen.border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "gap": 14,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "inspEyebrow",
+                  "name": "Eyebrow",
+                  "fill": "$lumen.primary",
+                  "content": "+  SELECTED CUE",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "inspTitle",
+                  "name": "Title",
+                  "fill": "$lumen.fg",
+                  "content": "Caption 02",
+                  "fontFamily": "$font.display",
+                  "fontSize": 20,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "inspTimes",
+                  "name": "Times",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "inspStart",
+                      "name": "Start",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "inspStartL",
+                          "name": "Label",
+                          "fill": "$lumen.mutedFg",
+                          "content": "IN",
+                          "fontFamily": "Inter",
+                          "fontSize": 10,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "inspStartBox",
+                          "name": "Box",
+                          "width": "fill_container",
+                          "height": 36,
+                          "fill": "$lumen.card",
+                          "cornerRadius": 10,
+                          "stroke": "$lumen.primary",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "padding": [
+                            8,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "inspStartV",
+                              "name": "Value",
+                              "fill": "$lumen.fg",
+                              "content": "00:04.200",
+                              "fontFamily": "$font.mono",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "inspEnd",
+                      "name": "End",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "inspEndL",
+                          "name": "Label",
+                          "fill": "$lumen.mutedFg",
+                          "content": "OUT",
+                          "fontFamily": "Inter",
+                          "fontSize": 10,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "inspEndBox",
+                          "name": "Box",
+                          "width": "fill_container",
+                          "height": 36,
+                          "fill": "$lumen.card",
+                          "cornerRadius": 10,
+                          "stroke": "$lumen.border",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "padding": [
+                            8,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "inspEndV",
+                              "name": "Value",
+                              "fill": "$lumen.fg",
+                              "content": "00:08.050",
+                              "fontFamily": "$font.mono",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "inspText",
+                  "name": "Text Field",
+                  "width": "fill_container",
+                  "height": 120,
+                  "fill": "$lumen.card",
+                  "cornerRadius": 12,
+                  "stroke": "$lumen.border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "layout": "vertical",
+                  "padding": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "inspTextV",
+                      "name": "Value",
+                      "fill": "$lumen.fg",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Welcome to the stage.",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "inspPos",
+                  "name": "Position",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "inspPosL",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "PLAYER POSITION",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "inspPosSeg",
+                      "name": "Segmented",
+                      "width": "fill_container",
+                      "height": 36,
+                      "fill": "$lumen.card",
+                      "cornerRadius": 10,
+                      "stroke": "$lumen.border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "gap": 4,
+                      "padding": 3,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "inspPosTop",
+                          "name": "Top",
+                          "width": "fill_container",
+                          "height": "fill_container",
+                          "cornerRadius": 8,
+                          "gap": 6,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "inspPosTopI",
+                              "name": "Icon",
+                              "width": 12,
+                              "height": 12,
+                              "icon": "arrow-up",
+                              "library": "phosphor",
+                              "fill": "$lumen.mutedFg"
+                            },
+                            {
+                              "type": "text",
+                              "id": "inspPosTopL",
+                              "name": "Label",
+                              "fill": "$lumen.mutedFg",
+                              "content": "Top",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "inspPosBottom",
+                          "name": "Bottom",
+                          "width": "fill_container",
+                          "height": "fill_container",
+                          "fill": "#EC489933",
+                          "cornerRadius": 8,
+                          "gap": 6,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "inspPosBottomI",
+                              "name": "Icon",
+                              "width": 12,
+                              "height": 12,
+                              "icon": "arrow-down",
+                              "library": "phosphor",
+                              "fill": "$lumen.primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "inspPosBottomL",
+                              "name": "Label",
+                              "fill": "$lumen.primary",
+                              "content": "Bottom",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "inspHint",
+                  "name": "Hint",
+                  "fill": "$lumen.mutedFg",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Top / Bottom only. Caption snaps to the video plane; bottom sits above the control dock.",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lmnTimeline",
+          "name": "3D Waveform Timeline",
+          "width": "fill_container",
+          "height": 168,
+          "fill": "$lumen.surface",
+          "stroke": "$lumen.border",
+          "strokeWidth": {
+            "top": 1
+          },
+          "strokeAlignment": "inner",
+          "layout": "vertical",
+          "gap": 10,
+          "padding": [
+            12,
+            16
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "lmnTlMeta",
+              "name": "Meta",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lmnTlLabel",
+                  "name": "Label",
+                  "fill": "$lumen.mutedFg",
+                  "content": "WAVEFORM  ·  CANVAS EFFECTS  ·  video.js SOURCE",
+                  "fontFamily": "$font.mono",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "lmnTlZoom",
+                  "name": "Zoom",
+                  "fill": "$lumen.mutedFg",
+                  "content": "pps 240",
+                  "fontFamily": "$font.mono",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lmnWaveHost",
+              "name": "Wave Host",
+              "clip": true,
+              "width": "fill_container",
+              "height": "fill_container",
+              "cornerRadius": 12,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "lmnWaveFill",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Shader",
+                  "fill": {
+                    "type": "shader",
+                    "enabled": true,
+                    "url": "shaders/lumen-waveform.glsl",
+                    "uniforms": {
+                      "u_magenta": "$lumen.primary",
+                      "u_blue": "$lumen.accent",
+                      "u_playhead": 0.38
+                    }
+                  },
+                  "width": 1408,
+                  "height": 100
+                },
+                {
+                  "id": "lmnSlab1",
+                  "type": "ref",
+                  "ref": "lmnGlassCue",
+                  "name": "Slab 1",
+                  "x": 48,
+                  "y": 28,
+                  "width": 200,
+                  "height": 44
+                },
+                {
+                  "id": "lmnSlab2",
+                  "type": "ref",
+                  "ref": "lmnGlassCue",
+                  "name": "Slab 2",
+                  "x": 268,
+                  "y": 28,
+                  "width": 240,
+                  "height": 44,
+                  "descendants": {
+                    "lmnGlassCueText": {
+                      "content": "Keep the beat with me."
+                    },
+                    "lmnGlassCueTime": {
+                      "content": "08.1 – 12.0"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "boardLumen",
+      "x": 1560,
+      "y": 1020,
+      "name": "02 Components / Lumen Stage",
+      "clip": true,
+      "width": 720,
+      "height": 900,
+      "fill": "$lumen.bg",
+      "layout": "vertical",
+      "gap": 20,
+      "padding": 32,
+      "children": [
+        {
+          "type": "text",
+          "id": "boardLumenTitle",
+          "name": "Title",
+          "fill": "$lumen.fg",
+          "content": "Lumen Stage",
+          "fontFamily": "$font.display",
+          "fontSize": 28,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "boardLumenSub",
+          "name": "Sub",
+          "fill": "$lumen.mutedFg",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "OLED + Glass + Spatial. Three.js가 장식만이 아니라 타임라인·자막 프리뷰의 본체.",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "boardLumenBtns",
+          "name": "Buttons",
+          "width": "fill_container",
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "id": "showLmnIcon",
+              "type": "ref",
+              "ref": "lmnIconBtn",
+              "name": "Icon"
+            },
+            {
+              "id": "showLmnGhost",
+              "type": "ref",
+              "ref": "lmnGhostBtn",
+              "name": "Ghost"
+            },
+            {
+              "id": "showLmnPrimary",
+              "type": "ref",
+              "ref": "lmnPrimaryBtn",
+              "name": "Primary"
+            }
+          ]
+        },
+        {
+          "id": "showLmnRow",
+          "type": "ref",
+          "ref": "lmnCueRow",
+          "name": "Cue Row",
+          "width": "fill_container"
+        },
+        {
+          "id": "showLmnSlab",
+          "type": "ref",
+          "ref": "lmnGlassCue",
+          "name": "Glass Slab"
+        },
+        {
+          "type": "frame",
+          "id": "boardTokens",
+          "name": "Tokens",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "tokH",
+              "name": "H",
+              "fill": "$lumen.mutedFg",
+              "content": "COLOR TOKENS",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "tokRow",
+              "name": "Swatches",
+              "width": "fill_container",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "sw1",
+                  "name": "Primary",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 8,
+                      "id": "sw1r",
+                      "name": "Chip",
+                      "fill": "$lumen.primary",
+                      "width": 56,
+                      "height": 36,
+                      "stroke": "$lumen.border",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "sw1t",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "Primary",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sw2",
+                  "name": "Accent",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 8,
+                      "id": "sw2r",
+                      "name": "Chip",
+                      "fill": "$lumen.accent",
+                      "width": 56,
+                      "height": 36,
+                      "stroke": "$lumen.border",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "sw2t",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "Accent",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sw3",
+                  "name": "Bg",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 8,
+                      "id": "sw3r",
+                      "name": "Chip",
+                      "fill": "$lumen.bg",
+                      "width": 56,
+                      "height": 36,
+                      "stroke": "$lumen.border",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "sw3t",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "Bg",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sw4",
+                  "name": "Card",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 8,
+                      "id": "sw4r",
+                      "name": "Chip",
+                      "fill": "$lumen.card",
+                      "width": 56,
+                      "height": 36,
+                      "stroke": "$lumen.border",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "sw4t",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "Card",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sw5",
+                  "name": "Fg",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 8,
+                      "id": "sw5r",
+                      "name": "Chip",
+                      "fill": "$lumen.fg",
+                      "width": 56,
+                      "height": 36,
+                      "stroke": "$lumen.border",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "sw5t",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "Fg",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "boardThree",
+      "x": 2360,
+      "y": 1020,
+      "name": "03 Three.js Direction",
+      "clip": true,
+      "width": 720,
+      "height": 900,
+      "fill": "$lumen.surface",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": 32,
+      "children": [
+        {
+          "type": "text",
+          "id": "thTitle",
+          "name": "Title",
+          "fill": "$lumen.fg",
+          "content": "Three.js 적용 지도",
+          "fontFamily": "$font.display",
+          "fontSize": 24,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "th1",
+          "name": "01  VideoTexture Stage",
+          "width": "fill_container",
+          "fill": "$lumen.card",
+          "cornerRadius": 12,
+          "stroke": "$lumen.border",
+          "strokeWidth": 1,
+          "strokeAlignment": "inner",
+          "layout": "vertical",
+          "gap": 6,
+          "padding": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "th1t",
+              "name": "Title",
+              "fill": "$lumen.primary",
+              "content": "01  VideoTexture Stage",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "th1b",
+              "name": "Body",
+              "fill": "$lumen.fg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "영상은 DOM video가 아니라 Plane + VideoTexture. ACES Filmic tone mapping으로 영화 콘트라스트.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "th2",
+          "name": "02  3D Caption",
+          "width": "fill_container",
+          "fill": "$lumen.card",
+          "cornerRadius": 12,
+          "stroke": "$lumen.border",
+          "strokeWidth": 1,
+          "strokeAlignment": "inner",
+          "layout": "vertical",
+          "gap": 6,
+          "padding": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "th2t",
+              "name": "Title",
+              "fill": "$lumen.primary",
+              "content": "02  3D Caption",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "th2b",
+              "name": "Body",
+              "fill": "$lumen.fg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "활성 자막은 troika-three-text. 비디오 플레인 앞에 떠 있고, 비활성은 투명도만 낮춤. TextGeometry는 무거운 글리프용으로만.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "th3",
+          "name": "03  InstancedMesh Wave",
+          "width": "fill_container",
+          "fill": "$lumen.card",
+          "cornerRadius": 12,
+          "stroke": "$lumen.border",
+          "strokeWidth": 1,
+          "strokeAlignment": "inner",
+          "layout": "vertical",
+          "gap": 6,
+          "padding": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "th3t",
+              "name": "Title",
+              "fill": "$lumen.primary",
+              "content": "03  InstancedMesh Wave",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "th3b",
+              "name": "Body",
+              "fill": "$lumen.fg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "파형은 캔버스 2D가 아니라 InstancedMesh 바. 피크만 UnrealBloomPass. HUD/플랫 UI는 MeshBasicMaterial — 라이트 패스 낭비 금지.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "th4",
+          "name": "04  Glass Cue Slabs",
+          "width": "fill_container",
+          "fill": "$lumen.card",
+          "cornerRadius": 12,
+          "stroke": "$lumen.border",
+          "strokeWidth": 1,
+          "strokeAlignment": "inner",
+          "layout": "vertical",
+          "gap": 6,
+          "padding": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "th4t",
+              "name": "Title",
+              "fill": "$lumen.primary",
+              "content": "04  Glass Cue Slabs",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "th4b",
+              "name": "Body",
+              "fill": "$lumen.fg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "큐 블록은 MeshPhysicalMaterial transmission. Ambient + Directional 최소 조명. 선택 큐만 thickness/bloom.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "th5",
+          "name": "05  Playhead Light",
+          "width": "fill_container",
+          "fill": "$lumen.card",
+          "cornerRadius": 12,
+          "stroke": "$lumen.border",
+          "strokeWidth": 1,
+          "strokeAlignment": "inner",
+          "layout": "vertical",
+          "gap": 6,
+          "padding": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "th5t",
+              "name": "Title",
+              "fill": "$lumen.primary",
+              "content": "05  Playhead Light",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "th5b",
+              "name": "Body",
+              "fill": "$lumen.fg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "재생헤드는 AdditiveBlending 플레인 + 약한 포인트라이트. reduced-motion이면 정적 라인으로 폴백.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "th6",
+          "name": "06  Nuxt 경계",
+          "width": "fill_container",
+          "fill": "$lumen.card",
+          "cornerRadius": 12,
+          "stroke": "$lumen.border",
+          "strokeWidth": 1,
+          "strokeAlignment": "inner",
+          "layout": "vertical",
+          "gap": 6,
+          "padding": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "th6t",
+              "name": "Title",
+              "fill": "$lumen.primary",
+              "content": "06  Nuxt 경계",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "th6b",
+              "name": "Body",
+              "fill": "$lumen.fg",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "TresJS 또는 vue-three-fiber로 씬을 컴포넌트화. 타임라인 상태는 기존 CueStore가 SSOT. Three는 뷰포트만.",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "id": "noteCurrent",
+      "x": 0,
+      "y": 920,
+      "name": "Current mapping",
+      "width": 480,
+      "height": 160,
+      "content": "HeaderDefault + CueEditArea + VideoPlayer + BarArea(TimeBar/WaveBar/CueBar) + vertical Slider.\n\nMobile: CueEditArea moves below timeline when displayWidth < 768."
+    },
+    {
+      "type": "note",
+      "id": "noteLumen",
+      "x": 0,
+      "y": 1940,
+      "name": "Lumen Stage",
+      "width": 480,
+      "height": 170,
+      "content": "Recommended direction: OLED dark + glass overlays + Three.js as the timeline/caption body, not a background gimmick.\n\nPrimary #EC4899  Accent #2563EB  Bg #07090F"
+    },
+    {
+      "type": "context",
+      "id": "ctxIndex",
+      "x": 1020,
+      "y": 920,
+      "name": "Source",
+      "width": 420,
+      "height": 120,
+      "content": "Mapped from subscript-editor/pages/index.tsx, layouts/default.tsx, HeaderDefault, CueEditArea, VideoPlayer, BarArea."
+    },
+    {
+      "id": "h4PMFX",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 3535,
+      "y": -3720
+    },
+    {
+      "id": "ob4Qb",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 3795,
+      "y": -3720
+    },
+    {
+      "id": "fHnYq",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 4055,
+      "y": -3720
+    },
+    {
+      "id": "GlmTe",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 4315,
+      "y": -3720
+    },
+    {
+      "id": "nwG0p",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 4575,
+      "y": -3720
+    },
+    {
+      "id": "OfQN4",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 4835,
+      "y": -3720
+    },
+    {
+      "id": "fvWLj",
+      "type": "ref",
+      "ref": "lmnCueRow",
+      "x": 5095,
+      "y": -3720
+    },
+    {
+      "id": "kMiGN",
+      "type": "ref",
+      "ref": "lmnCueRow",
+      "x": 5987,
+      "y": -3720
+    },
+    {
+      "id": "XYW2D",
+      "type": "ref",
+      "ref": "lmnCueRow",
+      "x": 6879,
+      "y": -3720
+    }
+  ],
+  "variables": {
+    "as.bg": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "as.fg": {
+      "type": "color",
+      "value": "#171717"
+    },
+    "as.muted": {
+      "type": "color",
+      "value": "#F5F5F5"
+    },
+    "as.mutedFg": {
+      "type": "color",
+      "value": "#737373"
+    },
+    "as.primary": {
+      "type": "color",
+      "value": "#262626"
+    },
+    "as.primaryFg": {
+      "type": "color",
+      "value": "#FAFAFA"
+    },
+    "as.border": {
+      "type": "color",
+      "value": "#E5E5E5"
+    },
+    "as.sidebar": {
+      "type": "color",
+      "value": "#F5F5F5"
+    },
+    "as.card": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "as.destructive": {
+      "type": "color",
+      "value": "#DC2626"
+    },
+    "as.ring": {
+      "type": "color",
+      "value": "#A3A3A3"
+    },
+    "as.cue": {
+      "type": "color",
+      "value": "#D1D5DB99"
+    },
+    "as.playhead": {
+      "type": "color",
+      "value": "#EF4444B3"
+    },
+    "as.hoverline": {
+      "type": "color",
+      "value": "#FCA5A7B3"
+    },
+    "as.control": {
+      "type": "color",
+      "value": "#6B728099"
+    },
+    "as.video": {
+      "type": "color",
+      "value": "#111111"
+    },
+    "as.whisperIdle": {
+      "type": "color",
+      "value": "#ECFDF5"
+    },
+    "as.whisperIdleFg": {
+      "type": "color",
+      "value": "#059669"
+    },
+    "as.radius": {
+      "type": "number",
+      "value": 10
+    },
+    "as.gap": {
+      "type": "number",
+      "value": 8
+    },
+    "as.pad": {
+      "type": "number",
+      "value": 16
+    },
+    "lumen.bg": {
+      "type": "color",
+      "value": "#07090F"
+    },
+    "lumen.surface": {
+      "type": "color",
+      "value": "#0F172A"
+    },
+    "lumen.card": {
+      "type": "color",
+      "value": "#192134"
+    },
+    "lumen.muted": {
+      "type": "color",
+      "value": "#201A32"
+    },
+    "lumen.fg": {
+      "type": "color",
+      "value": "#F8FAFC"
+    },
+    "lumen.mutedFg": {
+      "type": "color",
+      "value": "#94A3B8"
+    },
+    "lumen.primary": {
+      "type": "color",
+      "value": "#EC4899"
+    },
+    "lumen.onPrimary": {
+      "type": "color",
+      "value": "#000000"
+    },
+    "lumen.accent": {
+      "type": "color",
+      "value": "#2563EB"
+    },
+    "lumen.onAccent": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "lumen.border": {
+      "type": "color",
+      "value": "#FFFFFF14"
+    },
+    "lumen.glass": {
+      "type": "color",
+      "value": "#FFFFFF18"
+    },
+    "lumen.destructive": {
+      "type": "color",
+      "value": "#DC2626"
+    },
+    "font.ui": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "font.mono": {
+      "type": "string",
+      "value": "JetBrains Mono"
+    },
+    "font.display": {
+      "type": "string",
+      "value": "Syne"
+    },
+    "space.xs": {
+      "type": "number",
+      "value": 2
+    },
+    "space.sm": {
+      "type": "number",
+      "value": 4
+    },
+    "space.md": {
+      "type": "number",
+      "value": 8
+    },
+    "space.lg": {
+      "type": "number",
+      "value": 12
+    },
+    "space.xl": {
+      "type": "number",
+      "value": 16
+    },
+    "space.2xl": {
+      "type": "number",
+      "value": 24
+    }
+  },
+  "fileToken": "788df6de-8a93-4644-9821-218436d397db"
+}

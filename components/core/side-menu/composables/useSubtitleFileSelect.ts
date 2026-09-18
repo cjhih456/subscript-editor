@@ -5,7 +5,7 @@ export default function useSubtitleFileSelect ({ onSuccess }: { onSuccess: (cues
   const nuxt = useNuxtApp()
   
   const { open, reset, onChange } = useFileDialog({
-    accept: 'text/vtt, text/sbv, text/srt',
+    accept: '.vtt,.wtt,.srt,.sbv,text/vtt,text/sbv,text/srt',
     multiple: false,
   })
 

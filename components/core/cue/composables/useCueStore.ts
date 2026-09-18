@@ -1,9 +1,10 @@
 import { v4 as uuid } from 'uuid'
-import type { VTTCueSlim } from '~/plugins/WebVttPlugin'
+import type { CueLinePosition, VTTCueSlim } from '~/plugins/WebVttPlugin'
 export interface CueDataInterface {
   startTime: number
   endTime: number
   text: string
+  linePosition: CueLinePosition
 }
 
 export interface CueData extends CueDataInterface {
@@ -21,6 +22,7 @@ export interface CueStoreInterface {
   allIds: ComputedRef<string[]>
   undoAble: ComputedRef<boolean>
   redoAble: ComputedRef<boolean>
+  store: Ref<Map<string, CueDataInterface>>
   loadCues: (cues: (VTTCue | VTTCueSlim)[]) => void
   get: (idx: string) => CueDataInterface
   create: () => void
@@ -31,6 +33,7 @@ export interface CueStoreInterface {
 }
 
 export default function useCueStore (): CueStoreInterface {
+  const nuxt = useNuxtApp()
   const cueStore = ref<Map<string, CueDataInterface>>(new Map())
   const cueStoreKeys = ref<string[]>([])
   const historyStack = ref<HistoryData[]>([])
@@ -94,7 +97,8 @@ export default function useCueStore (): CueStoreInterface {
     const cueData: CueDataInterface = {
       startTime: 0,
       endTime: 0,
-      text: ''
+      text: '',
+      linePosition: 'bottom'
     }
     storeCreateAction(idx, cueData)
     addHistory('add', idx, { after: cueData })
@@ -105,7 +109,8 @@ export default function useCueStore (): CueStoreInterface {
     const cue: CueDataInterface = {
       startTime,
       endTime,
-      text: cueData.text
+      text: cueData.text,
+      linePosition: cueData.linePosition ?? 'bottom'
     }
     const before = cueStore.value.get(idx)
     storeUpdateAction(idx, cue)
@@ -149,14 +154,15 @@ export default function useCueStore (): CueStoreInterface {
     }
   }
 
-  function loadCues (cues: VTTCue[]) {
+  function loadCues (cues: (VTTCue | VTTCueSlim)[]) {
     storeCleanAction()
     cues.forEach(cue => {
       const idx = uuid()
       storeCreateAction(idx, {
         startTime: cue.startTime,
         endTime: cue.endTime,
-        text: cue.text
+        text: cue.text,
+        linePosition: nuxt.$webVtt.resolveCuePosition(cue)
       })
     })
   }
@@ -166,6 +172,7 @@ export default function useCueStore (): CueStoreInterface {
     allIds,
     undoAble,
     redoAble,
+    store: cueStore,
     loadCues,
     get,
     create,

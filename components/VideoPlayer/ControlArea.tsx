@@ -1,8 +1,9 @@
 import { Button } from '~/components/ui/button'
-import { Play, Pause, Square, Volume2, Volume, Maximize, Minimize, VolumeOff, Volume1 } from 'lucide-vue-next'
+import { Play, Pause, SkipBack, SkipForward, Volume2, Maximize, Minimize, VolumeOff, Volume1, Volume } from 'lucide-vue-next'
 import type Player from 'video.js/dist/types/player'
 import type { PropType } from 'vue'
 import { Slider } from '~/components/ui/slider'
+
 export default defineNuxtComponent({
   name: 'ControlAreaVue',
   props: {
@@ -31,7 +32,6 @@ export default defineNuxtComponent({
   setup (props, { emit }) {
     const nuxt = useNuxtApp()
 
-    // Play & Pause
     const playIcon = computed(() => props.isPlaying ? Pause : Play)
     const togglePlayPause = () => {
       if (props.isPlaying) {
@@ -42,23 +42,17 @@ export default defineNuxtComponent({
     }
     function startVideo () {
       if (!props.player) { return }
-      // starting the video...
       props.player.play()
     }
     function pauseVideo () {
       if (!props.player) { return }
-      // pausing the video...
       props.player.pause()
     }
-    function stopVideo () {
+    function skip (delta: number) {
       if (!props.player) { return }
-      // stopping the video...
-      props.player.pause()
-      props.player.currentTime(0)
-      props.player.trigger('stop')
+      props.player.currentTime((props.player.currentTime() || 0) + delta)
     }
 
-    // Volume
     const volumeData = shallowRef({
       value: 0,
       mute: false
@@ -78,18 +72,12 @@ export default defineNuxtComponent({
       if (!props.player) { return }
       volumeData.value = { value: props.player.volume() || 0, mute: props.player.muted() || false }
     }
-    function changeVolume (value: number) {
-      if (!props.player) { return }
-      props.player.volume(value)
-      updateVolumeState()
-    }
     function toggleMute () {
       if (!props.player) { return }
       props.player.muted(!volumeData.value.mute)
       updateVolumeState()
     }
 
-    // FullScreen
     const fullscreenData = ref(false)
     function updateFullscreenState () {
       if (!props.player) { return }
@@ -107,7 +95,6 @@ export default defineNuxtComponent({
     }
     const fullscreenIcon = computed(() => fullscreenData.value ? Minimize : Maximize)
 
-    // CurrentTime
     const currentTime = ref(0)
     function seekCurrentTime (value: number) {
       if (value !== currentTime.value) { props.player?.currentTime(value) }
@@ -129,18 +116,17 @@ export default defineNuxtComponent({
       }
     })
 
-    // Duration
     const duration = ref(0)
     function updateDurationState () {
       duration.value = props.player?.duration() || 0
     }
     function formatTimeDisplay (duration: number) {
-      const format = duration >= 3600 ? 'H:mm:ss' : 'm:ss'
+      const format = duration >= 3600 ? 'H:mm:ss' : 'mm:ss.SS'
       return nuxt.$dayjs.utc(duration * 1000).format(format)
     }
 
     const durationWithCurrentTime = computed(() => {
-      return formatTimeDisplay(currentTime.value) + ' / ' + formatTimeDisplay(duration.value)
+      return formatTimeDisplay(currentTime.value)
     })
 
     function init () {
@@ -172,10 +158,9 @@ export default defineNuxtComponent({
     return {
       playIcon,
       togglePlayPause,
-      stopVideo,
+      skip,
       volumeData,
       volumeIcon,
-      changeVolume,
       toggleMute,
       fullscreenData,
       fullscreenIcon,
@@ -188,15 +173,18 @@ export default defineNuxtComponent({
     }
   },
   render () {
-    return <div class="h-[40px] gap-2 absolute bottom-0 left-0 right-0 flex items-center px-2 text-foreground bg-gray-500 bg-opacity-60">
-      <Button variant="outline" size="icon-sm" onClick={this.togglePlayPause}>
+    return <div class="pointer-events-auto absolute bottom-3 left-1/2 z-40 flex h-12 w-[min(480px,92%)] -translate-x-1/2 items-center justify-center gap-2.5 rounded-2xl border border-white/10 bg-white/6 px-3 text-foreground backdrop-blur-md">
+      <Button variant="ghost" size="icon-sm" onClick={() => this.skip(-10)}>
+        <SkipBack />
+      </Button>
+      <Button class="size-8 rounded-full bg-primary text-primary-foreground" size="icon-sm" onClick={this.togglePlayPause}>
         <this.playIcon />
       </Button>
-      <Button variant="outline" size="icon-sm" onClick={this.stopVideo}>
-        <Square />
+      <Button variant="ghost" size="icon-sm" onClick={() => this.skip(10)}>
+        <SkipForward />
       </Button>
-      <span>{this.durationWithCurrentTime}</span>
-      <div class="grow px-2">
+      <span class="font-mono text-xs">{this.durationWithCurrentTime}</span>
+      <div class="w-24">
         <Slider
           max={this.duration}
           min={0}
@@ -207,12 +195,10 @@ export default defineNuxtComponent({
           }}
         />
       </div>
-      <div class="relative">
-        <Button variant="outline" size="icon-sm" onClick={this.toggleMute}>
-          <this.volumeIcon />
-        </Button>
-      </div>
-      <Button variant="outline" size="icon-sm" onClick={this.toggleFullscreen}>
+      <Button variant="ghost" size="icon-sm" onClick={this.toggleMute}>
+        <this.volumeIcon />
+      </Button>
+      <Button variant="ghost" size="icon-sm" onClick={this.toggleFullscreen}>
         <this.fullscreenIcon />
       </Button>
     </div>

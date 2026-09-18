@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "~/components/ui/select"
 import useVideoFileSelect from "../composables/useVideoFileSelect"
 import useSaveCue from "../composables/useSaveCue"
-import { MenuIcon, Moon, Sun } from "lucide-vue-next"
+import { FileUp, FolderOpen, MenuIcon, Moon, Sun } from "lucide-vue-next"
 import useSubtitleFileSelect from "../composables/useSubtitleFileSelect"
 import { useCueStore } from "../../provider/SubtitleControllerProvider"
 import AlertDialog from "../../alert/ui/AlertDialog"
@@ -13,12 +13,13 @@ import { useWhisperProvider } from "../../whisper"
 export default defineNuxtComponent({
   name: 'SideMenu',
   setup () {
-    const sideMenuState = ref<boolean>(true)
+    const sideMenuState = ref<boolean>(false)
     const { loadCues } = useCueStore()
     const { open: openVideoFileSelect } = useVideoFileSelect()
     const { open: openSubtitleFileSelect } = useSubtitleFileSelect({ onSuccess: (cues) => {
       loadCues(cues)
     } })
+
     const { saveCue, saveAble } = useSaveCue()
 
     const colorMode = useColorMode()
@@ -66,6 +67,17 @@ export default defineNuxtComponent({
   },
   render () {
     return <ClientOnly>
+      <Button variant="outline" class="h-9 rounded-xl border-border bg-muted max-md:hidden" onClick={() => this.openVideoFileSelectorAction()}>
+        <FolderOpen class="size-3.5" />
+        Open Video
+      </Button>
+      <Button variant="outline" class="h-9 rounded-xl border-border bg-muted max-md:hidden" onClick={() => this.openSubtitleFileSelectAction()}>
+        Open VTT
+      </Button>
+      <Button class="h-9 rounded-xl bg-primary text-primary-foreground max-md:hidden" disabled={!this.saveAble} onClick={() => this.saveCueAction()}>
+        <FileUp class="size-3.5" />
+        Export VTT
+      </Button>
       <Sheet v-model:open={this.sideMenuState}>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon">
@@ -90,7 +102,8 @@ export default defineNuxtComponent({
               </Switch>
             </div>
             <Button onClick={() => this.openVideoFileSelectorAction()}>
-              Open Video File
+              <FolderOpen class="size-3.5" />
+              Open Video
             </Button>
             {this.saveAble ? (<AlertDialog
               title="Subtitle File Select Warning"
@@ -105,15 +118,16 @@ export default defineNuxtComponent({
                   </p>
                 ),
                 trigger: () => (<Button>
-                  Open Subtitle File
+                  Open VTT
                 </Button>)
               }}
             </AlertDialog>) : <Button onClick={() => this.openSubtitleFileSelectAction()}>
-              Open Subtitle File
+                Open VTT
             </Button>}
             
             <Button onClick={() => this.saveCueAction()} disabled={!this.saveAble}>
-              Export Cues as VTT
+              <FileUp class="size-3.5" />
+              Export VTT
             </Button>
             <div class="flex items-center justify-between text-foreground">
               <p>Whisper AI</p>

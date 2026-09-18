@@ -69,7 +69,7 @@ export default function useCueControl (id: string, element: Readonly<ShallowRef<
 
     // cueStore를 사용하여 데이터 업데이트
     updateCue(id, {
-      text: cue.value.text,
+      ...cue.value,
       startTime: newStartTime,
       endTime: newEndTime
     })

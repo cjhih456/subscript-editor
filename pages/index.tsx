@@ -2,12 +2,11 @@ import AlertDisplay from '~/components/core/alert/ui/AlertDisplay'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
 import { useDisplayWidth, usePixPerSec, useCueStore, useCurrentTime, useVideoFileObjectUrl } from '~/components/core/provider/SubtitleControllerProvider'
 import TimeBar from '~/components/core/timeline/ui/TimeBar'
-import WaveBar from '~/components/core/timeline/ui/WaveBar'
+import WaveHostScene from '~/components/core/timeline/ui/WaveHostScene.vue'
 import BarArea from '~/components/core/timeline/ui/BarArea'
 import CueBar from '~/components/core/cue/ui/CueBar'
 import CueEditArea from '~/components/core/cue/ui/CueEditArea'
-import CurrentTimeCursor from '~/components/core/timeline/ui/CurrentTimeCursor'
-import CurrentCursor from '~/components/core/timeline/ui/CurrentCursor'
+import LumenInspector from '~/components/core/cue/ui/LumenInspector'
 import { Slider } from '~/components/ui/slider'
 import { ClientOnly } from '#components'
 import useWaveConverter from '~/components/core/ffmpeg/composables/useWaveConverter'
@@ -36,7 +35,7 @@ export default defineNuxtComponent({
 
     const timeBarHeight = ref(20)
     const fontSize = ref(12)
-    const waveHeight = ref(50)
+    const waveHostHeight = ref(100)
 
     const allCues = computed(() => allIds.value.map(id => getCue(id)))
 
@@ -46,49 +45,63 @@ export default defineNuxtComponent({
       pixPerSec,
       timeBarHeight,
       fontSize,
-      waveHeight,
+      waveHostHeight,
       allCues,
       isMobile
     }
   },
   render () {
-    return <section class="flex flex-col gap-2 flex-1 p-4">
+    return <section class="flex h-full min-h-0 flex-1 flex-col bg-background text-foreground">
       <AlertDisplay />
-      <div class="flex gap-2 flex-col md:grow md:flex-row">
-        <div class="flex flex-col grow md:grow-0">
+      <div class="flex min-h-0 flex-1 flex-col gap-3 p-3 md:flex-row">
+        <div class={this.isMobile ? 'order-3 h-64' : 'w-[280px] shrink-0'}>
           <ClientOnly>
-            {!this.isMobile ? <CueEditArea class="grow" /> : <></>}
+            <CueEditArea class="h-full" />
           </ClientOnly>
         </div>
-        <div class="md:flex-1">
+        <div class="min-h-0 min-w-0 flex-1 self-stretch">
           <VideoPlayer
             v-model:currentTime={this.currentTime}
             subscript={this.allCues}
             src={this.videoFileObjectUrl || undefined}
           />
         </div>
+        {!this.isMobile
+          ? <div class="w-[280px] shrink-0">
+            <LumenInspector />
+          </div>
+          : null}
       </div>
-      <div class="flex w-full grow-0 gap-4">
-        <BarArea class="flex grow">
-          {{
-            canvas: () => (
-              <>
-                <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
-                <WaveBar waveHeight={this.waveHeight} />
-              </>
-            ),
-            default: () => (
-              <CueBar />
-            ),
-            cursor: () => (
-              <>
-                <CurrentTimeCursor />
-                <CurrentCursor />
-              </>
-            )
-          }}
-        </BarArea>
-        <div class="grow-0">
+      <div class="flex h-[168px] w-full shrink-0 gap-4 border-t border-border bg-sidebar px-4 py-3">
+        <div class="flex min-w-0 flex-1 flex-col gap-2">
+          <div class="flex items-center justify-between font-mono text-[11px] text-muted-foreground">
+            <span>WAVEFORM</span>
+            <span>pps {this.pixPerSec[0]}</span>
+          </div>
+          <BarArea class="flex min-h-0 flex-1 overflow-hidden rounded-xl">
+            {{
+              canvas: () => (
+                <>
+                  <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
+                  <div class="relative w-full overflow-hidden rounded-xl" style={{ height: `${this.waveHostHeight}px` }}>
+                    <ClientOnly>
+                      <WaveHostScene />
+                    </ClientOnly>
+                  </div>
+                </>
+              ),
+              default: () => (
+                <div
+                  class="relative pointer-events-none"
+                  style={{ marginTop: `-${this.waveHostHeight}px`, height: `${this.waveHostHeight}px` }}
+                >
+                  <CueBar />
+                </div>
+              )
+            }}
+          </BarArea>
+        </div>
+        <div class="flex w-8 shrink-0 items-stretch">
           <ClientOnly>
             <Slider
               v-model={this.pixPerSec}
@@ -101,9 +114,11 @@ export default defineNuxtComponent({
           </ClientOnly>
         </div>
       </div>
-      <ClientOnly>
-        {this.isMobile ? <CueEditArea class="grow" /> : <></>}
-      </ClientOnly>
+      {this.isMobile
+        ? <div class="p-3">
+          <LumenInspector />
+        </div>
+        : null}
     </section>
   }
 })

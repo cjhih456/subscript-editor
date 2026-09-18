@@ -26,7 +26,7 @@ function renderWaveBar (params: WaveBarRenderParams) {
   // SharedArrayBuffer를 Int8Array로 래핑
   const waveDataArray = new Int8Array(waveData)
 
-  const samplePerPixel = (audioRate / pixPerSec) * 2
+  const samplePerPixel = audioRate / pixPerSec
   const waveHalfHeight = waveHeight / 2
 
   ctx.canvas.width = canvasWidth
@@ -35,13 +35,12 @@ function renderWaveBar (params: WaveBarRenderParams) {
   ctx.clearRect(0, 0, canvasWidth, waveHeight)
   ctx.beginPath()
 
-  // scrollValue를 고려하여 파형 데이터의 시작 위치 계산
-  const scrollOffset = Math.floor(scrollTime * audioRate)
+  // timeAt(x) = scrollTime + x / pixPerSec → sampleIndex = timeAt(x) * audioRate
+  const scrollOffset = scrollTime * audioRate
 
   for (let i = 0; i < canvasWidth; i += 2) {
-    // scrollValue에 따른 오프셋 적용
-    const start = Math.floor(i * samplePerPixel) + scrollOffset
-    const end = start + samplePerPixel * 2
+    const start = Math.floor(i * samplePerPixel + scrollOffset)
+    const end = Math.floor((i + 2) * samplePerPixel + scrollOffset)
 
     if (start >= waveDataLength) {
       break
@@ -57,7 +56,7 @@ function renderWaveBar (params: WaveBarRenderParams) {
         if (value < min) { min = value }
       }
     }
-    ctx.fillRect(i * 2, waveHalfHeight - (max / waveScaleValue) * waveHeight, 2, ((max - min) / waveScaleValue) * waveHeight)
+    ctx.fillRect(i, waveHalfHeight - (max / waveScaleValue) * waveHeight, 2, ((max - min) / waveScaleValue) * waveHeight)
   }
 }
 
