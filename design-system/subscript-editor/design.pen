@@ -1227,6 +1227,20 @@
                   "fontWeight": "500"
                 }
               ]
+            },
+            {
+              "id": "xpzrt",
+              "type": "ref",
+              "ref": "lmnIconBtn",
+              "name": "Delete",
+              "width": 28,
+              "height": 28,
+              "descendants": {
+                "lmnIconBtnGlyph": {
+                  "icon": "trash",
+                  "fill": "$lumen.destructive"
+                }
+              }
             }
           ]
         }
@@ -2597,19 +2611,11 @@
                 {
                   "type": "frame",
                   "id": "lmnStage",
-                  "name": "3D Stage",
+                  "name": "Stage / Canvas + video.js",
                   "clip": true,
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": {
-                    "type": "shader",
-                    "enabled": true,
-                    "url": "shaders/lumen-stage.glsl",
-                    "uniforms": {
-                      "u_magenta": "$lumen.primary",
-                      "u_blue": "$lumen.accent"
-                    }
-                  },
+                  "fill": "#07090F",
                   "cornerRadius": 20,
                   "stroke": "$lumen.border",
                   "strokeWidth": 1,
@@ -2625,6 +2631,102 @@
                   "justifyContent": "space_between",
                   "alignItems": "center",
                   "children": [
+                    {
+                      "type": "frame",
+                      "id": "oRFc8",
+                      "layoutPosition": "absolute",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Render Stack",
+                      "clip": true,
+                      "width": 832,
+                      "height": 652,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "GzlPO",
+                          "x": 0,
+                          "y": 0,
+                          "name": "TresJS Effect Canvas",
+                          "width": 832,
+                          "height": 652,
+                          "fill": {
+                            "type": "shader",
+                            "enabled": true,
+                            "url": "shaders/lumen-stage.glsl",
+                            "uniforms": {
+                              "u_magenta": "$lumen.primary",
+                              "u_blue": "$lumen.accent"
+                            }
+                          },
+                          "layout": "vertical",
+                          "gap": 8,
+                          "padding": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "bigXr",
+                              "name": "Effect Label",
+                              "fill": "$lumen.mutedFg",
+                              "content": "TresJS canvas  ·  idle effects",
+                              "fontFamily": "$font.mono",
+                              "fontSize": 11,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "jgYps",
+                              "name": "Effect Hint",
+                              "fill": "$lumen.fg",
+                              "content": "Video not selected — canvas stays in front",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "DQSfa",
+                          "x": 0,
+                          "y": 0,
+                          "name": "video.js Player (z-index 20 when selected)",
+                          "opacity": 0.08,
+                          "width": 832,
+                          "height": 652,
+                          "fill": "#000000CC",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "padding": 24,
+                          "justifyContent": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "qnZTK",
+                              "name": "Video Tech",
+                              "fill": "$lumen.primary",
+                              "content": "video.js  ·  z-index 0 → 20",
+                              "fontFamily": "$font.mono",
+                              "fontSize": 11,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "V9lFM",
+                              "name": "Video Hint",
+                              "fill": "$lumen.mutedFg",
+                              "content": "Renders the source. WTT cues overlay as HTML, not VideoTexture.",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
                     {
                       "type": "frame",
                       "id": "lmnCaptionTop",
@@ -3119,7 +3221,7 @@
                   "id": "lmnTlLabel",
                   "name": "Label",
                   "fill": "$lumen.mutedFg",
-                  "content": "WAVEFORM  ·  INSTANCEDMESH + BLOOM",
+                  "content": "WAVEFORM  ·  CANVAS EFFECTS  ·  video.js SOURCE",
                   "fontFamily": "$font.mono",
                   "fontSize": 11,
                   "fontWeight": "600"
@@ -3740,6 +3842,69 @@
       "width": 420,
       "height": 120,
       "content": "Mapped from subscript-editor/pages/index.tsx, layouts/default.tsx, HeaderDefault, CueEditArea, VideoPlayer, BarArea."
+    },
+    {
+      "id": "h4PMFX",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 3535,
+      "y": -3720
+    },
+    {
+      "id": "ob4Qb",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 3795,
+      "y": -3720
+    },
+    {
+      "id": "fHnYq",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 4055,
+      "y": -3720
+    },
+    {
+      "id": "GlmTe",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 4315,
+      "y": -3720
+    },
+    {
+      "id": "nwG0p",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 4575,
+      "y": -3720
+    },
+    {
+      "id": "OfQN4",
+      "type": "ref",
+      "ref": "lmnGlassCue",
+      "x": 4835,
+      "y": -3720
+    },
+    {
+      "id": "fvWLj",
+      "type": "ref",
+      "ref": "lmnCueRow",
+      "x": 5095,
+      "y": -3720
+    },
+    {
+      "id": "kMiGN",
+      "type": "ref",
+      "ref": "lmnCueRow",
+      "x": 5987,
+      "y": -3720
+    },
+    {
+      "id": "XYW2D",
+      "type": "ref",
+      "ref": "lmnCueRow",
+      "x": 6879,
+      "y": -3720
     }
   ],
   "variables": {
