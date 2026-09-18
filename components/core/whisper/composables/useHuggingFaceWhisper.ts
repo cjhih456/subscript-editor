@@ -1,5 +1,6 @@
 import type { AutomaticSpeechRecognitionPipeline, Chunk } from '@huggingface/transformers'
 import { pipeline } from '@huggingface/transformers'
+import { getMobileType } from '~/lib/getMobileType'
 
 export enum HuggingFaceWhisperStatus {
   BEFORE_INIT = 'before_init',
@@ -14,8 +15,8 @@ export function useHuggingFaceWhisper () {
   const downloadProgress = ref<number>(0)
 
   async function init() {
-    // @ts-expect-error - navigator.gpu is not allowed major browsers
-    const isGpuSupported = await navigator.gpu?.requestAdapter() ?? null
+    const mobileType = getMobileType()
+    const isGpuSupported = mobileType === 'ios' ? false : await navigator.gpu?.requestAdapter() ?? null
 
     if (!pipelineRef.value) {
       pipelineRef.value = await pipeline<'automatic-speech-recognition'>('automatic-speech-recognition', 'Xenova/whisper-tiny', {
