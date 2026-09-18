@@ -3905,6 +3905,1151 @@
       "ref": "lmnCueRow",
       "x": 6879,
       "y": -3720
+    },
+    {
+      "type": "frame",
+      "id": "c0iiEp",
+      "x": 1560,
+      "y": 1980,
+      "name": "Proposed / Lumen Stage 375",
+      "clip": true,
+      "width": 375,
+      "height": 812,
+      "fill": "$lumen.bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "EVJZ8",
+          "name": "Top Bar",
+          "width": "fill_container",
+          "height": 52,
+          "fill": "$lumen.surface",
+          "stroke": "$lumen.border",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "strokeAlignment": "inner",
+          "gap": 8,
+          "padding": [
+            0,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "f9iwNf",
+              "name": "Brand",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "BMGjk",
+                  "name": "Mark",
+                  "width": 22,
+                  "height": 22,
+                  "fill": "$lumen.primary",
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "PoWaD",
+                      "name": "Plus",
+                      "fill": "$lumen.onPrimary",
+                      "content": "+",
+                      "fontFamily": "$font.display",
+                      "fontSize": 16,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "Yyf0P",
+                  "name": "Name",
+                  "fill": "$lumen.fg",
+                  "content": "LUMEN",
+                  "fontFamily": "$font.display",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "hCYK0",
+              "name": "File Meta",
+              "width": "fill_container",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "oLiI6",
+                  "name": "File",
+                  "fill": "$lumen.mutedFg",
+                  "content": "clip.mp4",
+                  "fontFamily": "$font.mono",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "C290jE",
+              "name": "Actions",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "m2PW4P",
+                  "name": "Whisper Chip",
+                  "height": 28,
+                  "fill": "$lumen.muted",
+                  "cornerRadius": 999,
+                  "gap": 6,
+                  "padding": [
+                    4,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "cLloy",
+                      "name": "Dot",
+                      "fill": "#34D399",
+                      "width": 8,
+                      "height": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "g8Syu",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "Idle",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "id": "C4uF7",
+                  "type": "ref",
+                  "ref": "lmnIconBtn",
+                  "name": "Open",
+                  "width": 32,
+                  "height": 32,
+                  "descendants": {
+                    "lmnIconBtnGlyph": {
+                      "icon": "folder-open"
+                    }
+                  }
+                },
+                {
+                  "id": "XcCwP",
+                  "type": "ref",
+                  "ref": "lmnIconBtn",
+                  "name": "Export",
+                  "width": 32,
+                  "height": 32,
+                  "descendants": {
+                    "lmnIconBtnGlyph": {
+                      "icon": "export",
+                      "fill": "$lumen.primary"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "jAgEk",
+          "name": "Body",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 10,
+          "children": [
+            {
+              "type": "frame",
+              "id": "cMDRO",
+              "name": "Stage / Canvas + video.js",
+              "clip": true,
+              "width": "fill_container",
+              "height": 280,
+              "fill": "#07090F",
+              "cornerRadius": 20,
+              "stroke": "$lumen.border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": [
+                12,
+                12,
+                10,
+                12
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "mFuEN",
+                  "layoutPosition": "absolute",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Render Stack",
+                  "clip": true,
+                  "width": 355,
+                  "height": 280,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "nDBIg",
+                      "x": 0,
+                      "y": 0,
+                      "name": "TresJS Effect Canvas",
+                      "width": 355,
+                      "height": 280,
+                      "fill": {
+                        "type": "shader",
+                        "enabled": true,
+                        "url": "shaders/lumen-stage.glsl",
+                        "uniforms": {
+                          "u_magenta": "$lumen.primary",
+                          "u_blue": "$lumen.accent"
+                        }
+                      },
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": 12,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "iPP9Q",
+                          "name": "Effect Label",
+                          "fill": "$lumen.mutedFg",
+                          "content": "TresJS canvas  ·  idle effects",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 10,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Y4cZ6L",
+                          "name": "Effect Hint",
+                          "fill": "$lumen.fg",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Video not selected — canvas stays in front",
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "rgzH8",
+                      "x": 0,
+                      "y": 0,
+                      "name": "video.js Player (z-index 20 when selected)",
+                      "opacity": 0.08,
+                      "width": 355,
+                      "height": 280,
+                      "fill": "#000000CC",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "padding": 12,
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "jwfCx",
+                          "name": "Video Tech",
+                          "fill": "$lumen.primary",
+                          "content": "video.js  ·  z-index 0 → 20",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "iTmVT",
+                          "name": "Video Hint",
+                          "fill": "$lumen.mutedFg",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Renders the source. WTT cues overlay as HTML, not VideoTexture.",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "o5n8V",
+                  "name": "Caption Top",
+                  "width": "fill_container",
+                  "height": 36,
+                  "fill": "#00000099",
+                  "cornerRadius": 8,
+                  "effect": {
+                    "type": "background_blur",
+                    "radius": 16
+                  },
+                  "gap": 10,
+                  "padding": [
+                    6,
+                    10
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "dOTLq",
+                      "name": "Caption",
+                      "fill": "$lumen.fg",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Hello from the dark.",
+                      "textAlign": "center",
+                      "fontFamily": "$font.display",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "dOf58",
+                  "name": "Spacer",
+                  "width": "fill_container",
+                  "height": "fill_container"
+                },
+                {
+                  "type": "frame",
+                  "id": "R1dYmu",
+                  "name": "Caption Bottom",
+                  "width": "fill_container",
+                  "height": 36,
+                  "fill": "#00000099",
+                  "cornerRadius": 8,
+                  "effect": {
+                    "type": "background_blur",
+                    "radius": 16
+                  },
+                  "gap": 10,
+                  "padding": [
+                    6,
+                    10
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Na1tx",
+                      "name": "Caption",
+                      "fill": "$lumen.fg",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Welcome to the stage.",
+                      "textAlign": "center",
+                      "fontFamily": "$font.display",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "CfDY7",
+                  "name": "Glass Dock",
+                  "width": "fill_container",
+                  "height": 48,
+                  "fill": "$lumen.glass",
+                  "cornerRadius": 16,
+                  "stroke": "$lumen.border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "effect": {
+                    "type": "background_blur",
+                    "radius": 18
+                  },
+                  "gap": 8,
+                  "padding": [
+                    6,
+                    8
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "FAcqM",
+                      "name": "Prev",
+                      "width": 18,
+                      "height": 18,
+                      "icon": "skip-back",
+                      "library": "phosphor",
+                      "fill": "$lumen.fg"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "rED2i",
+                      "name": "Play",
+                      "width": 32,
+                      "height": 32,
+                      "fill": "$lumen.primary",
+                      "cornerRadius": 999,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "MUbE9",
+                          "name": "Icon",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "play",
+                          "library": "phosphor",
+                          "fill": "$lumen.onPrimary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "icon",
+                      "id": "wOawx",
+                      "name": "Next",
+                      "width": 18,
+                      "height": 18,
+                      "icon": "skip-forward",
+                      "library": "phosphor",
+                      "fill": "$lumen.fg"
+                    },
+                    {
+                      "type": "text",
+                      "id": "kmVRN",
+                      "name": "TC",
+                      "fill": "$lumen.fg",
+                      "content": "00:14.20",
+                      "fontFamily": "$font.mono",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Tq84Z",
+              "name": "3D Waveform Timeline",
+              "width": "fill_container",
+              "height": 120,
+              "fill": "$lumen.surface",
+              "stroke": "$lumen.border",
+              "strokeWidth": {
+                "top": 1
+              },
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "gap": 6,
+              "padding": [
+                8,
+                10
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "w7wOX",
+                  "name": "Meta",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "A9yQuN",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "WAVE  ·  TRES  ·  video.js",
+                      "fontFamily": "$font.mono",
+                      "fontSize": 10,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Dl4Ui",
+                      "name": "Zoom",
+                      "fill": "$lumen.mutedFg",
+                      "content": "pps 240",
+                      "fontFamily": "$font.mono",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "qBwdi",
+                  "name": "Wave Host",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "cornerRadius": 12,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "B8TjB",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Shader",
+                      "fill": {
+                        "type": "shader",
+                        "enabled": true,
+                        "url": "shaders/lumen-waveform.glsl",
+                        "uniforms": {
+                          "u_magenta": "$lumen.primary",
+                          "u_blue": "$lumen.accent",
+                          "u_playhead": 0.38
+                        }
+                      },
+                      "width": 335,
+                      "height": 82
+                    },
+                    {
+                      "id": "rIBiz",
+                      "type": "ref",
+                      "ref": "lmnGlassCue",
+                      "name": "Slab 1",
+                      "x": 8,
+                      "y": 18,
+                      "width": 148,
+                      "height": 40
+                    },
+                    {
+                      "id": "Gdgcx",
+                      "type": "ref",
+                      "ref": "lmnGlassCue",
+                      "name": "Slab 2",
+                      "x": 164,
+                      "y": 18,
+                      "width": 162,
+                      "height": 40,
+                      "descendants": {
+                        "lmnGlassCueText": {
+                          "content": "Keep the beat with me."
+                        },
+                        "lmnGlassCueTime": {
+                          "content": "08.1 – 12.0"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "WkyrC",
+              "name": "Cue Rail",
+              "clip": true,
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "$lumen.surface",
+              "cornerRadius": 16,
+              "stroke": "$lumen.border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "gap": 10,
+              "padding": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "PL1Qg",
+                  "name": "Rail Head",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "SNklu",
+                      "name": "Title",
+                      "fill": "$lumen.mutedFg",
+                      "content": "CUES  ·  8",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "id": "DRmQb",
+                      "type": "ref",
+                      "ref": "lmnIconBtn",
+                      "name": "Add",
+                      "width": 28,
+                      "height": 28
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jR5ou",
+                  "name": "Cue List / Scroll",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "id": "Pumb2",
+                      "type": "ref",
+                      "ref": "lmnCueRow",
+                      "name": "Row 1",
+                      "width": "fill_container",
+                      "descendants": {
+                        "lmnCueRowMark": {
+                          "fill": "$lumen.muted"
+                        },
+                        "lmnCueRowTime": {
+                          "content": "00:01.0 — 00:04.2"
+                        },
+                        "lmnCueRowText": {
+                          "content": "Hello from the dark."
+                        }
+                      }
+                    },
+                    {
+                      "id": "J45AvG",
+                      "type": "ref",
+                      "ref": "lmnCueRow",
+                      "name": "Row 2",
+                      "width": "fill_container"
+                    },
+                    {
+                      "id": "sqEav",
+                      "type": "ref",
+                      "ref": "lmnCueRow",
+                      "name": "Row 3",
+                      "width": "fill_container",
+                      "descendants": {
+                        "lmnCueRowMark": {
+                          "fill": "$lumen.muted"
+                        },
+                        "lmnCueRowTime": {
+                          "content": "00:08.1 — 00:12.0"
+                        },
+                        "lmnCueRowText": {
+                          "content": "Cut."
+                        }
+                      }
+                    },
+                    {
+                      "id": "FtcPZ",
+                      "type": "ref",
+                      "ref": "lmnCueRow",
+                      "name": "Row 00:12.0 — 00:16.4",
+                      "width": "fill_container",
+                      "descendants": {
+                        "lmnCueRowMark": {
+                          "fill": "$lumen.muted"
+                        },
+                        "lmnCueRowTime": {
+                          "content": "00:12.0 — 00:16.4"
+                        },
+                        "lmnCueRowText": {
+                          "content": "Lights down."
+                        }
+                      }
+                    },
+                    {
+                      "id": "L8NDGV",
+                      "type": "ref",
+                      "ref": "lmnCueRow",
+                      "name": "Row 00:16.4 — 00:21.0",
+                      "width": "fill_container",
+                      "descendants": {
+                        "lmnCueRowMark": {
+                          "fill": "$lumen.muted"
+                        },
+                        "lmnCueRowTime": {
+                          "content": "00:16.4 — 00:21.0"
+                        },
+                        "lmnCueRowText": {
+                          "content": "Hold the line."
+                        }
+                      }
+                    },
+                    {
+                      "id": "r52wd",
+                      "type": "ref",
+                      "ref": "lmnCueRow",
+                      "name": "Row 00:21.0 — 00:25.8",
+                      "width": "fill_container",
+                      "descendants": {
+                        "lmnCueRowMark": {
+                          "fill": "$lumen.muted"
+                        },
+                        "lmnCueRowTime": {
+                          "content": "00:21.0 — 00:25.8"
+                        },
+                        "lmnCueRowText": {
+                          "content": "Keep the beat with me."
+                        }
+                      }
+                    },
+                    {
+                      "id": "e7gnEJ",
+                      "type": "ref",
+                      "ref": "lmnCueRow",
+                      "name": "Row 00:25.8 — 00:30.2",
+                      "width": "fill_container",
+                      "descendants": {
+                        "lmnCueRowMark": {
+                          "fill": "$lumen.muted"
+                        },
+                        "lmnCueRowTime": {
+                          "content": "00:25.8 — 00:30.2"
+                        },
+                        "lmnCueRowText": {
+                          "content": "Cut to black."
+                        }
+                      }
+                    },
+                    {
+                      "id": "WunKG",
+                      "type": "ref",
+                      "ref": "lmnCueRow",
+                      "name": "Row 00:30.2 — 00:35.0",
+                      "width": "fill_container",
+                      "descendants": {
+                        "lmnCueRowMark": {
+                          "fill": "$lumen.muted"
+                        },
+                        "lmnCueRowTime": {
+                          "content": "00:30.2 — 00:35.0"
+                        },
+                        "lmnCueRowText": {
+                          "content": "End card."
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 999,
+                  "id": "I5qOjw",
+                  "layoutPosition": "absolute",
+                  "x": 346,
+                  "y": 52,
+                  "name": "Scroll Thumb",
+                  "opacity": 0.5,
+                  "fill": "$lumen.mutedFg",
+                  "width": 3,
+                  "height": 88
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "S9IgCW",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 538,
+          "name": "Sheet Dim",
+          "width": 375,
+          "height": 274,
+          "fill": "#00000066"
+        },
+        {
+          "type": "frame",
+          "id": "ANnaN",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 538,
+          "name": "Selected Cue / Bottom Sheet",
+          "width": 375,
+          "height": 274,
+          "fill": "$lumen.surface",
+          "cornerRadius": [
+            24,
+            24,
+            0,
+            0
+          ],
+          "stroke": "$lumen.border",
+          "strokeWidth": {
+            "top": 1
+          },
+          "strokeAlignment": "inner",
+          "effect": [
+            {
+              "type": "background_blur",
+              "radius": 22
+            },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "#00000080",
+              "offset": {
+                "x": 0,
+                "y": -8
+              },
+              "blur": 28
+            }
+          ],
+          "layout": "vertical",
+          "gap": 8,
+          "padding": [
+            8,
+            16,
+            14,
+            16
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "Gr1c3",
+              "name": "Handle Row",
+              "width": "fill_container",
+              "height": 16,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "pRxtx",
+                  "name": "Handle",
+                  "opacity": 0.45,
+                  "width": 40,
+                  "height": 4,
+                  "fill": "$lumen.mutedFg",
+                  "cornerRadius": 999
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "J47Zva",
+              "name": "Sheet Head",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "r0q0a",
+                  "name": "Eyebrow",
+                  "fill": "$lumen.primary",
+                  "content": "+  SELECTED CUE",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "id": "F6LJFI",
+                  "type": "ref",
+                  "ref": "lmnIconBtn",
+                  "name": "Close",
+                  "width": 28,
+                  "height": 28,
+                  "descendants": {
+                    "lmnIconBtnGlyph": {
+                      "icon": "x"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "B4tso",
+              "name": "Title",
+              "fill": "$lumen.fg",
+              "content": "Caption 02",
+              "fontFamily": "$font.display",
+              "fontSize": 18,
+              "fontWeight": "700"
+            },
+            {
+              "type": "frame",
+              "id": "H3Bc6",
+              "name": "Times",
+              "width": "fill_container",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "UASuC",
+                  "name": "Start",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "swzSj",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "IN",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "aRPGo",
+                      "name": "Box",
+                      "width": "fill_container",
+                      "height": 36,
+                      "fill": "$lumen.card",
+                      "cornerRadius": 10,
+                      "stroke": "$lumen.primary",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "padding": [
+                        8,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "VOTMq",
+                          "name": "Value",
+                          "fill": "$lumen.fg",
+                          "content": "00:04.200",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "gio0V",
+                  "name": "End",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "hd45n",
+                      "name": "Label",
+                      "fill": "$lumen.mutedFg",
+                      "content": "OUT",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "IULDq",
+                      "name": "Box",
+                      "width": "fill_container",
+                      "height": 36,
+                      "fill": "$lumen.card",
+                      "cornerRadius": 10,
+                      "stroke": "$lumen.border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "padding": [
+                        8,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "rGeFW",
+                          "name": "Value",
+                          "fill": "$lumen.fg",
+                          "content": "00:08.050",
+                          "fontFamily": "$font.mono",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "wVJ9e",
+              "name": "Text Field",
+              "width": "fill_container",
+              "height": 48,
+              "fill": "$lumen.card",
+              "cornerRadius": 12,
+              "stroke": "$lumen.border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "padding": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "y0UdPx",
+                  "name": "Value",
+                  "fill": "$lumen.fg",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Welcome to the stage.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "QH7F8",
+              "name": "Position",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "W2wX9f",
+                  "name": "Label",
+                  "fill": "$lumen.mutedFg",
+                  "content": "PLAYER POSITION",
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "i4teh",
+                  "name": "Segmented",
+                  "width": "fill_container",
+                  "height": 36,
+                  "fill": "$lumen.card",
+                  "cornerRadius": 10,
+                  "stroke": "$lumen.border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "gap": 4,
+                  "padding": 3,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "RMPmG",
+                      "name": "Top",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "cornerRadius": 8,
+                      "gap": 6,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "jzJgY",
+                          "name": "Icon",
+                          "width": 12,
+                          "height": 12,
+                          "icon": "arrow-up",
+                          "library": "phosphor",
+                          "fill": "$lumen.mutedFg"
+                        },
+                        {
+                          "type": "text",
+                          "id": "xIvRW",
+                          "name": "Label",
+                          "fill": "$lumen.mutedFg",
+                          "content": "Top",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "VzNQQ",
+                      "name": "Bottom",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "#EC489933",
+                      "cornerRadius": 8,
+                      "gap": 6,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "tZeyT",
+                          "name": "Icon",
+                          "width": 12,
+                          "height": 12,
+                          "icon": "arrow-down",
+                          "library": "phosphor",
+                          "fill": "$lumen.primary"
+                        },
+                        {
+                          "type": "text",
+                          "id": "iW2bc",
+                          "name": "Label",
+                          "fill": "$lumen.primary",
+                          "content": "Bottom",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "id": "IVYFx",
+      "x": 1960,
+      "y": 1980,
+      "name": "Lumen Mobile",
+      "width": 420,
+      "height": 160,
+      "content": "Mobile: video 280 + wave 120 stay fixed. CUES fill leftover and clip-scroll. Selected cue opens as a bottom sheet over the list — not an inline inspector."
     }
   ],
   "variables": {
