@@ -42,7 +42,7 @@ export default defineNuxtComponent({
   },
   render () {
     return <div class="relative overflow-hidden bg-card text-card-foreground border-card-foreground">
-      <div ref="scrollArea" class="relative w-full overflow-x-scroll pb-2">
+      <div ref="scrollArea" class="relative w-full overflow-x-scroll overflow-y-hidden pb-2">
         <div class="sticky top-0 left-0 right-0">
           {this.$slots.canvas?.()}
         </div>
