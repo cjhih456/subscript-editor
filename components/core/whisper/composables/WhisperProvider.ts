@@ -63,7 +63,8 @@ export function provideWhisperProvider () {
         acc.push({
           startTime: currentStartTime,
           endTime: currentEndTime,
-          text: currentText
+          text: currentText,
+          linePosition: 'bottom'
         })
         return acc
       }
@@ -74,7 +75,8 @@ export function provideWhisperProvider () {
         acc.push({
           startTime: currentStartTime,
           endTime: currentEndTime,
-          text: currentText
+          text: currentText,
+          linePosition: 'bottom'
         })
         return acc
       }
@@ -89,7 +91,8 @@ export function provideWhisperProvider () {
         acc.push({
           startTime: currentStartTime,
           endTime: currentEndTime,
-          text: currentText
+          text: currentText,
+          linePosition: 'bottom'
         })
       } else {
         // 현재 단어를 마지막 문장에 추가
