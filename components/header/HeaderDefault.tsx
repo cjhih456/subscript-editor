@@ -1,11 +1,11 @@
 import SideMenu from "../core/side-menu/ui/SideMenu"
 import { useWhisperProvider } from "../core/whisper"
-import WhisperStatus from "../core/whisper/ui/WhisperStatus"
 import { useCurrentTime, useDuration, useVideoFile } from "../core/provider/SubtitleControllerProvider"
+import { LazyCoreWhisperUiWhisperStatus } from "#components"
 
 export default defineNuxtComponent({
   name: 'HeaderDefault',
-  setup () {
+  async setup () {
     const nuxt = useNuxtApp()
     const { willUseWhisper } = useWhisperProvider()
     const videoFile = useVideoFile()
@@ -33,7 +33,7 @@ export default defineNuxtComponent({
       <div class="flex items-center gap-2">
         {this.willUseWhisper && (
           <div class="flex h-7 items-center gap-1.5 rounded-full bg-muted px-2.5">
-            <WhisperStatus />
+            <LazyCoreWhisperUiWhisperStatus />
             <p class="text-xs text-muted-foreground">Whisper</p>
           </div>
         )}

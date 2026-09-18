@@ -2,13 +2,12 @@ import AlertDisplay from '~/components/core/alert/ui/AlertDisplay'
 import VideoPlayer from '~/components/VideoPlayer/VideoPlayer'
 import { useDisplayWidth, usePixPerSec, useCueStore, useCurrentTime, useVideoFileObjectUrl } from '~/components/core/provider/SubtitleControllerProvider'
 import TimeBar from '~/components/core/timeline/ui/TimeBar'
-import WaveHostScene from '~/components/core/timeline/ui/WaveHostScene.vue'
 import BarArea from '~/components/core/timeline/ui/BarArea'
 import CueBar from '~/components/core/cue/ui/CueBar'
 import CueEditArea from '~/components/core/cue/ui/CueEditArea'
 import LumenInspector from '~/components/core/cue/ui/LumenInspector'
 import { Slider } from '~/components/ui/slider'
-import { ClientOnly } from '#components'
+import { ClientOnly, LazyCoreTimelineUiWaveHostScene } from '#components'
 import useWaveConverter from '~/components/core/ffmpeg/composables/useWaveConverter'
 
 export default defineNuxtComponent({
@@ -85,7 +84,7 @@ export default defineNuxtComponent({
                   <TimeBar timeBarHeight={this.timeBarHeight} fontSize={this.fontSize} />
                   <div class="relative w-full overflow-hidden rounded-xl" style={{ height: `${this.waveHostHeight}px` }}>
                     <ClientOnly>
-                      <WaveHostScene />
+                      <LazyCoreTimelineUiWaveHostScene />
                     </ClientOnly>
                   </div>
                 </>
