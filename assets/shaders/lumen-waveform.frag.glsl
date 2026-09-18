@@ -7,6 +7,7 @@ uniform float u_playhead;
 uniform sampler2D u_wave;
 uniform float u_hasData;
 uniform float u_showPlayhead;
+uniform float u_light;
 
 varying vec2 vUv;
 
@@ -31,25 +32,32 @@ void main() {
   body *= gap * u_hasData;
 
   float zeroLine = 1.0 - smoothstep(0.0, 1.2 / max(u_resolution.y, 1.0), abs(uv.y - 0.5));
-  zeroLine *= 0.22;
+  zeroLine *= mix(0.22, 0.18, u_light);
 
   vec3 colA = mix(u_blue, u_magenta, smoothstep(0.15, 0.85, x));
-  // Always tint the host so full-width coverage is visible even without waveData
-  vec3 bg = mix(vec3(0.035, 0.045, 0.08), colA * 0.12, 0.55);
+  // Dark: #07090F-ish base; Light: #F6F4F8 base — brand wash keeps empty host readable
+  vec3 bgBase = mix(vec3(0.035, 0.045, 0.08), vec3(0.965, 0.957, 0.973), u_light);
+  vec3 bgWash = colA * mix(0.12, 0.22, u_light);
+  vec3 bg = mix(bgBase, bgWash, mix(0.55, 0.35, u_light));
+
   float played = 1.0 - smoothstep(u_playhead, u_playhead + 0.004, x);
-  vec3 wave = mix(colA * 0.42, colA, 0.35 + 0.65 * played);
-  wave *= 0.75 + 0.25 * maxAmp;
+  float waveLo = mix(0.42, 0.55, u_light);
+  float waveMix = mix(0.35, 0.4, u_light) + mix(0.65, 0.6, u_light) * played;
+  vec3 wave = mix(colA * waveLo, colA, waveMix);
+  wave *= mix(0.75, 0.7, u_light) + mix(0.25, 0.3, u_light) * maxAmp;
 
   vec3 rgb = mix(bg, wave, body);
-  rgb += vec3(0.75, 0.82, 0.95) * zeroLine * (1.0 - body * 0.5);
+  vec3 zeroTint = mix(vec3(0.75, 0.82, 0.95), vec3(0.35, 0.4, 0.55), u_light);
+  rgb += zeroTint * zeroLine * (1.0 - body * 0.5);
 
-  float peakGlow = body * smoothstep(0.62, 0.95, max(maxAmp, minAmp)) * 0.22;
+  float peakGlow = body * smoothstep(0.62, 0.95, max(maxAmp, minAmp)) * mix(0.22, 0.18, u_light);
   rgb += colA * peakGlow;
 
   if (u_showPlayhead > 0.5) {
     float ph = abs(uv.x - u_playhead);
-    rgb += vec3(1.0, 0.30, 0.62) * (1.0 - smoothstep(0.0, 0.0035, ph));
-    rgb += vec3(1.0, 0.30, 0.62) * exp(-ph * 55.0) * 0.28;
+    vec3 phCol = mix(vec3(1.0, 0.30, 0.62), vec3(0.93, 0.28, 0.6), u_light);
+    rgb += phCol * (1.0 - smoothstep(0.0, 0.0035, ph));
+    rgb += phCol * exp(-ph * 55.0) * mix(0.28, 0.22, u_light);
   }
 
   gl_FragColor = vec4(rgb, 1.0);

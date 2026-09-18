@@ -16,6 +16,7 @@ const fragmentShader = `
 uniform float uTime;
 uniform vec3 uMagenta;
 uniform vec3 uBlue;
+uniform vec3 uBase;
 uniform vec2 uResolution;
 varying vec2 vUv;
 
@@ -29,10 +30,9 @@ void main() {
   p.x *= uResolution.x / max(uResolution.y, 1.0);
 
   float t = uTime * 0.15;
-  vec3 base = vec3(0.03, 0.04, 0.07);
   vec3 wash = mix(uBlue, uMagenta, 0.5 + 0.5 * sin(t));
   float radial = 1.0 - smoothstep(0.2, 1.35, length(p));
-  vec3 rgb = mix(base, wash * 0.22, radial);
+  vec3 rgb = mix(uBase, wash * 0.22, radial);
 
   float grain = hash(gl_FragCoord.xy + vec2(uTime * 40.0, 0.0)) * 0.05;
   rgb += grain;
@@ -47,12 +47,22 @@ void main() {
 }
 `
 
+const colorMode = useColorMode()
+const clearColorHex = computed(() =>
+  colorMode.value === 'dark' ? appConfig.three.clearColor : appConfig.three.clearColorLight
+)
+
 const uniforms = {
   uTime: { value: 0 },
   uMagenta: { value: new Color(appConfig.three.magenta) },
   uBlue: { value: new Color(appConfig.three.blue) },
+  uBase: { value: new Color(clearColorHex.value) },
   uResolution: { value: new Vector2(16, 9) }
 }
+
+watch(clearColorHex, (hex) => {
+  uniforms.uBase.value.set(hex)
+})
 
 const { onBeforeRender } = useLoop()
 onBeforeRender(({ elapsed, renderer }) => {

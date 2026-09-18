@@ -10,6 +10,7 @@ const props = defineProps<{
 }>()
 
 const appConfig = useAppConfig()
+const colorMode = useColorMode()
 const hostWidthRef = toRef(props, 'hostWidth') as Ref<number>
 const { texture, playhead, hasData } = useWaveformTexture(hostWidthRef)
 
@@ -43,7 +44,8 @@ const uniforms = {
   u_playhead: { value: 0 },
   u_wave: { value: texture.value },
   u_hasData: { value: 0 },
-  u_showPlayhead: { value: 1 }
+  u_showPlayhead: { value: 1 },
+  u_light: { value: colorMode.value === 'dark' ? 0 : 1 }
 }
 
 watch(texture, (next) => {
@@ -70,6 +72,7 @@ onBeforeRender(({ renderer }) => {
   uniforms.u_playhead.value = playhead.value
   uniforms.u_hasData.value = hasData.value ? 1 : 0
   uniforms.u_showPlayhead.value = prefersReducedMotion.value ? 0 : 1
+  uniforms.u_light.value = colorMode.value === 'dark' ? 0 : 1
 })
 </script>
 

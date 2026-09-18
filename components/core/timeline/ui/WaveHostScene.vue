@@ -4,9 +4,13 @@ import { TresCanvas } from '@tresjs/core'
 import WaveHostMesh from './WaveHostMesh.vue'
 
 const appConfig = useAppConfig()
+const colorMode = useColorMode()
 const hostEl = useTemplateRef<HTMLDivElement>('hostEl')
 const hostWidth = ref(1)
 const cameraPosition = [0, 0, 1] as unknown as Vector3
+const clearColor = computed(() =>
+  colorMode.value === 'dark' ? appConfig.three.clearColor : appConfig.three.clearColorLight
+)
 
 let resizeObserver: ResizeObserver | null = null
 
@@ -34,8 +38,8 @@ onBeforeUnmount(() => {
   >
     <ClientOnly>
       <TresCanvas
-        :clear-color="appConfig.three.clearColor"
-        class="!h-full !w-full"
+        :clear-color="clearColor"
+        class="h-full! w-full!"
         :alpha="false"
         :dpr="[1, 2]"
         :gl="{ preserveDrawingBuffer: true, antialias: false }"
