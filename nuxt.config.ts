@@ -61,7 +61,7 @@ export default defineNuxtConfig({
       BACKEND_API: 'http://localhost:3000'
     }
   },
-  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'shadcn-nuxt', '@nuxtjs/color-mode', '@nuxt/eslint', 'motion-v/nuxt'],
+  modules: ['@nuxt/devtools', 'nuxt-security', 'dayjs-nuxt', 'shadcn-nuxt', '@nuxtjs/color-mode', '@nuxt/eslint', 'motion-v/nuxt', '@tresjs/nuxt'],
   features: {
     inlineStyles: false
   },
